@@ -1,0 +1,41 @@
+.section-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+}
+
+.banner-text {
+    color: white;
+    font-weight: 300;
+    position: absolute;
+}
+
+.banner-media {
+    min-height: 230px;
+    max-height: 290px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.slick-prev {
+    left: 3% !important;
+    z-index: 1;
+}
+
+.slick-next {
+    right: 3% !important;
+    z-index: 1;
+}
+
+@media screen and (min-width : 747px) {
+    .banner-text {
+        font-size: 60px;
+    }
+}
+
+@media screen and (max-width : 746px) {
+    .banner-text {
+        font-size: 34px;
+    }
+}

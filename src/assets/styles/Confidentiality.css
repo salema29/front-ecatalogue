@@ -1,0 +1,30 @@
+.section-confidentiality {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.confidentiality-text-button {
+    color: var(--primary-color-2);
+    font-size: 16px;
+}
+
+@media screen and (min-width : 747px) {
+    .confidentiality-text-button {
+        text-align: right;
+    }
+}
+
+@media screen and (max-width : 746px) {
+    .confidentiality-text-button {
+        text-align: center;
+        /* width: max-content; */
+    }
+}
+
+.confidentiality-text-button:hover {
+    text-shadow: 0 0 .90px var(--primary-color-2), 0 0 .90px var(--primary-color-2);
+}
+
+.confidentiality-button {
+    text-decoration: none;
+}
