@@ -27,6 +27,7 @@
 }
 
 .slide-media {
+  border-radius: 5px;
   max-width: 640px;
 }
 

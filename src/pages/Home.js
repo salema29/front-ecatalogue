@@ -5,6 +5,7 @@ import Carousel from '../components/Carousel';
 import Confidentiality from '../components/Confidentiality';
 
 function Home() {
+    
     return (
         <>
             <Banner />

@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import Flickity from "react-flickity-component";
 import Slide from '../assets/images/rentree.webp'
 import '../assets/styles/Carousel.css'
+import ViewFormatDialog from '../components/ViewFormatModal';
 
 function Carousel() {
-
     const slidesCount = 2; // Replace this with the actual count of your elements
-
     const flickityOptions = {
         initialIndex: 0,
         cellAlign: 'left',
+        selectedAttraction: 0.03,
+        friction: 0.3
+    };
+
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
@@ -18,8 +28,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    // src={Slide}
-                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
+                    src={Slide}
+                // src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -30,7 +40,7 @@ function Carousel() {
                             <div className='slide-headline'>2nd LINE</div>
                         </div>
                     </div>
-                    <div className='slide-button'>
+                    <div className='slide-button' variant="contained" onClick={handleClickOpen}>
                         Découvrir
                     </div>
                 </div>
@@ -39,8 +49,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    // src={Slide}
-                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
+                    src={Slide}
+                // src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -51,7 +61,7 @@ function Carousel() {
                             <div className='slide-headline'>2nd LINE</div>
                         </div>
                     </div>
-                    <div className='slide-button'>
+                    <div className='slide-button' variant="contained" onClick={handleClickOpen}>
                         Découvrir
                     </div>
                 </div>
@@ -60,8 +70,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    // src={Slide}
-                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
+                    src={Slide}
+                // src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -72,7 +82,7 @@ function Carousel() {
                             <div className='slide-headline'>2nd LINE</div>
                         </div>
                     </div>
-                    <div className='slide-button'>
+                    <div className='slide-button' variant="contained" onClick={handleClickOpen}>
                         Découvrir
                     </div>
                 </div>
@@ -81,8 +91,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    // src={Slide}
-                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
+                    src={Slide}
+                // src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -93,11 +103,14 @@ function Carousel() {
                             <div className='slide-headline'>2nd LINE</div>
                         </div>
                     </div>
-                    <div className='slide-button'>
+                    <div className='slide-button' variant="contained" onClick={handleClickOpen}>
                         Découvrir
                     </div>
                 </div>
             </div>
+            <ViewFormatDialog 
+                open={open} 
+                handleClose={handleClose} />
         </Flickity>
     );
 }
