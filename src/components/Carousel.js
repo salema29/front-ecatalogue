@@ -4,10 +4,13 @@ import Slide from '../assets/images/rentrée.webp'
 import '../assets/styles/Carousel.css'
 
 function Carousel() {
+
+    const slidesCount = 2; // Replace this with the actual count of your elements
+
     const flickityOptions = {
         initialIndex: 0,
-        cellAlign: 'left'
-    }
+        cellAlign: 'left',
+    };
 
     return (
         <Flickity className='slider-container' options={flickityOptions}>
