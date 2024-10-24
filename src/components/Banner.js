@@ -9,7 +9,8 @@ function Banner() {
                 <img
                     alt='ecatalogue header media'
                     className='banner-media'
-                    src={BannerMedia}
+                    // src={BannerMedia}
+                    src='https://f2a4-51-83-2-114.ngrok-free.app/ecata-header.webp'
                 />
                 <h1 className='banner-text'>Nos catalogues</h1>
             </div>

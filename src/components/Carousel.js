@@ -1,6 +1,6 @@
 import React from "react";
 import Flickity from "react-flickity-component";
-import Slide from '../assets/images/rentrée.webp'
+import Slide from '../assets/images/rentree.webp'
 import '../assets/styles/Carousel.css'
 
 function Carousel() {
@@ -18,7 +18,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    src={Slide}
+                    // src={Slide}
+                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -38,7 +39,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    src={Slide}
+                    // src={Slide}
+                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -58,7 +60,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    src={Slide}
+                    // src={Slide}
+                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
@@ -78,7 +81,8 @@ function Carousel() {
                 <img
                     alt='slide0 media'
                     className='slide-media'
-                    src={Slide}
+                    // src={Slide}
+                    src='https://f2a4-51-83-2-114.ngrok-free.app/rentree.webp'
                 />
                 <div className='slide-meta'>
                     <div className='slide-head'>
