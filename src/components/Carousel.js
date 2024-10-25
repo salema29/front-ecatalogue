@@ -9,8 +9,9 @@ function Carousel() {
     const flickityOptions = {
         initialIndex: 0,
         cellAlign: 'left',
+        contain: true,
         selectedAttraction: 0.03,
-        friction: 0.3
+        friction: 0.3,
     };
 
     const [open, setOpen] = useState(false);
