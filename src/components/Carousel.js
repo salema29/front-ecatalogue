@@ -1,11 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flickity from "react-flickity-component";
-import '../assets/styles/Carousel.css'
+import '../assets/styles/Carousel.css';
 import ViewFormatDialog from '../components/ViewFormatModal';
 
 function Carousel() {
-    const imageSrc = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/images/rentree.webp';
-    const slidesCount = 2; // Replace this with the actual count of your elements
+    const [slidesData, setSlidesData] = useState([]);
+    const [productsData, setProductsData] = useState([]);
+
+    // get slides data API
+    useEffect(() => {
+        fetch('http://localhost/admin-ecatalogue-v2/api/getSlides')
+            .then(response => response.json())
+            .then(fetchedData => setSlidesData(fetchedData))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+    console.log(slidesData);
+
+    // get products data API
+    useEffect(() => {
+        fetch('http://localhost/admin-ecatalogue-v2/api/getProducts')
+            .then(response => response.json())
+            .then(fetchedData => setProductsData(fetchedData))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+    console.log(productsData);
+    
     const flickityOptions = {
         initialIndex: 0,
         cellAlign: 'left',
@@ -22,33 +41,6 @@ function Carousel() {
     const handleClose = () => {
         setOpen(false);
     };
-
-    const slidesData = [
-        {
-            id: 1,
-            imageSrc: imageSrc,
-            subtitle: "Du 16 Août au 23 Août 2024",
-            headlines: ["E-CATALOGUE", "1st LINE", "2nd LINE"],
-        },
-        {
-            id: 2,
-            imageSrc: imageSrc,
-            subtitle: "Du 16 Août au 23 Août 2024",
-            headlines: ["E-CATALOGUE", "1st LINE", "2nd LINE"],
-        },
-        {
-            id: 3,
-            imageSrc: imageSrc,
-            subtitle: "Du 16 Août au 23 Août 2024",
-            headlines: ["E-CATALOGUE", "1st LINE", "2nd LINE"],
-        },
-        {
-            id: 4,
-            imageSrc: imageSrc,
-            subtitle: "Du 16 Août au 23 Août 2024",
-            headlines: ["E-CATALOGUE", "1st LINE", "2nd LINE"],
-        },
-    ];
 
     return (
         <Flickity className='slider-container' options={flickityOptions}>
