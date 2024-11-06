@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import '../assets/styles/ViewFormatDialog.css';
 import { Dialog, DialogContent, Button } from '@mui/material';
 
 const ViewFormatDialog = ({ open, handleClose }) => {
-    const GutenbergLogo = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/gutenberg-logo.svg'
     const ByProductIcon = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg';
     const ByCatalogIcon = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg';
     const ViewFormatIcon = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/view-format-icon.svg';
     const DesktopViewFormatIcon = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/desktop-view-format-icon.svg';
-    const PromoImage = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/images/pross-promo-hiver.png';
+
+    const [oneSlideData, setOneSlideData] = useState([]);
+    useEffect(() => {
+        fetch('http://localhost/admin-ecatalogue-v2/api/getOneSlide/336')
+            .then(response => response.json())
+            .then(fetchedData => setOneSlideData(fetchedData))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
 
     return (
         <Dialog
@@ -19,10 +25,10 @@ const ViewFormatDialog = ({ open, handleClose }) => {
         >
             <header className='view-format-dialog-header container'>
                 <div className='view-format-dialog-left-part'>
-                    <img className='view-format-dialog-header-logo' src={GutenbergLogo} alt='' />
+                    <img className='view-format-dialog-header-logo' src={oneSlideData.client_logo} alt='' />
                     <div className='view-format-dialog-header-text'>
-                        <p>Les promo de l'hiver 2024</p>
-                        <p>du 13 au 22 janvier 2024</p>
+                        <p>{oneSlideData.catalogue_name_ln_un} {oneSlideData.catalogue_name_ln_deux}</p>
+                        <p>du {oneSlideData.catalogue_date_validite_debut} au {oneSlideData.catalogue_date_validite_fin}</p>
                     </div>
                 </div>
                 <div className='view-format-dialog-right-part'>
@@ -34,7 +40,7 @@ const ViewFormatDialog = ({ open, handleClose }) => {
                     <div className='view-format-dialog-desktop-left-part'>
                         <span className='view-format-dialog-side-image'>
                             <img 
-                                src={PromoImage} 
+                                src={oneSlideData.slide_image}
                                 alt='Pross Promo Hiver'
                             />
                         </span>

@@ -5,25 +5,14 @@ import ViewFormatDialog from '../components/ViewFormatModal';
 
 function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
-    const [productsData, setProductsData] = useState([]);
 
     // get slides data API
     useEffect(() => {
-        fetch('http://localhost/admin-ecatalogue-v2/api/getSlides')
+        fetch('http://localhost/admin-ecatalogue-v2/api/getSlides/l-intersport')
             .then(response => response.json())
             .then(fetchedData => setSlidesData(fetchedData))
             .catch(error => console.error('Error fetching data:', error));
     }, []);
-    console.log(slidesData);
-
-    // get products data API
-    useEffect(() => {
-        fetch('http://localhost/admin-ecatalogue-v2/api/getProducts')
-            .then(response => response.json())
-            .then(fetchedData => setProductsData(fetchedData))
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
-    console.log(productsData);
     
     const flickityOptions = {
         initialIndex: 0,
@@ -45,19 +34,18 @@ function Carousel() {
     return (
         <Flickity className='slider-container' options={flickityOptions}>
             {slidesData.map(slide => (
-                <div key={slide.id} className='slide-element'>
+                <div key={slide.catalogue_id} className='slide-element'>
                     <img
-                        alt={`slide${slide.id} media`}
+                        alt={`slide${slide.catalogue_id} media`}
                         className='slide-media'
-                        src={slide.imageSrc}
+                        src={slide.slide_image}
                     />
                     <div className='slide-meta'>
                         <div className='slide-head'>
-                            <div className='slide-head-subtitle'>{slide.subtitle}</div>
+                            <div className='slide-head-subtitle'> Du {slide.catalogue_date_validite_debut} au {slide.catalogue_date_validite_fin}</div>
                             <div className='slide-head-title'>
-                                {slide.headlines.map((line, index) => (
-                                    <div key={index} className='slide-headline'>{line}</div>
-                                ))}
+                                <div className='slide-headline'>{slide.catalogue_name_ln_un}</div>
+                                <div className='slide-headline'>{slide.catalogue_name_ln_deux}</div>
                             </div>
                         </div>
                         <div className='slide-button' onClick={handleClickOpen}>
