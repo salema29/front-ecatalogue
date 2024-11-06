@@ -8,12 +8,12 @@ function Carousel() {
 
     // get slides data API
     useEffect(() => {
-        fetch('http://localhost/admin-ecatalogue-v2/api/getSlides/l-intersport')
+        fetch('http://localhost/admin-ecatalogue-v2/api/getSlides/logo-preprod')
             .then(response => response.json())
             .then(fetchedData => setSlidesData(fetchedData))
             .catch(error => console.error('Error fetching data:', error));
     }, []);
-    
+
     const flickityOptions = {
         initialIndex: 0,
         cellAlign: 'left',
