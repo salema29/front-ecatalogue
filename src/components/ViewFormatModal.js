@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import '../assets/styles/ViewFormatDialog.css';
-import { Dialog, DialogContent, Button } from '@mui/material';
+import {Button } from '@mui/material';
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function ViewFormatDialog() {
     const ByProductIcon = 'https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg';
@@ -22,6 +22,10 @@ function ViewFormatDialog() {
             });
     }, [id]);
 
+    const navigate = useNavigate();
+    const handleClose = () => {
+        navigate(`/`);
+    };
     return (
         <div>
             {slideData ? (
@@ -35,7 +39,7 @@ function ViewFormatDialog() {
                             </div>
                         </div>
                         <div className='view-format-dialog-right-part'>
-                            {/* <Button className='view-format-dialog-close' onClick={handleClose}>🗙</Button> */}
+                            <Button className='view-format-dialog-close' onClick={handleClose}>🗙</Button>
                         </div>
                     </header>
                     <div>

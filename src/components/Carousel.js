@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Flickity from "react-flickity-component";
 import '../assets/styles/Carousel.css';
-import { Link } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 
 function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
@@ -21,32 +21,38 @@ function Carousel() {
         selectedAttraction: 0.03,
         friction: 0.3,
     };
-
+    const navigate = useNavigate();
     return (
         <Flickity className='slider-container' options={flickityOptions}>
-            {slidesData.map(slide => (
-                <div key={slide.catalogue_id} className='slide-element'>
-                    <img
-                        alt={`slide${slide.catalogue_id} media`}
-                        className='slide-media'
-                        src={slide.slide_image}
-                    />
-                    <div className='slide-meta'>
-                        <div className='slide-head'>
-                            <div className='slide-head-subtitle'> Du {slide.catalogue_date_validite_debut} au {slide.catalogue_date_validite_fin}</div>
-                            <div className='slide-head-title'>
-                                <div className='slide-headline'>{slide.catalogue_name_ln_un}</div>
-                                <div className='slide-headline'>{slide.catalogue_name_ln_deux}</div>
+            {slidesData.map(slide => {
+                const handleClick = () => {
+                    navigate(`/blog/${slide.catalogue_id}`);
+                };
+
+                return (
+                    <div key={slide.catalogue_id} className='slide-element'>
+                        <img
+                            alt={`slide${slide.catalogue_id} media`}
+                            className='slide-media'
+                            src={slide.slide_image}
+                        />
+                        <div className='slide-meta'>
+                            <div className='slide-head'>
+                                <div className='slide-head-subtitle'>
+                                    Du {slide.catalogue_date_validite_debut} au {slide.catalogue_date_validite_fin}
+                                </div>
+                                <div className='slide-head-title'>
+                                    <div className='slide-headline'>{slide.catalogue_name_ln_un}</div>
+                                    <div className='slide-headline'>{slide.catalogue_name_ln_deux}</div>
+                                </div>
+                            </div>
+                            <div className='slide-button' onClick={handleClick} style={{ cursor: 'pointer' }}>
+                                Découvrir
                             </div>
                         </div>
-                        <div className='slide-button' >
-                        <Link to={`/blog/${slide.catalogue_id}`}>Découvrir</Link>
-                        </div>
-                        
-                        
                     </div>
-                </div>
-            ))}            
+                );
+            })}
         </Flickity>
     );
 }
