@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Flickity from "react-flickity-component";
 import '../assets/styles/Carousel.css';
-import ViewFormatDialog from '../components/ViewFormatModal';
+import { Link } from 'react-router-dom';
 
 function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
@@ -22,15 +22,6 @@ function Carousel() {
         friction: 0.3,
     };
 
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     return (
         <Flickity className='slider-container' options={flickityOptions}>
             {slidesData.map(slide => (
@@ -48,13 +39,14 @@ function Carousel() {
                                 <div className='slide-headline'>{slide.catalogue_name_ln_deux}</div>
                             </div>
                         </div>
-                        <div className='slide-button' onClick={handleClickOpen}>
-                            Découvrir
+                        <div className='slide-button' >
+                        <Link to={`/blog/${slide.catalogue_id}`}>Découvrir</Link>
                         </div>
+                        
+                        
                     </div>
                 </div>
-            ))}
-            <ViewFormatDialog open={open} handleClose={handleClose} />
+            ))}            
         </Flickity>
     );
 }
