@@ -38,15 +38,15 @@ function Carousel() {
                         />
                         <div className='slide-meta'>
                             <div className='slide-head'>
-                                <div className='slide-head-subtitle'>
+                            <div className='slide-head-subtitle' style={{ fontFamily: slide.date_typo_name }}>
                                     Du {slide.catalogue_date_validite_debut} au {slide.catalogue_date_validite_fin}
                                 </div>
-                                <div className='slide-head-title'>
+                                <div className='slide-head-title' style={{ fontFamily: slide.nom_catalogue_typo_name }}>
                                     <div className='slide-headline'>{slide.catalogue_name_ln_un}</div>
                                     <div className='slide-headline'>{slide.catalogue_name_ln_deux}</div>
                                 </div>
                             </div>
-                            <div className='slide-button' onClick={handleClick} style={{ cursor: 'pointer' }}>
+                            <div className='slide-button' onClick={handleClick} style={{ cursor: 'pointer', fontFamily: slide.btn_discover_typos_name }} >
                                 Découvrir
                             </div>
                         </div>
