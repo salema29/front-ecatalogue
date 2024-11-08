@@ -1,16 +1,16 @@
-.MuiDialog-paper {
-    background: var(--dark-bg)!important;
-}
-
 .view-format-dialog-content {
-    color: white;
     align-content: center;
+    background: var(--dark-bg);
+    color: white;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
 }
 
 .view-format-dialog-close {
-    width: -webkit-fill-available;
-    position: absolute;
     color: white;
+    background: none;
+    border: none;
 }
 
 .view-format-dialog-left-part {
@@ -24,13 +24,15 @@
 }
 
 .view-format-dialog-header {
-    align-content: center;
+    /* position: absolute; */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
     border: none;
     background: #1c1a1f;
     column-gap: 1rem;
     display: flex;
     height: 80px;
     max-height: 80px;
+    padding: 0 1rem;
     text-align: center;
     justify-content: space-between;
 }
@@ -173,6 +175,8 @@
 }
 
 .view-format-dialog-button-icon {
+    display: flex;
+    justify-content: center;
     background-color: var(--primary-color);
     color: #5ea3a3;
     flex: 1;

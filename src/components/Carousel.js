@@ -5,8 +5,8 @@ import { useNavigate  } from 'react-router-dom';
 
 function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
+    const navigate = useNavigate();
 
-    // get slides data API
     useEffect(() => {
         fetch('http://localhost/admin-ecatalogue-v2/api/getSlides/logo-preprod')
             .then(response => response.json())
@@ -21,14 +21,13 @@ function Carousel() {
         selectedAttraction: 0.03,
         friction: 0.3,
     };
-    const navigate = useNavigate();
+
     return (
         <Flickity className='slider-container' options={flickityOptions}>
             {slidesData.map(slide => {
                 const handleClick = () => {
                     navigate(`/blog/${slide.catalogue_id}`);
                 };
-
                 return (
                     <div key={slide.catalogue_id} className='slide-element'>
                         <img

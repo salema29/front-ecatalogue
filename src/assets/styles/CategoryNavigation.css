@@ -1,0 +1,58 @@
+@media screen and (min-width : 747px) {
+    .circular-icons-row {
+        justify-content: center;
+        column-gap: 4%;
+    }
+}
+
+@media screen and (max-width : 746px) {
+    .circular-icons-row {
+        justify-content: left;
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+        column-gap: 6%;
+    }
+}
+
+.circular-icons-row {
+    display: flex;
+    align-items: center;
+    background-color: black;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+}
+
+.icon-container {
+    text-align: center;
+    color: white;
+}
+
+@media screen and (min-width : 747px) {
+    .icon {
+        width: 4rem;
+    }
+}
+
+@media screen and (max-width : 746px) {
+    .icon {
+        width: 3.5rem;
+    }
+}
+
+.icon {
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid white;
+    transition: transform 0.3s;
+}
+
+.icon:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+}
+
+.icon-label {
+    font-size: 14px;
+    color: var(--main-bg);
+}
