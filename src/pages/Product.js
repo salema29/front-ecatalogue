@@ -33,7 +33,10 @@ function Product() {
                             </div>
                         </div>
                         <div className='view-format-dialog-right-part'>
-                            <button className='view-format-dialog-close' onClick={handleClose}><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' /></button>                        </div>
+                            <button className='view-format-dialog-close' onClick={handleClose}>
+                                <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' alt='Fermer' />
+                            </button>                        
+                        </div>
                     </header>
                     <CategoryNavigation />
             

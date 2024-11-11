@@ -41,7 +41,7 @@ function ViewFormatDialog() {
                             </div>
                         </div>
                         <div className='view-format-dialog-right-part'>
-                            <button className='view-format-dialog-close' onClick={handleClose} style={{ cursor: 'pointer'}} ><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' /></button>
+                            <button className='view-format-dialog-close' onClick={handleClose} style={{ cursor: 'pointer'}} ><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' alt='Fermer' width='20' /></button>
                         </div>
                     </header>
                     <div className="view-format-dialog-content"> 
