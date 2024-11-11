@@ -11,14 +11,6 @@ function ViewFormatDialog() {
         navigate(`/`);
     };
 
-    const handleProductView = () => {
-        navigate(`/products/${id}`);
-    };
-
-    const handleCatalogView = () => {
-        navigate(`/catalog/${id}`);
-    };
-
     useEffect(() => {
         fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${id}`)
             .then(response => response.json())
@@ -27,6 +19,15 @@ function ViewFormatDialog() {
                 console.error("Error fetching data:", error);
             });
     }, [id]);
+    const catalogue_id = slideData ? slideData.catalogue_id : null;
+    
+    const handleProductView = () => {
+        navigate(`/products/${id}`);
+    };
+
+    const handleCatalogView = () => {
+        navigate(`/catalog/${id}`);
+    };
 
     return (
         <>

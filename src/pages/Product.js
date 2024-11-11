@@ -8,7 +8,7 @@ function Product() {
     const [slideData, setSlideData] = useState(null);
     const navigate = useNavigate();
     const handleClose = () => {
-        navigate(`/`);
+        navigate(`/view/${id}`);
     };
 
     useEffect(() => {

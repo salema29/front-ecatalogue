@@ -26,7 +26,7 @@ function Carousel() {
         <Flickity className='slider-container' options={flickityOptions}>
             {slidesData.map(slide => {
                 const handleClick = () => {
-                    navigate(`/blog/${slide.catalogue_id}`);
+                    navigate(`/view/${slide.catalogue_id}`);
                 };
                 return (
                     <div key={slide.catalogue_id} className='slide-element'>
