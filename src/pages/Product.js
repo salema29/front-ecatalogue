@@ -16,7 +16,7 @@ function Product() {
             .then(response => response.json())
             .then(fetchedData => setSlideData(fetchedData))
             .catch(error => {
-                console.error("Error fetching data:", error);
+                console.error("erreur lors de la récupération de donnée : ", error);
             });
     }, [id]);
 
