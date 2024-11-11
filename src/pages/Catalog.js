@@ -33,8 +33,8 @@ function Catalog() {
                             <button className='view-format-dialog-close' onClick={handleClose}><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' alt='Fermer' /></button>
                         </div>
                     </header>
-                        <iframe src={slideData.catalogue_link} width="100%" height="100%" border="none" padding-right="0" padding-left="0">
-                        </iframe>
+                    <iframe src={slideData.catalogue_link} width="100%" height="90%" border="none" padding-right="0" padding-left="0" >
+                    </iframe>
                 </>
             ) : (
                 <p>Loading...</p>
