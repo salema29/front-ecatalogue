@@ -36,19 +36,20 @@ function Product() {
                             <button className='view-format-dialog-close' onClick={handleClose}><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' /></button>                        </div>
                     </header>
                     <CategoryNavigation />
-                </>
+            
+                    <div className="container">
+                        <div class="grid-container">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>
+                            <div class="grid-item">4</div>
+                            <div class="grid-item">5</div>
+                        </div>
+                    </div>
+                    </>
             ) : (
                 <p>Loading...</p>
             )}
-            <div className="container">
-                <div class="grid-container">
-                    <div class="grid-item">1</div>
-                    <div class="grid-item">2</div>
-                    <div class="grid-item">3</div>
-                    <div class="grid-item">4</div>
-                    <div class="grid-item">5</div>
-                </div>
-            </div>
         </>
     );
 };

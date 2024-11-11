@@ -38,6 +38,4 @@ const CircularIconsRow = () => {
         </div>
     );
 };
-
-
 export default CircularIconsRow;

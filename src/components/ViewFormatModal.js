@@ -19,7 +19,6 @@ function ViewFormatDialog() {
                 console.error("Error fetching data:", error);
             });
     }, [id]);
-    const catalogue_id = slideData ? slideData.catalogue_id : null;
     
     const handleProductView = () => {
         navigate(`/products/${id}`);
@@ -37,12 +36,12 @@ function ViewFormatDialog() {
                         <div className='view-format-dialog-left-part'>
                             <img className='view-format-dialog-header-logo' src={slideData.client_logo} alt='' />
                             <div className='view-format-dialog-header-text'>
-                                <p>{slideData.catalogue_name_ln_un}{slideData.catalogue_name_ln_deux}</p>
+                                <p>{slideData.catalogue_name_ln_un} {slideData.catalogue_name_ln_deux}</p>
                                 <p>du {slideData.catalogue_date_validite_debut} au {slideData.catalogue_date_validite_fin}</p>
                             </div>
                         </div>
                         <div className='view-format-dialog-right-part'>
-                            <button className='view-format-dialog-close' onClick={handleClose}><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' /></button>
+                            <button className='view-format-dialog-close' onClick={handleClose} style={{ cursor: 'pointer'}} ><img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg' width='20' /></button>
                         </div>
                     </header>
                     <div className="view-format-dialog-content"> 
@@ -51,7 +50,7 @@ function ViewFormatDialog() {
                                 <span className='view-format-dialog-side-image'>
                                     <img
                                         src={slideData.slide_image}
-                                        alt='Pross Promo Hiver'
+                                        alt= ' {slideData.catalogue_name_ln_un} {slideData.catalogue_name_ln_deux} '
                                     />
                                 </span>
                             </div>
@@ -83,13 +82,13 @@ function ViewFormatDialog() {
                             </div>
                             <div className='view-format-dialog-button-container' >
                                 <button className='view-format-dialog-button' onClick={handleProductView}>
-                                    <span className='view-format-dialog-button-text'>Par produit</span>
+                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>Par produit</span>
                                     <span className='view-format-dialog-button-icon'>
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg' alt='' />
                                     </span>
                                 </button>
                                 <button className='view-format-dialog-button' onClick={handleCatalogView}>
-                                    <span className='view-format-dialog-button-text'>e-catalogue</span>
+                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>e-catalogue</span>
                                     <span className='view-format-dialog-button-icon'>
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg' alt='' />
                                     </span>
