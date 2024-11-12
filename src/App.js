@@ -3,6 +3,7 @@ import ViewFormatModal from './components/ViewFormatModal';
 import Home from './pages/Home'
 import Products from './pages/Product'
 import Catalog from './pages/Catalog'
+import Confidentiality from './components/Confidentiality';
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
                 <Route path="view/:id" element={<ViewFormatModal />} />
                 <Route path="products/:id" element={<Products />} />
                 <Route path="catalog/:id" element={<Catalog />} />
+                <Route path="confidentiality-text" element={<Confidentiality />} />
             </Routes>
         </Router>
     );

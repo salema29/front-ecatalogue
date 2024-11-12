@@ -1,15 +1,23 @@
-import React from 'react';
-import '../assets/styles/Confidentiality.css'
+import React, { useEffect, useState } from 'react';
 
 function Confidentiality() {
+    const [confidentialText, setConfidentialText] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`http://localhost/admin-ecatalogue-v2/api/getTextConfidentiality`);
+                const data = await response.json();
+                setConfidentialText(data.html)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, []);
     return (
-        <>
-            <div className='section-confidentiality'>
-                <a href="/" className='confidentiality-button' title="Cliquez ici pour lire le texte de confidentialité">
-                    <p className='confidentiality-text-button'>Données personnelles &amp; Paramètres de confidentialité</p>
-                </a>
-            </div>
-        </>
+        <iframe width="100%" height="90%" srcDoc={confidentialText} border="none" padding-right="0" padding-left="0">
+        </iframe>
     );
 };
 
