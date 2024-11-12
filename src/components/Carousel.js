@@ -60,9 +60,9 @@ function Carousel() {
                 })}
             </Flickity>
             <div className='section-confidentiality'>
-                <button  className='confidentiality-button' title="Cliquez ici pour lire le texte de confidentialité" onClick={handleOpenText}>
+                <div  className='confidentiality-button' title="Cliquez ici pour lire le texte de confidentialité" style={{ cursor: 'pointer' }} onClick={handleOpenText}>
                     <p className='confidentiality-text-button'>Données personnelles &amp; Paramètres de confidentialité</p>
-                </button>
+                </div>
             </div>
         </>
     );
