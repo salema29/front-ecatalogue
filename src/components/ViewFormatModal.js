@@ -61,13 +61,13 @@ function ViewFormatDialog() {
                                 </div>
                                 <div className='view-format-dialog-button-container' >
                                     <button className='view-format-dialog-button' style={{ backgroundColor: slideData.client_color}} onClick={handleProductView}>
-                                        <span className='view-format-dialog-button-text'>Par produit</span>
+                                        <span className='view-format-dialog-button-text'>Vue produit</span>
                                         <span className='view-format-dialog-button-icon' >
                                             <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg' alt='' />
                                         </span>
                                     </button>
                                     <button className='view-format-dialog-button' style={{ backgroundColor: slideData.client_color}} onClick={handleCatalogView}>
-                                        <span className='view-format-dialog-button-text'>e-catalogue</span>
+                                        <span className='view-format-dialog-button-text'>Vue feuilletable</span>
                                         <span className='view-format-dialog-button-icon'>
                                             <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg' alt='' />
                                         </span>
@@ -87,7 +87,7 @@ function ViewFormatDialog() {
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg' alt='' />
                                     </span>
                                 </button>
-                                <button className='view-format-dialog-button' onClick={handleCatalogView}>
+                                <button style={{ backgroundColor: slideData.client_color}} className='view-format-dialog-button' onClick={handleCatalogView}>
                                     <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>Vue feuilletable</span>
                                     <span className='view-format-dialog-button-icon'>
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg' alt='' />
