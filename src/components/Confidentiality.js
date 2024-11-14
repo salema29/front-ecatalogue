@@ -16,7 +16,7 @@ function Confidentiality() {
         fetchData();
     }, []);
     return (
-        <iframe width="100%" height="90%" srcDoc={confidentialText} border="none" padding-right="0" padding-left="0">
+        <iframe width="100%" height="100%" srcDoc={confidentialText} border="none" padding-right="0" padding-left="0" >
         </iframe>
     );
 };

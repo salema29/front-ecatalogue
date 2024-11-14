@@ -40,11 +40,12 @@
 }
 
 .icon {
-    height: auto;
+    height: 102.5px;
     border-radius: 50%;
-    object-fit: cover;
+    /* object-fit: fill; */
     border: 2px solid white;
     transition: transform 0.3s;
+    width: 102.5px;
 }
 
 .icon:hover {

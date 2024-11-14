@@ -136,7 +136,7 @@
 }
 
 .view-format-dialog-header-text > p:nth-child(1) {
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
     font-weight: 900;
 }
 
@@ -147,8 +147,8 @@
 
 .view-format-dialog-button {
     align-items: center;
-    border: 3px solid var(--primary-color);
-    background-color: var(--primary-color);
+    /* border: 3px solid var(--primary-color); */
+    /* background-color: var(--primary-color); */
     border-radius: 15px;
     display: flex;
     font-size: 1rem;
@@ -177,7 +177,7 @@
 .view-format-dialog-button-icon {
     display: flex;
     justify-content: center;
-    background-color: var(--primary-color);
+    /* background-color: var(--primary-color); */
     color: #5ea3a3;
     flex: 1;
     font-size: 1.2rem;
@@ -199,7 +199,7 @@
 }
 
 .view-format-text {
-    color: var(--secondary-color-2);
+    /* color: var(--secondary-color-2); */
     font-size: 24px;
     font-weight: 900;
 }

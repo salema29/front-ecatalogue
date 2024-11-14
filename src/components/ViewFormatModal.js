@@ -36,7 +36,7 @@ function ViewFormatDialog() {
                         <div className='view-format-dialog-left-part'>
                             <img className='view-format-dialog-header-logo' src={slideData.client_logo} alt='' />
                             <div className='view-format-dialog-header-text'>
-                                <p>{slideData.catalogue_name_ln_un} {slideData.catalogue_name_ln_deux}</p>
+                                <p style={{ color: slideData.client_color}} > {slideData.catalogue_name_ln_un} {slideData.catalogue_name_ln_deux} </p>
                                 <p>du {slideData.catalogue_date_validite_debut} au {slideData.catalogue_date_validite_fin}</p>
                             </div>
                         </div>
@@ -57,16 +57,16 @@ function ViewFormatDialog() {
                             <div className='view-format-dialog-desktop-right-part'>
                                 <div className='view-format-icon-container'>
                                     <img className='view-format-icon' src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/desktop-view-format-icon.svg' alt='' />
-                                    <h2 className='view-format-text'>Nouveau ! choisissez votre mode de lecture... Version simplifiée par produit et créez ainsi directement vos listes de courses, ou continuer en version feuilletable.</h2>
+                                    <h2 style={{ color: slideData.client_color}} className='view-format-text'>Nouveau ! choisissez votre mode de lecture... Version simplifiée par produit et créez ainsi directement vos listes de courses, ou continuer en version feuilletable.</h2>
                                 </div>
                                 <div className='view-format-dialog-button-container' >
-                                    <button className='view-format-dialog-button' onClick={handleProductView}>
+                                    <button className='view-format-dialog-button' style={{ backgroundColor: slideData.client_color}} onClick={handleProductView}>
                                         <span className='view-format-dialog-button-text'>Par produit</span>
-                                        <span className='view-format-dialog-button-icon'>
+                                        <span className='view-format-dialog-button-icon' >
                                             <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg' alt='' />
                                         </span>
                                     </button>
-                                    <button className='view-format-dialog-button' onClick={handleCatalogView}>
+                                    <button className='view-format-dialog-button' style={{ backgroundColor: slideData.client_color}} onClick={handleCatalogView}>
                                         <span className='view-format-dialog-button-text'>e-catalogue</span>
                                         <span className='view-format-dialog-button-icon'>
                                             <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg' alt='' />
@@ -81,14 +81,14 @@ function ViewFormatDialog() {
                                 <h2 className='view-format-text'>Choisissez votre mode de lecture</h2>
                             </div>
                             <div className='view-format-dialog-button-container' >
-                                <button className='view-format-dialog-button' onClick={handleProductView}>
-                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>Par produit</span>
+                                <button style={{ backgroundColor: slideData.client_color}} className='view-format-dialog-button' onClick={handleProductView}>
+                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>Vue produit</span>
                                     <span className='view-format-dialog-button-icon'>
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg' alt='' />
                                     </span>
                                 </button>
                                 <button className='view-format-dialog-button' onClick={handleCatalogView}>
-                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>e-catalogue</span>
+                                    <span className='view-format-dialog-button-text' style={{ cursor: 'pointer'}}>Vue feuilletable</span>
                                     <span className='view-format-dialog-button-icon'>
                                         <img src='https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg' alt='' />
                                     </span>

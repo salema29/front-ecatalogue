@@ -24,7 +24,7 @@ const CircularIconsRow = () => {
             {categories.length > 0 ? (
                 <div className="circular-icons-row">
                     {categories.map((item, index) => (
-                        <div className="icon-container" key={item.categorie_id}>
+                        <div className="icon-container" key={item.categorie_id} height="186px">
                             <a href={item.categorie_image}>
                                 <img src={item.categorie_image} alt={item.categorie_name} className="icon" />
                             </a>
