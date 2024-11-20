@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import '../assets/styles/CategoryNavigation.css'; 
 
 const CircularIconsRow = () => {
-    const { id } = useParams();
+    const { idCatalog } = useParams();
     const [categories, setCategories] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${id}`)
+        fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${idCatalog}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Problème de connexion');
@@ -17,7 +17,7 @@ const CircularIconsRow = () => {
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-    }, [id]);
+    }, [idCatalog]);
 
     return (
         <div>

@@ -8,13 +8,13 @@
     font-size: 16px;
 }
 
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
     .confidentiality-text-button {
         text-align: right;
     }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
     .confidentiality-text-button {
         text-align: center;
     }
