@@ -4,7 +4,7 @@ import CategoryNavigation from "../components/CategoryNavigation";
 import "../assets/styles/Product.css";
 
 function Product() {
-    const { id } = useParams();
+    const { idCatalog } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
@@ -15,7 +15,11 @@ function Product() {
     };
 
     const handleCatalogView = () => {
-        navigate(`/catalog/${id}`);
+        navigate(`/catalog/${idCatalog}`);
+    };
+
+    const handleDetailedView = () => {
+        navigate(`/product/${idCatalog}`);
     };
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -30,7 +34,7 @@ function Product() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${id}`
+                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${idCatalog}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -47,7 +51,7 @@ function Product() {
         };
 
         fetchHeaderData();
-    }, [id]);
+    }, [idCatalog]);
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -72,9 +76,6 @@ function Product() {
 
         fetchProductData();
     }, []);
-
-    const linkHref = "https://example.com";
-    // console.log(headerData);
 
     return (
         <>
@@ -108,7 +109,7 @@ function Product() {
                                         height: "25",
                                         width: "auto"
                                     }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="51" height="30" fill="none"><g stroke={headerData ? headerData.client_color : "#fff"} strokeLinecap="round" strokeLinejoin="round" strokewidth="1.401" clipPath="url(#a)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="51" height="30" fill="none"><g stroke={headerData ? headerData.client_color : "#fff"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.401" clipPath="url(#a)">
                                             <path d="M5.356 21.495h12.382c5.8 0 7.09 5.796 7.09 5.796V6.496S23.538.701 17.738.701H5.356v20.794ZM44.724 21.495H31.956c-5.8 0-7.09 5.796-7.09 5.796V6.496s1.29-5.795 7.09-5.795h12.768v20.794Z" />
                                             <path d="M24.866 28.096h-.038s-1.29-4.569-7.09-4.569H2.94V2.694" />
                                             <path d="M24.866 29.3h-.038s-1.29-3.548-7.09-3.548H.701V4.854M24.942 28.096h.038s1.289-4.569 7.09-4.569h15.013V2.694" />
@@ -149,9 +150,8 @@ function Product() {
                                                 }}
                                             >
                                                 <div className="item-wrapper">
-                                                    <a
-                                                        href={linkHref}
-                                                        rel="noopener noreferrer"
+                                                    <div
+                                                        onClick={handleDetailedView}
                                                         className="item-link"
                                                     >
                                                         <iframe
@@ -159,7 +159,7 @@ function Product() {
                                                             className="product-item"
                                                             title={`Product ${index}`}
                                                         />
-                                                    </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );

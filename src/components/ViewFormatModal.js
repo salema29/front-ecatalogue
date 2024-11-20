@@ -3,7 +3,7 @@ import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 
 function ViewFormatDialog() {
-  const { id } = useParams();
+  const { idCatalog } = useParams();
   const [slideData, setSlideData] = useState(null);
   const navigate = useNavigate();
 
@@ -12,20 +12,20 @@ function ViewFormatDialog() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${id}`)
+    fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${idCatalog}`)
       .then((response) => response.json())
       .then((fetchedData) => setSlideData(fetchedData))
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [id]);
+  }, [idCatalog]);
 
   const handleProductView = () => {
-    navigate(`/products/${id}`);
+    navigate(`/products/${idCatalog}`);
   };
 
   const handleCatalogView = () => {
-    navigate(`/catalog/${id}`);
+    navigate(`/catalog/${idCatalog}`);
   };
 
   return (
