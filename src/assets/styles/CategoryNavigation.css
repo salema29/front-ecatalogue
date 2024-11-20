@@ -1,16 +1,16 @@
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
     .circular-icons-row {
         justify-content: center;
         column-gap: 4%;
     }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
     .circular-icons-row {
         justify-content: left;
         overflow-x: scroll;
         scroll-behavior: smooth;
-        column-gap: 6%;
+        column-gap: 10%;
     }
 }
 
@@ -27,25 +27,40 @@
     color: white;
 }
 
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
     .icon {
-        width: 4rem;
+        width: 3rem;
     }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
     .icon {
-        width: 3.5rem;
+        width: 2.5rem;
     }
 }
 
 .icon {
-    height: 102.5px;
     border-radius: 50%;
-    /* object-fit: fill; */
-    border: 2px solid white;
+    /* border: 2px solid white; */
     transition: transform 0.3s;
-    width: 102.5px;
+}
+
+@media screen and (min-width: 768px) {
+    .icon {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .icon-label {
+        margin: 0.5rem 0;
+    }
 }
 
 .icon:hover {
@@ -56,4 +71,6 @@
 .icon-label {
     font-size: 14px;
     color: var(--main-bg);
+    text-transform: capitalize;
+    margin-bottom: 0;
 }
