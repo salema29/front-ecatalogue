@@ -2,42 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 function MainProduct() {
-    const { idCatalog } = useParams();
+    const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
 
-    
+
     const handleCatalogView = () => {
-        navigate(`/catalog/${idCatalog}`);
+        navigate(`/catalog/${catalogId}`);
     };
-    
+
     const handleClose = () => {
         navigate(`/`);
     };
 
     useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${idCatalog}`)
+        fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)
             .then((response) => response.json())
             .then((fetchedData) => setHeaderData(fetchedData))
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
-    }, [idCatalog]);
+    }, [catalogId]);
 
     return (
         <>
             {headerData ? (
                 <>
-                    <header className="view-format-dialog-header">
+                    <header className="header">
                         <div className="view-format-dialog-left-part">
                             <img
-                                className="view-format-dialog-header-logo"
+                                className="header-logo"
                                 src={headerData.client_logo}
                                 alt=""
                             />
-                            <div className="view-format-dialog-header-text">
+                            <div className="header-text">
                                 <p style={{ color: headerData.client_color }}>
-                                    {" "}
                                     {headerData.catalogue_name_ln_un}{" "}
                                     {headerData.catalogue_name_ln_deux}{" "}
                                 </p>
@@ -77,9 +76,11 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
-                    <p>
-                        test vue detaillé
-                    </p>
+                    <div className="container">
+                        <p>
+                            test vue detaillé
+                        </p>
+                    </div>
                 </>
             ) : (
                 <p>Loading...</p>

@@ -3,7 +3,7 @@ import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 
 function ViewFormatDialog() {
-  const { idCatalog } = useParams();
+  const { catalogId } = useParams();
   const [slideData, setSlideData] = useState(null);
   const navigate = useNavigate();
 
@@ -12,34 +12,34 @@ function ViewFormatDialog() {
   };
 
   useEffect(() => {
-    fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${idCatalog}`)
+    fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)
       .then((response) => response.json())
       .then((fetchedData) => setSlideData(fetchedData))
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [idCatalog]);
+  }, [catalogId]);
 
   const handleProductView = () => {
-    navigate(`/products/${idCatalog}`);
+    navigate(`/products/${catalogId}`);
   };
 
   const handleCatalogView = () => {
-    navigate(`/catalog/${idCatalog}`);
+    navigate(`/catalog/${catalogId}`);
   };
 
   return (
     <>
       {slideData ? (
         <>
-          <header className="view-format-dialog-header">
+          <header className="header view-format-dialog-header">
             <div className="view-format-dialog-left-part">
               <img
-                className="view-format-dialog-header-logo"
+                className="header-logo"
                 src={slideData.client_logo}
                 alt=""
               />
-              <div className="view-format-dialog-header-text">
+              <div className="header-text">
                 <p style={{ color: slideData.client_color }}>
                   {" "}
                   {slideData.catalogue_name_ln_un}{" "}

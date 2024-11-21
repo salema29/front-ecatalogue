@@ -9,7 +9,7 @@ function Carousel() {
     const navigate = useNavigate();
 
     const handleOpenText = () => {
-        navigate(`/confidentiality-text`);
+        navigate(`/confidentiality`);
     };
 
     useEffect(() => {

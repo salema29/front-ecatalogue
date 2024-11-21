@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryNavigation from "../components/CategoryNavigation";
+import CategoryMenu from "../components/navigation/CategoryMenu";
 import "../assets/styles/Product.css";
 
 function Product() {
-    const { idCatalog } = useParams();
+    const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
@@ -15,11 +15,11 @@ function Product() {
     };
 
     const handleCatalogView = () => {
-        navigate(`/catalog/${idCatalog}`);
+        navigate(`/catalog/${catalogId}`);
     };
 
     const handleDetailedView = () => {
-        navigate(`/product/${idCatalog}`);
+        navigate(`/product/${catalogId}`);
     };
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -34,7 +34,7 @@ function Product() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${idCatalog}`
+                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -51,7 +51,7 @@ function Product() {
         };
 
         fetchHeaderData();
-    }, [idCatalog]);
+    }, [catalogId]);
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -82,14 +82,14 @@ function Product() {
             {headerData ? (
                 <>
                     <div className="sticky">
-                        <header className="view-format-dialog-header">
+                        <header className="header">
                             <div className="view-format-dialog-left-part">
                                 <img
-                                    className="view-format-dialog-header-logo"
+                                    className="header-logo"
                                     src={headerData.client_logo}
                                     alt=""
                                 />
-                                <div className="view-format-dialog-header-text">
+                                <div className="header-text">
                                     <p>
                                         {headerData.catalogue_name_ln_un}{" "}
                                         {headerData.catalogue_name_ln_deux}
@@ -130,7 +130,7 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        <CategoryNavigation />
+                        <CategoryMenu />
                     </div>
 
                     <div className="container">
