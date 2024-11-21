@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import LoadingSpinner from '../components/spinner/LoadingSpinner'
 
 function MainProduct() {
     const { catalogId } = useParams();
@@ -83,7 +84,7 @@ function MainProduct() {
                     </div>
                 </>
             ) : (
-                <p>Loading...</p>
+                <LoadingSpinner />
             )}
         </>
     );

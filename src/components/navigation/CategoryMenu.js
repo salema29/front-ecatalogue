@@ -4,7 +4,8 @@ import '../../assets/styles/CategoryMenu.css';
 
 const CircularIconsRow = () => {
     const { catalogId } = useParams();
-    const [categories, setCategories] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    
     useEffect(() => {
         fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
             .then(response => {
@@ -13,7 +14,7 @@ const CircularIconsRow = () => {
                 }
                 return response.json();
             })
-            .then(fetchedData => setCategories(fetchedData))
+            .then(data => setCategoryList(data))
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
@@ -21,14 +22,14 @@ const CircularIconsRow = () => {
 
     return (
         <div>
-            {categories.length > 0 ? (
+            {categoryList.length > 0 ? (
                 <div className="circular-icons-row">
-                    {categories.map((item, index) => (
-                        <div className="icon-container" key={item.categorie_id} height="186px">
-                            <a href={item.categorie_image}>
-                                <img src={item.categorie_image} alt={item.categorie_name} className="icon" />
+                    {categoryList.map((category, index) => (
+                        <div className="icon-container" key={category.categorie_id} height="186px">
+                            <a href={category.categorie_image}>
+                                <img src={category.categorie_image} alt={category.categorie_name} className="icon" />
                             </a>
-                            <p className="icon-label">{item.categorie_name}</p>
+                            <p className="icon-label">{category.categorie_name}</p>
                         </div>
                     ))}
                 </div>

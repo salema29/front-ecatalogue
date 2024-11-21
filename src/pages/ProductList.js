@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
+import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/Product.css";
 
 function Product() {
@@ -174,7 +175,7 @@ function Product() {
                     </div>
                 </>
             ) : (
-                <p>Loading...</p>
+                <LoadingSpinner />
             )}
         </>
     );
