@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 function Catalog() {
   const { catalogId } = useParams();
-  const [slideData, setSlideData] = useState(null);
+  const [headerData, setHeaderData] = useState(null);
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
   };
 
+  const handleProductView = () => {
+    navigate(`/products/${catalogId}`);
+  };
+
   useEffect(() => {
     fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)
       .then((response) => response.json())
-      .then((fetchedData) => setSlideData(fetchedData))
+      .then((fetchedData) => setHeaderData(fetchedData))
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
@@ -19,37 +23,40 @@ function Catalog() {
 
   return (
     <>
-      {slideData ? (
+      {headerData ? (
         <>
           <header className="header">
             <div className="view-format-dialog-left-part">
               <img
                 className="header-logo"
-                src={slideData.client_logo}
+                src={headerData.client_logo}
                 alt=""
               />
               <div className="header-text">
-                <p>
-                  {slideData.catalogue_name_ln_un}{" "}
-                  {slideData.catalogue_name_ln_deux}
+                <p style={{ color: headerData ? headerData.client_color : "#fff" }} >
+                  {headerData.catalogue_name_ln_un}{" "}
+                  {headerData.catalogue_name_ln_deux}
                 </p>
                 <p>
-                  du {slideData.catalogue_date_validite_debut} au{" "}
-                  {slideData.catalogue_date_validite_fin}
+                  du {headerData.catalogue_date_validite_debut} auuy{" "}
+                  {headerData.catalogue_date_validite_fin}
                 </p>
               </div>
             </div>
             <div className="view-format-dialog-right-part">
               <button
                 className="view-format-switcher btn"
-                onClick={handleClose}
+                onClick={handleProductView}
               >
-                <img
-                  src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg"
-                  height="25"
-                  width="auto"
-                  alt="Vue catalogue"
-                />
+                <span style={{
+                  height: "25",
+                  width: "auto"
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none">
+                    <path fill={headerData ? headerData.client_color : "#fff"} stroke={headerData ? headerData.client_color : "#fff"} d="M.5.5h13.962v14.542H.5z" />
+                    <path stroke={headerData ? headerData.client_color : "#fff"} d="M.5 18.632h13.962v14.542H.5zM19.203.5h13.962v14.542H19.203zM19.203 18.632h13.962v14.542H19.203z" />
+                  </svg>
+                </span>
               </button>
               <button
                 className="view-format-dialog-close btn"
@@ -64,7 +71,7 @@ function Catalog() {
             </div>
           </header>
           <iframe
-            src={slideData.catalogue_link}
+            src={headerData.catalogue_link}
             width="100%"
             height="90%"
             border="none"

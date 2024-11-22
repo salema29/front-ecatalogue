@@ -91,7 +91,7 @@ function Product() {
                                     alt=""
                                 />
                                 <div className="header-text">
-                                    <p>
+                                    <p style={{ color: headerData ? headerData.client_color : "#fff" }} >
                                         {headerData.catalogue_name_ln_un}{" "}
                                         {headerData.catalogue_name_ln_deux}
                                     </p>
