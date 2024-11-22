@@ -29,6 +29,7 @@
 
 .header {
     width: -webkit-fill-available;
+    width: -moz-available;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
     border: none;
     background: #1c1a1f;

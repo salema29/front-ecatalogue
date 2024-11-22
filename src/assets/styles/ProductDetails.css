@@ -1,0 +1,10 @@
+.product-detail-container {
+    height: inherit;
+}
+
+.single-product-item {
+    border: none;
+    min-height: 80%;
+    width: 80%;
+    pointer-events: none;
+  }

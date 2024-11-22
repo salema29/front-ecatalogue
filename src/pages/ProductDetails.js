@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
+import '../assets/styles/ProductDetails.css';
 
 function MainProduct() {
     const { catalogId } = useParams();
@@ -77,10 +78,16 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
-                    <div className="container">
-                        <p>
-                            test vue detaillé
-                        </p>
+                    <div className="product-detail-container">
+                        <div className="single-item-wrapper">
+                            <iframe
+                                src={`https://intranet.vivetic.com/labo/15556/sftp_simulation/catalogue_sftp/HTML/334992.html`}
+                                className="product-item"
+                                title={`Product 334922`}
+                                width="auto"
+                                height="590px"
+                            />
+                        </div>
                     </div>
                 </>
             ) : (
