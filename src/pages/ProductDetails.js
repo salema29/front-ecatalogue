@@ -73,7 +73,7 @@ function MainProduct() {
                                 <img
                                     src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
                                     alt="Fermer"
-                                    width="20"
+                                    width="25"
                                 />
                             </button>
                         </div>
