@@ -28,13 +28,13 @@
     z-index: 1;
 }
 
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
     .banner-text {
         font-size: 60px;
     }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
     .banner-text {
         font-size: 34px;
     }

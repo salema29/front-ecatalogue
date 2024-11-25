@@ -19,8 +19,16 @@ code {
   --secondary-color-2: #BCD8D8;
   --black-color: #000000;
   --dark-bg: #1E1C21;
+  --main-bg: #EDEDED;
 }
 
 .container {
   margin: 0 1rem;
+}
+
+html, body, #ecatalogue {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--main-bg);
 }
