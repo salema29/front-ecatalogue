@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import '../../assets/styles/CategoryMenu.css'; 
+import '../../assets/styles/CategoryMenu.css';
 
 const CategoryMenu = ({categoryIdSelected}) => {
     const { catalogId } = useParams();
@@ -25,6 +25,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
             });
     }, [catalogId]);
 
+    console.log(categoryList);
     return (
         <div>
             {categoryList.length > 0 ? (
@@ -50,7 +51,9 @@ const CategoryMenu = ({categoryIdSelected}) => {
                     ))}
                 </div>
             ) : (
-                <p> Il n'y a pas de catégorie disponible </p>
+                <>
+                    {/* <p> Il n'y a pas de catégorie disponible </p> */}
+                </>
             )}
         </div>
     );
