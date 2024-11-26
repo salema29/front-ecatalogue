@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
+
 function Catalog() {
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
-  const [categoryList, setCategoryList] = useState([]);
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
   };
 
-  useEffect(() => {
-    fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Problème de connexion');
-            }
-            return response.json();
-        })
-        .then(data => setCategoryList(data))
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
-}, [catalogId]);
-const firstCategorieId = categoryList[0]?.categorie_id;  // for the preselected category
+const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
 const handleProductView = () => {
     navigate(`/products-resume/${catalogId}/${firstCategorieId}`);

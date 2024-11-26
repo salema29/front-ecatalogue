@@ -1,31 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from "react-router-dom";
+import CategoryPerCatalogue from "./CategoryPerCatalogue"
 import '../../assets/styles/CategoryMenu.css';
 
 const CategoryMenu = ({categoryIdSelected}) => {
     const { catalogId } = useParams();
-    const [categoryList, setCategoryList] = useState([]);
     const navigate = useNavigate();
 
     const handleProductsPerCategory = (catalogId, categoryId) => {
         navigate(`/products-resume/${catalogId}/${categoryId}`);
     };
-    
-    useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Problème de connexion');
-                }
-                return response.json();
-            })
-            .then(data => setCategoryList(data))
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    }, [catalogId]);
+    const { categoryList } = CategoryPerCatalogue(catalogId);
 
-    console.log(categoryList);
     return (
         <div>
             {categoryList.length > 0 ? (
@@ -49,6 +35,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
             ) : (
                 <>
                     {/* <p> Il n'y a pas de catégorie disponible </p> */}
+                    <p> Il n'y a pas de produits disponible </p>
                 </>
             )}
         </div>
