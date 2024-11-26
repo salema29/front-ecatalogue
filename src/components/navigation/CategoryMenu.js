@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import '../../assets/styles/CategoryMenu.css'; 
 
-const CircularIconsRow = () => {
+const CategoryMenu = ({categoryIdSelected}) => {
     const { catalogId } = useParams();
     const [categoryList, setCategoryList] = useState([]);
+    const navigate = useNavigate();
+
+    const handleProductsPerCategory = (catalogId, categoryId) => {
+        navigate(`/products-resume/${catalogId}/${categoryId}`);
+    };
     
     useEffect(() => {
         fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
@@ -25,11 +30,22 @@ const CircularIconsRow = () => {
             {categoryList.length > 0 ? (
                 <div className="circular-icons-row">
                     {categoryList.map((category, index) => (
-                        <div className="icon-container" key={category.categorie_id} height="186px">
+                            <div className="icon-container" key={category.categorie_id} height="186px"  onClick={() => handleProductsPerCategory(catalogId, category.categorie_id)} >
                             <a href={category.categorie_image}>
                                 <img src={category.categorie_image} alt={category.categorie_name} className="icon" />
                             </a>
-                            <p className="icon-label">{category.categorie_name}</p>
+                            
+                            <p 
+                                style={
+                                    category.categorie_id === categoryIdSelected
+                                        ? { fontWeight: "bolder" }
+                                        : {}
+                                }
+                                className="icon-label" 
+                            >
+                                {category.categorie_name}
+
+                            </p>
                         </div>
                     ))}
                 </div>
@@ -39,4 +55,4 @@ const CircularIconsRow = () => {
         </div>
     );
 };
-export default CircularIconsRow;
+export default CategoryMenu;
