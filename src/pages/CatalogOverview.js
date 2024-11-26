@@ -3,14 +3,30 @@ import { useParams, useNavigate } from "react-router-dom";
 function Catalog() {
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
+  const [categoryList, setCategoryList] = useState([]);
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
   };
 
-  const handleProductView = () => {
-    navigate(`/products/${catalogId}`);
-  };
+  useEffect(() => {
+    fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Problème de connexion');
+            }
+            return response.json();
+        })
+        .then(data => setCategoryList(data))
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+}, [catalogId]);
+const firstCategorieId = categoryList[0]?.categorie_id;  // for the preselected category
+
+const handleProductView = () => {
+    navigate(`/products-resume/${catalogId}/${firstCategorieId}`);
+};
 
   useEffect(() => {
     fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)

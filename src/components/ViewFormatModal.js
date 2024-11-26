@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 function ViewFormatDialog() {
     const { catalogId } = useParams();
     const [slideData, setSlideData] = useState(null);
+    const [categoryList, setCategoryList] = useState([]);
     const navigate = useNavigate();
 
     const handleClose = () => {
@@ -21,8 +22,23 @@ function ViewFormatDialog() {
             });
     }, [catalogId]);
 
+    useEffect(() => {
+        fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Problème de connexion');
+                }
+                return response.json();
+            })
+            .then(data => setCategoryList(data))
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }, [catalogId]);
+    const firstCategorieId = categoryList[0]?.categorie_id;  // for the preselected category
+
     const handleProductView = () => {
-        navigate(`/products/${catalogId}`);
+        navigate(`/products-resume/${catalogId}/${firstCategorieId}`);
     };
 
     const handleCatalogView = () => {
