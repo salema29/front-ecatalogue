@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 
 function Catalog() {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const handleProductView = () => {
 };
 
   useEffect(() => {
-    fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)
+    fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
       .then((response) => response.json())
       .then((fetchedData) => setHeaderData(fetchedData))
       .catch((error) => {

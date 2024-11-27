@@ -5,6 +5,7 @@ import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 
 function Carousel() {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
@@ -26,7 +27,7 @@ function Carousel() {
         const fetchedValue = client ? client.value : null ;
         setClientId(fetchedValue);
 
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getSlides/${clientId}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
             .then((response) => response.json())
             .then((fetchedData) => setSlidesData(fetchedData))
             .catch((error) => console.error("Error fetching data:", error));
