@@ -6,18 +6,31 @@ import { useNavigate } from "react-router-dom";
 
 function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
+    const [shopId, setShopId] = useState(null);
+    const [clientId, setClientId] = useState(null);
+    let environment_shop_id = 0;
+    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) 
+    {
+        environment_shop_id = window.dataLayer[0].cdl_environment_shop;
+    }    
+    const client = document.getElementById('catalogue-client');
     const navigate = useNavigate();
-
     const handleOpenText = () => {
         navigate(`/confidentiality`);
     };
 
     useEffect(() => {
-        fetch("http://localhost/admin-ecatalogue-v2/api/getSlides/logo-preprod")
+        const shop = environment_shop_id;
+        setShopId(shop);
+        
+        const fetchedValue = client ? client.value : null ;
+        setClientId(fetchedValue);
+
+        fetch(`http://localhost/admin-ecatalogue-v2/api/getSlides/${clientId}/${shopId}`)
             .then((response) => response.json())
             .then((fetchedData) => setSlidesData(fetchedData))
             .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+    }, [clientId, shopId, client, environment_shop_id]);
 
     const flickityOptions = {
         initialIndex: 0,
