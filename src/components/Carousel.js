@@ -9,7 +9,9 @@ function Carousel() {
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
+
     let environment_shop_id = 0;
+    
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) 
     {
         environment_shop_id = window.dataLayer[0].cdl_environment_shop;
