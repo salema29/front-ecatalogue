@@ -5,6 +5,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/Product.css";
 
 function Product() {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
@@ -35,7 +36,7 @@ function Product() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`
+                    `${API_BASE_URL}/api/getOneSlide/${catalogId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -58,7 +59,7 @@ function Product() {
         const fetchProductData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getProducts/${categoryId}`
+                    `${API_BASE_URL}/api/getProducts/${categoryId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);

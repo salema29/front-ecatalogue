@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 
 const CategoryPerCatalogue = (catalogId) => {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [categoryList, setCategoryList] = useState([]);
     const firstCategorieId = categoryList[0]?.categorie_id;
 
     useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getCategory/${catalogId}`)
+        fetch(`${API_BASE_URL}/api/getCategory/${catalogId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Problème de connexion');

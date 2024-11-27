@@ -5,6 +5,7 @@ import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 
 function Carousel() {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ function Carousel() {
     };
 
     useEffect(() => {
-        fetch("http://localhost/admin-ecatalogue-v2/api/getSlides/logo-preprod")
+        fetch(`${API_BASE_URL}/api/getSlides/logo-preprod`)
             .then((response) => response.json())
             .then((fetchedData) => setSlidesData(fetchedData))
             .catch((error) => console.error("Error fetching data:", error));
