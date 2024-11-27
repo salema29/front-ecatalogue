@@ -63,8 +63,8 @@
     }
 }
 
-.icon:hover {
-    transform: scale(1.05);
+.icon-container:hover {
+    transform: scale(1.08);
     transition: transform 0.3s;
 }
 

@@ -3,10 +3,11 @@ import '../../assets/styles/PrivacyPolicy.css';
 import LoadingSpinner from '../../components/spinner/LoadingSpinner'
 
 function PrivacyPolicy() {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [privacyPolicyContent, setPrivacyPolicyContent] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getTextConfidentiality`)
+        fetch(`${API_BASE_URL}/api/getTextConfidentiality`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Problème de connexion');

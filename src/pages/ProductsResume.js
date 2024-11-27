@@ -5,12 +5,13 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/Product.css";
 
 function Product() {
-    const { catalogId } = useParams();
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const navigate = useNavigate();
-
+    
     const handleClose = () => {
         navigate(`/`);
     };
@@ -35,7 +36,7 @@ function Product() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`
+                    `${API_BASE_URL}/api/getOneSlide/${catalogId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -58,7 +59,7 @@ function Product() {
         const fetchProductData = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost/admin-ecatalogue-v2/api/getProducts/104`
+                    `${API_BASE_URL}/api/getProducts/${categoryId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -76,7 +77,7 @@ function Product() {
         };
 
         fetchProductData();
-    }, []);
+    }, [categoryId]);
 
     return (
         <>
@@ -131,7 +132,7 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        <CategoryMenu />
+                        <CategoryMenu categoryIdSelected={categoryId}/>
                     </div>
 
                     <div className="container">
@@ -169,7 +170,7 @@ function Product() {
                                     return null;
                                 })
                             ) : (
-                                <p>No products available</p>
+                                <p>No products available catégorie = {categoryId} </p>
                             )}
                         </div>
                     </div>

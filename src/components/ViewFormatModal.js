@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 
 function ViewFormatDialog() {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const { catalogId } = useParams();
     const [slideData, setSlideData] = useState(null);
     const navigate = useNavigate();
@@ -13,7 +15,7 @@ function ViewFormatDialog() {
     };
 
     useEffect(() => {
-        fetch(`http://localhost/admin-ecatalogue-v2/api/getOneSlide/${catalogId}`)
+        fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
             .then((response) => response.json())
             .then((fetchedData) => setSlideData(fetchedData))
             .catch((error) => {
@@ -21,8 +23,10 @@ function ViewFormatDialog() {
             });
     }, [catalogId]);
 
+    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
+    
     const handleProductView = () => {
-        navigate(`/products/${catalogId}`);
+        navigate(`/products-resume/${catalogId}/${firstCategorieId}`);
     };
 
     const handleCatalogView = () => {
