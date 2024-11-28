@@ -29,7 +29,8 @@ function Carousel() {
         const fetchedValue = client ? client.value : null ;
         setClientId(fetchedValue);
 
-        fetch(`${API_BASE_URL}/api/getSlides/174/0`)
+        // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/174/0`) //Static data for testing
             .then((response) => response.json())
             .then((fetchedData) => setSlidesData(fetchedData))
             .catch((error) => console.error("Error fetching data:", error));
