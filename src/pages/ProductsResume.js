@@ -30,7 +30,7 @@ function Product() {
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [API_BASE_URL]);
 
     useEffect(() => {
         const fetchHeaderData = async () => {
@@ -53,7 +53,7 @@ function Product() {
         };
 
         fetchHeaderData();
-    }, [catalogId]);
+    }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -77,7 +77,7 @@ function Product() {
         };
 
         fetchProductData();
-    }, [categoryId]);
+    }, [categoryId, API_BASE_URL]);
 
     return (
         <>

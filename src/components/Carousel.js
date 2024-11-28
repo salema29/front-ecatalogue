@@ -29,11 +29,11 @@ function Carousel() {
         const fetchedValue = client ? client.value : null ;
         setClientId(fetchedValue);
 
-        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/174/0`)
             .then((response) => response.json())
             .then((fetchedData) => setSlidesData(fetchedData))
             .catch((error) => console.error("Error fetching data:", error));
-    }, [clientId, shopId, client, environment_shop_id]);
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL]);
 
     const flickityOptions = {
         initialIndex: 0,

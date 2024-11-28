@@ -24,7 +24,7 @@ const handleProductView = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, [catalogId]);
+  }, [catalogId, API_BASE_URL]);
 
   return (
     <>

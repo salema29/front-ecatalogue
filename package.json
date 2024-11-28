@@ -1,6 +1,7 @@
 {
   "name": "front-ecatalogue",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "@capacitor/android": "^6.1.2",
