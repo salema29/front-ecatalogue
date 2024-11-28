@@ -11,11 +11,11 @@ function Catalog() {
     navigate(`/`);
   };
 
-const { firstCategorieId } = CategoryPerCatalogue(catalogId);
+  const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
-const handleProductView = () => {
-    navigate(`/products-resume/${catalogId}/${firstCategorieId}`);
-};
+  const handleProductView = () => {
+    navigate(`/product-list/${catalogId}/${firstCategorieId}`);
+  };
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
@@ -82,6 +82,7 @@ const handleProductView = () => {
             border="none"
             padding-right="0"
             padding-left="0"
+            title={headerData.catalogue_name_ln_un}
           ></iframe>
         </>
       ) : (

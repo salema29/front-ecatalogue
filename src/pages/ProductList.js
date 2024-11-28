@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
-import "../assets/styles/Product.css";
+import "../assets/styles/ProductList.css";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;

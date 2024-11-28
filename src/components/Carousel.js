@@ -11,11 +11,10 @@ function Carousel() {
     const [clientId, setClientId] = useState(null);
 
     let environment_shop_id = 0;
-    
-    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) 
-    {
+
+    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
         environment_shop_id = window.dataLayer[0].cdl_environment_shop;
-    }    
+    }
     const client = document.getElementById('catalogue-client');
     const navigate = useNavigate();
     const handleOpenText = () => {
@@ -25,8 +24,8 @@ function Carousel() {
     useEffect(() => {
         const shop = environment_shop_id;
         setShopId(shop);
-        
-        const fetchedValue = client ? client.value : null ;
+
+        const fetchedValue = client ? client.value : null;
         setClientId(fetchedValue);
 
         // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
@@ -52,7 +51,10 @@ function Carousel() {
                         navigate(`/view/${slide.catalogue_id}`);
                     };
                     return (
-                        <div key={slide.catalogue_id} className="slide-element">
+                        <div
+                            key={slide.catalogue_id}
+                            className="slide-element"
+                        >
                             <img
                                 alt={`slide${slide.catalogue_id} media`}
                                 className="slide-media"
