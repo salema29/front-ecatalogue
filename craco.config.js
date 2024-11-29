@@ -3,7 +3,6 @@ module.exports = {
         configure: (webpackConfig, { env }) => {
             // Disable code splitting
             webpackConfig.optimization.splitChunks = false;
-
             // Disable the runtime chunk
             webpackConfig.optimization.runtimeChunk = false;
             webpackConfig.output.filename = 'static/js/[name].js';

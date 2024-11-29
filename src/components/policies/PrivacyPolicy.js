@@ -18,7 +18,7 @@ function PrivacyPolicy() {
             .catch(error => {
                 console.error('Error fetching PrivacyPolicy text:', error);
             });
-    }, []);
+    }, [API_BASE_URL]);
 
     return (
         <>

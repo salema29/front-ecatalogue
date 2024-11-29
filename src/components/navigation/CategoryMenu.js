@@ -8,7 +8,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
     const navigate = useNavigate();
 
     const handleProductsPerCategory = (catalogId, categoryId) => {
-        navigate(`/products-resume/${catalogId}/${categoryId}`);
+        navigate(`/product-list/${catalogId}/${categoryId}`);
     };
     const { categoryList } = CategoryPerCatalogue(catalogId);
 

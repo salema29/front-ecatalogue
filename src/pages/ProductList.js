@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
-import "../assets/styles/Product.css";
+import "../assets/styles/ProductList.css";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -30,7 +30,7 @@ function Product() {
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, [API_BASE_URL]);
 
     useEffect(() => {
         const fetchHeaderData = async () => {
@@ -53,7 +53,7 @@ function Product() {
         };
 
         fetchHeaderData();
-    }, [catalogId]);
+    }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -77,7 +77,7 @@ function Product() {
         };
 
         fetchProductData();
-    }, [categoryId]);
+    }, [categoryId, API_BASE_URL]);
 
     return (
         <>
