@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const { catalogId } = useParams();
-    const [slideData, setSlideData] = useState(null);
+    const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
 
     const handleClose = () => {
@@ -17,16 +17,16 @@ function ViewFormatDialog() {
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
             .then((response) => response.json())
-            .then((fetchedData) => setSlideData(fetchedData))
+            .then((fetchedData) => setHeaderData(fetchedData))
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
     }, [catalogId, API_BASE_URL]);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
-    
+
     const handleProductView = () => {
-        navigate(`/products-resume/${catalogId}/${firstCategorieId}`);
+        navigate(`/product-list/${catalogId}/${firstCategorieId}`);
     };
 
     const handleCatalogView = () => {
@@ -35,24 +35,24 @@ function ViewFormatDialog() {
 
     return (
         <>
-            {slideData ? (
+            {headerData ? (
                 <>
                     <header className="header view-format-dialog-header">
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src={slideData.client_logo}
+                                src={headerData.client_logo}
                                 alt=""
                             />
                             <div className="header-text">
-                                <p style={{ color: slideData.client_color }}>
+                                <p style={{ color: headerData.client_color }}>
                                     {" "}
-                                    {slideData.catalogue_name_ln_un}{" "}
-                                    {slideData.catalogue_name_ln_deux}{" "}
+                                    {headerData.catalogue_name_ln_un}{" "}
+                                    {headerData.catalogue_name_ln_deux}{" "}
                                 </p>
                                 <p>
-                                    du {slideData.catalogue_date_validite_debut} au{" "}
-                                    {slideData.catalogue_date_validite_fin}
+                                    du {headerData.catalogue_date_validite_debut} au{" "}
+                                    {headerData.catalogue_date_validite_fin}
                                 </p>
                             </div>
                         </div>
@@ -74,8 +74,8 @@ function ViewFormatDialog() {
                             <div className="view-format-dialog-desktop-left-part">
                                 <span className="view-format-dialog-side-image">
                                     <img
-                                        src={slideData.slide_image}
-                                        alt=" {slideData.catalogue_name_ln_un} {slideData.catalogue_name_ln_deux} "
+                                        src={headerData.slide_image}
+                                        alt=" {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux} "
                                     />
                                 </span>
                             </div>
@@ -87,7 +87,7 @@ function ViewFormatDialog() {
                                         alt=""
                                     />
                                     <h2
-                                        style={{ color: slideData.client_color }}
+                                        style={{ color: headerData.client_color }}
                                         className="view-format-text"
                                     >
                                         Nouveau ! choisissez votre mode de lecture... Version
@@ -98,7 +98,7 @@ function ViewFormatDialog() {
                                 <div className="view-format-dialog-button-container">
                                     <button
                                         className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: slideData.client_color }}
+                                        style={{ backgroundColor: headerData.client_color }}
                                         onClick={handleProductView}
                                     >
                                         <span className="view-format-dialog-button-text">
@@ -113,7 +113,7 @@ function ViewFormatDialog() {
                                     </button>
                                     <button
                                         className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: slideData.client_color }}
+                                        style={{ backgroundColor: headerData.client_color }}
                                         onClick={handleCatalogView}
                                     >
                                         <span className="view-format-dialog-button-text">
@@ -142,7 +142,7 @@ function ViewFormatDialog() {
                             </div>
                             <div className="view-format-dialog-button-container">
                                 <button
-                                    style={{ backgroundColor: slideData.client_color }}
+                                    style={{ backgroundColor: headerData.client_color }}
                                     className="view-format-dialog-button"
                                     onClick={handleProductView}
                                 >
@@ -160,7 +160,7 @@ function ViewFormatDialog() {
                                     </span>
                                 </button>
                                 <button
-                                    style={{ backgroundColor: slideData.client_color }}
+                                    style={{ backgroundColor: headerData.client_color }}
                                     className="view-format-dialog-button"
                                     onClick={handleCatalogView}
                                 >
