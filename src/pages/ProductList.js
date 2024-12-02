@@ -135,7 +135,7 @@ function Product() {
                         <CategoryMenu categoryIdSelected={categoryId}/>
                     </div>
 
-                    <div className="container" >
+                    <div className="product-list-container" >
                         <div className="grid-container">
                             {productData.length > 0 ? (
                                 productData.map((product, index) => {
