@@ -135,7 +135,7 @@ function Product() {
                         <CategoryMenu categoryIdSelected={categoryId}/>
                     </div>
 
-                    <div className="container">
+                    <div className="product-list-container" >
                         <div className="grid-container">
                             {productData.length > 0 ? (
                                 productData.map((product, index) => {
@@ -157,7 +157,7 @@ function Product() {
                                                         className="item-link"
                                                     >
                                                         <iframe
-                                                            src={`https://intranet.vivetic.com/labo/15556/sftp_simulation/catalogue_sftp/HTML/${product.html_name}`}
+                                                            src={product.html_name}
                                                             className="product-item"
                                                             title={`Product ${index}`}
                                                         />
