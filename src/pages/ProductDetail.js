@@ -5,8 +5,9 @@ import '../assets/styles/ProductDetail.css';
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const { catalogId } = useParams();
+    const { catalogId, product_id } = useParams();
     const [headerData, setHeaderData] = useState(null);
+    const [productData, setProductData] = useState(null);
     const navigate = useNavigate();
 
 
@@ -26,6 +27,15 @@ function MainProduct() {
                 console.error("Error fetching data:", error);
             });
     }, [catalogId, API_BASE_URL]);
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/api/getProductDetail/${product_id}`)
+            .then((response) => response.json())
+            .then((fetchedData) => setProductData(fetchedData))
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    }, [product_id, API_BASE_URL]);
 
     return (
         <>
@@ -81,13 +91,17 @@ function MainProduct() {
                     </header>
                     <div className="product-detail-container">
                         <div className="single-item-wrapper">
-                            <iframe
-                                src={`https://intranet.vivetic.com/labo/15556/sftp_simulation/catalogue_sftp/HTML/334992.html`}
-                                className="product-item"
-                                title={`Product 334922`}
-                                width="auto"
-                                height="590px"
-                            />
+                            {productData ? (
+                                <iframe
+                                    src={productData.html.html_name}
+                                    className="product-item"
+                                    title={productData.html.html_name}
+                                    width="auto"
+                                    height="590px"
+                                />
+                            ) : (
+                                <LoadingSpinner />
+                            )}
                         </div>
                     </div>
                 </>

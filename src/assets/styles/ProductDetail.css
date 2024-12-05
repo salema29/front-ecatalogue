@@ -7,4 +7,8 @@
     min-height: 80%;
     width: 80%;
     pointer-events: none;
-  }
+}
+
+.single-item-wrapper{
+    height: 90vh;
+}
