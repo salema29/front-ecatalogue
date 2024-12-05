@@ -59,7 +59,7 @@ function Product() {
         const fetchProductData = async () => {
             try {
                 const response = await fetch(
-                    `${API_BASE_URL}/api/getProducts/${categoryId}`
+                    `${API_BASE_URL}/api/getProducts/${categoryId}/${catalogId}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -78,7 +78,6 @@ function Product() {
 
         fetchProductData();
     }, [categoryId, API_BASE_URL]);
-
     return (
         <>
             {headerData ? (
