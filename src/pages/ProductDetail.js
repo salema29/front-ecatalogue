@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import '../assets/styles/ProductDetail.css';
 
 function MainProduct() {
@@ -9,14 +10,14 @@ function MainProduct() {
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
     const navigate = useNavigate();
-
+    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
 
     const handleClose = () => {
-        navigate(`/`);
+        navigate(`/product-list/${catalogId}/${firstCategorieId}`);
     };
 
     useEffect(() => {
