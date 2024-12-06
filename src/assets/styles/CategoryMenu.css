@@ -66,6 +66,7 @@
 .icon-container:hover {
     transform: scale(1.08);
     transition: transform 0.3s;
+    cursor: pointer;
 }
 
 .icon-label {

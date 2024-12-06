@@ -53,11 +53,20 @@ iframe>html>body {
 
 .product-list-container {
   height: 100%;
-  overflow: scroll;
+  /* overflow-y: scroll; */
 }
 
 .sticky {
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+.wrapper {
+  height: 70vh;
+  overflow-y: scroll;
+}
+.wrapper_one {
+  height: inherit;
+  /* overflow-y: scroll; */
 }

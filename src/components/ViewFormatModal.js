@@ -87,13 +87,14 @@ function ViewFormatDialog() {
                                         alt=""
                                     />
                                     <h2
-                                        style={{ color: headerData.client_color }}
+                                        style={{ color: headerData.client_color, marginBottom:0 }}
                                         className="view-format-text"
                                     >
-                                        Nouveau ! choisissez votre mode de lecture... Version
-                                        simplifiée par produit et créez ainsi directement vos listes
-                                        de courses, ou continuer en version feuilletable.
-                                    </h2>
+                                        <span style={{ fontWeight : 700}}>Nouveau !</span> choisissez votre mode de lecture...
+                                    </h2 >
+                                    <p>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
+                                        de courses, ou continuer en <span className="text-gras" >version feuilletable.</span>
+                                    </p>
                                 </div>
                                 <div className="view-format-dialog-button-container">
                                     <button
@@ -136,7 +137,7 @@ function ViewFormatDialog() {
                                     src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/view-format-icon.svg"
                                     alt=""
                                 />
-                                <h2 className="view-format-text">
+                                <h2 className="view-format-text" style={{ color: headerData.client_color , fontWeight: 900}}>
                                     Choisissez votre mode de lecture
                                 </h2>
                             </div>
