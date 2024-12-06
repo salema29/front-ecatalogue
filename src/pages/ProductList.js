@@ -191,7 +191,7 @@ function Product() {
                                         return null;
                                     })
                                 ) : (
-                                    <p>No products available catégorie </p>
+                                    <p>Chargement en cours... </p>
                                 )}
                             </div>
                         </div>

@@ -35,7 +35,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
             ) : (
                 <>
                     {/* <p> Il n'y a pas de catégorie disponible </p> */}
-                    <p> Il n'y a pas de produits disponible </p>
+                    <p> Chargement en cours ... </p>
                 </>
             )}
         </div>

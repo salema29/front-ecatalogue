@@ -206,7 +206,7 @@
 
 .view-format-text {
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 400;
 }
 
 .btn {
@@ -221,4 +221,7 @@
 
 .view-format-dialog-header {
     position: absolute;
+}
+.text-gras{
+    font-weight: 700;
 }

@@ -3,13 +3,14 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
+import { dataSlide } from "./slide.data";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
-
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     let environment_shop_id = 0;
 
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
@@ -29,23 +30,34 @@ function Carousel() {
         setClientId(fetchedValue);
 
         // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        fetch(`${API_BASE_URL}/api/getSlides/186/0`) //Static data for testing
+        fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
             .then((response) => response.json())
-            .then((fetchedData) => setSlidesData(fetchedData))
+            .then((fetchedData) => {
+                setSlidesData(fetchedData);
+            })
             .catch((error) => console.error("Error fetching data:", error));
-    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL]);
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData]);
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 767);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [API_BASE_URL]);
 
-    const flickityOptions = {
+    const flickityOptionsCenter = {
         initialIndex: 0,
-        cellAlign: "left",
+        cellAlign: isMobileView ? 'left' : slidesData.length < 3 ? 'center' :  'left',
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
+        pageDots: false
+        // groupCells: true
     };
 
     return (
         <>
-            <Flickity className="slider-container" options={flickityOptions}>
+            <Flickity className="slider-container" options={flickityOptionsCenter}>
                 {slidesData.map((slide) => {
                     const handleClick = () => {
                         navigate(`/view/${slide.catalogue_id}`);
@@ -72,6 +84,9 @@ function Carousel() {
                                         className="slide-head-title"
                                         style={{ fontFamily: slide.nom_catalogue_typo_name }}
                                     >
+                                        <div className="slide-headline">
+                                            E-CATALOGUE
+                                        </div>
                                         <div className="slide-headline">
                                             {slide.catalogue_name_ln_un}
                                         </div>
