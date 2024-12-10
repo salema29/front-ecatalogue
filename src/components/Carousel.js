@@ -9,34 +9,44 @@ function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
-    const [clientId, setClientId] = useState(null);
+    const [inputValue, setInputValue] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
-    let environment_shop_id = 0;
-
-    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
-        environment_shop_id = window.dataLayer[0].cdl_environment_shop;
-    }
-    const client = document.getElementById('catalogue-client');
     const navigate = useNavigate();
     const handleOpenText = () => {
         navigate(`/confidentiality`);
     };
 
+    let environment_shop_id = 0;
+    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
+        environment_shop_id = window.dataLayer[0].cdl_environment_shop;
+    }
     useEffect(() => {
-        const shop = environment_shop_id;
-        setShopId(shop);
+        const hiddenInput = document.getElementById('catalogue-client');
+        const fetchedValue = hiddenInput ? hiddenInput.value : 'No value found';
+        setInputValue(fetchedValue);
+    }, []);
 
-        const fetchedValue = client ? client.value : null;
-        setClientId(fetchedValue);
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
+        fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((fetchedData) => {
+            setSlidesData(fetchedData);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+    }, [inputValue, shopId, API_BASE_URL])
 
-        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        // fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
-            .then((response) => response.json())
-            .then((fetchedData) => {
-                setSlidesData(fetchedData);
-            })
-            .catch((error) => console.error("Error fetching data:", error));
-    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData]);
+    useEffect(() => {
+        setShopId(environment_shop_id);
+    }, [environment_shop_id]);
+
     useEffect(() => {
         const handleResize = () => {
             setIsMobileView(window.innerWidth <= 767);
