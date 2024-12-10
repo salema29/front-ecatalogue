@@ -3,7 +3,7 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
-import { dataSlide } from "./slide.data";
+// import { dataSlide } from "./slide.data";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -29,8 +29,8 @@ function Carousel() {
         const fetchedValue = client ? client.value : null;
         setClientId(fetchedValue);
 
-        // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
+        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+        // fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
             .then((response) => response.json())
             .then((fetchedData) => {
                 setSlidesData(fetchedData);
@@ -51,7 +51,7 @@ function Carousel() {
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
-        pageDots: false
+        // pageDots: false
         // groupCells: true
     };
 
