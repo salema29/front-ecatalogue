@@ -1,5 +1,7 @@
 .slider-container {
-  margin: 4rem 1rem 1rem 1rem;
+  margin: 4rem 0rem 1rem 0rem;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .slide-element {
@@ -33,7 +35,8 @@
 
 @media screen and (min-width : 768px) {
   .slide-media {
-    min-width: 640px;
+    /* min-width: 640px; */
+    max-width: 640px;
     width: 100%;
   }
 }
@@ -218,22 +221,22 @@ https://flickity.metafizzy.co
 }
 
 .flickity-prev-next-button.previous {
-  left: 10px;
+  left: 24px;
 }
 
 .flickity-prev-next-button.next {
-  right: 10px;
+  right: 24px;
 }
 
 /* right to left */
 .flickity-rtl .flickity-prev-next-button.previous {
   left: auto;
-  right: 10px;
+  right: 24px;
 }
 
 .flickity-rtl .flickity-prev-next-button.next {
   right: auto;
-  left: 10px;
+  left: 24px;
 }
 
 .flickity-prev-next-button .flickity-button-icon {
