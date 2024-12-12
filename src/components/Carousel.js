@@ -9,11 +9,13 @@ function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
+    const [inputValue, setInputValue] = useState(null);
     const [clientId, setClientId] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
     const sliderContainerRef = useRef(null);
+
     let environment_shop_id = 0;
 
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
@@ -25,16 +27,16 @@ function Carousel() {
         navigate(`/confidentiality`);
     };
 
-    const flickityOptions = {
+    const [flickityOptions, setFlickityOptions] = useState({
         initialIndex: 0,
         cellAlign: isMobileView ? 'left' : slidesData.length < 3 ? 'center' : 'left',
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
-        groupCells: isMobileView ? false : true, 
-        pageDots: showPageDots, 
-        prevNextButtons: true, 
-    };
+        groupCells: isMobileView ? false : true,
+        pageDots: true,
+        prevNextButtons: true,
+    });
 
     useEffect(() => {
         const shop = environment_shop_id;
@@ -43,14 +45,8 @@ function Carousel() {
         const fetchedValue = client ? client.value : null;
         setClientId(fetchedValue);
 
-        setSlidesData(dataSlide);
-
-    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData, isMobileView]);
-
-    useEffect(() => {
         updateSlideWidth();
-
-        calculatePaginationVisibility();
+        calculatePaginationVisibility();  
 
         const handleResize = () => {
             setIsMobileView(window.innerWidth <= 767);
@@ -61,7 +57,29 @@ function Carousel() {
         window.addEventListener("resize", handleResize);
         
         return () => window.removeEventListener("resize", handleResize);
-    }, [API_BASE_URL, slidesData, isMobileView]);
+
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData, isMobileView]);
+
+    useEffect(() => {
+        fetchSlideData();
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
+
+    const fetchSlideData = () => {
+        fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
+        // fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((fetchedData) => {
+            setSlidesData(fetchedData);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+    }
 
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
@@ -79,16 +97,22 @@ function Carousel() {
     };
 
     const calculatePaginationVisibility = () => {
-        if (sliderContainerRef.current) {
-            const containerWidth = sliderContainerRef.current.offsetWidth;
-            const totalSlidesWidth = slidesData.length * 640; // Assume each slide is 640px wide (adjust as needed)
+        const dataSlideLength = slidesData.length;
+        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+        const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
+        const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
+        if (sliderContainerRef.current && slidesData) {
+            const totalSlidesWidth = slidesData.length * containerWidth;
             setShowPageDots(totalSlidesWidth > containerWidth);
         }
     };
 
     return (
         <div ref={sliderContainerRef}>
-            <Flickity className="slider-container" options={flickityOptions}>
+            <Flickity 
+                options={flickityOptions} 
+                className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
+            >
                 {slidesData.map((slide, key) => {
                     const handleClick = () => {
                         navigate(`/view/${slide.catalogue_id}`);
