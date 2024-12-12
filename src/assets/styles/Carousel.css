@@ -1,5 +1,5 @@
 /* Afficher les points de pagination */
-.flickity-page-dots .flickity-page-dots {
+.show-page-dots .flickity-page-dots {
   display: block;
 }
 
