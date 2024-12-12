@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
@@ -11,15 +11,32 @@ function Carousel() {
     const [shopId, setShopId] = useState(null);
     const [inputValue, setInputValue] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const [slideWidth, setSlideWidth] = useState(640);
+    const [showPageDots, setShowPageDots] = useState(true);
+    const sliderContainerRef = useRef(null);
+
+    let environment_shop_id = 0;
+
+    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
+        environment_shop_id = window.dataLayer[0].cdl_environment_shop;
+    }
+    const client = document.getElementById('catalogue-client');
     const navigate = useNavigate();
     const handleOpenText = () => {
         navigate(`/confidentiality`);
     };
 
-    let environment_shop_id = 0;
-    if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
-        environment_shop_id = window.dataLayer[0].cdl_environment_shop;
-    }
+    const [flickityOptions, setFlickityOptions] = useState({
+        initialIndex: 0,
+        cellAlign: isMobileView ? 'left' : slidesData.length < 3 ? 'center' : 'left',
+        contain: true,
+        selectedAttraction: 0.03,
+        friction: 0.3,
+        groupCells: isMobileView ? false : true,
+        pageDots: true,
+        prevNextButtons: true,
+    });
+
     useEffect(() => {
         const hiddenInput = document.getElementById('catalogue-client');
         const fetchedValue = hiddenInput ? hiddenInput.value : 'No value found';
@@ -27,7 +44,30 @@ function Carousel() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getSlides/189/0`) //Static data for testing
+        setShopId(environment_shop_id);
+    }, [environment_shop_id]);
+
+    useEffect(() => {
+        updateSlideWidth();
+        calculatePaginationVisibility();
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 767);
+            updateSlideWidth();
+            calculatePaginationVisibility();
+        };
+        
+        window.addEventListener("resize", handleResize);
+        
+        return () => window.removeEventListener("resize", handleResize);
+
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData, isMobileView]);
+
+    useEffect(() => {
+        fetchSlideData();
+    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
+
+    const fetchSlideData = () => {
+        // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
         fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
@@ -41,41 +81,51 @@ function Carousel() {
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
-    }, [inputValue, shopId, API_BASE_URL])
+    }
 
-    useEffect(() => {
-        setShopId(environment_shop_id);
-    }, [environment_shop_id]);
+    const updateSlideWidth = () => {
+        const dataSlideLength = slidesData.length;
+        if (!isMobileView && sliderContainerRef.current) {
+            const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+            const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
+            const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
+            const minWidth = 600;
+            const maxWidth = 640;
+            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth); 
+            const theoricalNewSlideWidth = containerWidth / slidesPerView;
+            const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
+            setSlideWidth(newSlideWidth);
+        }
+    };
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [API_BASE_URL]);
-
-    const flickityOptionsCenter = {
-        initialIndex: 0,
-        cellAlign: isMobileView ? 'left' : slidesData.length < 3 ? 'center' :  'left',
-        contain: true,
-        selectedAttraction: 0.03,
-        friction: 0.3,
-        // pageDots: false
-        // groupCells: true
+    const calculatePaginationVisibility = () => {
+        const dataSlideLength = slidesData.length;
+        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+        const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
+        const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
+        if (sliderContainerRef.current && slidesData) {
+            const totalSlidesWidth = slidesData.length * containerWidth;
+            setShowPageDots(totalSlidesWidth > containerWidth);
+        }
     };
 
     return (
-        <>
-            <Flickity className="slider-container" options={flickityOptionsCenter}>
-                {slidesData.map((slide) => {
+        <div ref={sliderContainerRef}>
+            <Flickity
+                options={flickityOptions}
+                className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
+            >
+                {slidesData.map((slide, key) => {
                     const handleClick = () => {
                         navigate(`/view/${slide.catalogue_id}`);
                     };
                     return (
                         <div
-                            key={slide.catalogue_id}
+                            key={key}
                             className="slide-element"
+                            style={{
+                                width: isMobileView ? "100%" : `${slideWidth}px`,
+                            }}
                         >
                             <img
                                 alt={`slide${slide.catalogue_id} media`}
@@ -130,7 +180,7 @@ function Carousel() {
                     </p>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

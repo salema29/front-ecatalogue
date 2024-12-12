@@ -3,12 +3,16 @@
     justify-content: center;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    margin-bottom: 42px;
 }
 
 .banner-text {
-    color: white;
+    line-height: 1.5;
     font-weight: 300;
+    font-size: 60px;
+    text-transform: none;
     position: absolute;
+    color: #FFFF;
 }
 
 .banner-media {
