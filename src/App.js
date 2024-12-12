@@ -6,6 +6,7 @@ import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
 import './App.css';
+import "./assets/typographie/fontsuploaded.css";
 
 function App() {
     return (
