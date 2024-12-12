@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import ViewFormatModal from './components/ViewFormatModal';
 import Home from './pages/LandingPage';
@@ -6,9 +7,22 @@ import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
 import './App.css';
-import "./assets/typographie/fontsuploaded.css";
 
 function App() {
+    useEffect(() => {
+        // Ajout dynamique du lien CSS
+        const fontsPath = `${process.env.REACT_APP_API_BASE_URL}/public/css/fontsuploaded.css`;
+        const linkElement = document.createElement("link");
+        linkElement.rel = "stylesheet";
+        linkElement.href = fontsPath;
+        document.head.appendChild(linkElement);
+
+        // Nettoyage si nécessaire lors du démontage du composant
+        return () => {
+            document.head.removeChild(linkElement);
+        };
+    }, []);
+    
     return (
         <Router>
             <Routes>
