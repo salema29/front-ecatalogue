@@ -9,7 +9,7 @@ function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
-    const [inputValue, setInputValue] = useState(null);
+    const [clientId, setClientId] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
@@ -40,7 +40,7 @@ function Carousel() {
     useEffect(() => {
         const hiddenInput = document.getElementById('catalogue-client');
         const fetchedValue = hiddenInput ? hiddenInput.value : 'No value found';
-        setInputValue(fetchedValue);
+        setClientId(fetchedValue);
     }, []);
 
     useEffect(() => {
@@ -55,9 +55,8 @@ function Carousel() {
             updateSlideWidth();
             calculatePaginationVisibility();
         };
-        
         window.addEventListener("resize", handleResize);
-        
+
         return () => window.removeEventListener("resize", handleResize);
 
     }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData, isMobileView]);
@@ -68,7 +67,7 @@ function Carousel() {
 
     const fetchSlideData = () => {
         // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
-        fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
