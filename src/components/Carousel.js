@@ -3,14 +3,13 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
-import { dataSlide } from "./slide.data";
+// import { dataSlide } from "./slide.data";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [inputValue, setInputValue] = useState(null);
-    const [clientId, setClientId] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
@@ -39,19 +38,22 @@ function Carousel() {
     });
 
     useEffect(() => {
-        const shop = environment_shop_id;
-        setShopId(shop);
+        const hiddenInput = document.getElementById('catalogue-client');
+        const fetchedValue = hiddenInput ? hiddenInput.value : 'No value found';
+        setInputValue(fetchedValue);
+    }, []);
 
-        const fetchedValue = client ? client.value : null;
-        setClientId(fetchedValue);
+    useEffect(() => {
+        setShopId(environment_shop_id);
+    }, [environment_shop_id]);
 
+    useEffect(() => {
         updateSlideWidth();
-        calculatePaginationVisibility();  
-
+        calculatePaginationVisibility();
         const handleResize = () => {
             setIsMobileView(window.innerWidth <= 767);
             updateSlideWidth();
-            calculatePaginationVisibility(); 
+            calculatePaginationVisibility();
         };
         
         window.addEventListener("resize", handleResize);
@@ -65,8 +67,8 @@ function Carousel() {
     }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
 
     const fetchSlideData = () => {
-        fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
-        // fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
+        // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
+        fetch(`${API_BASE_URL}/api/getSlides/${inputValue}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -109,8 +111,8 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            <Flickity 
-                options={flickityOptions} 
+            <Flickity
+                options={flickityOptions}
                 className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
             >
                 {slidesData.map((slide, key) => {
