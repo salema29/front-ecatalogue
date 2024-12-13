@@ -50,7 +50,7 @@ function ViewFormatDialog() {
                                     {headerData.catalogue_name_ln_un}{" "}
                                     {headerData.catalogue_name_ln_deux}{" "}
                                 </p>
-                                <p>
+                                <p style={{ color: "black" }}>
                                     du {headerData.catalogue_date_validite_debut} au{" "}
                                     {headerData.catalogue_date_validite_fin}
                                 </p>
@@ -62,7 +62,8 @@ function ViewFormatDialog() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
                                     alt="Fermer"
                                     width="25"
                                 />
@@ -83,16 +84,16 @@ function ViewFormatDialog() {
                                 <div className="view-format-icon-container">
                                     <img
                                         className="view-format-icon"
-                                        src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/desktop-view-format-icon.svg"
+                                        src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/desktop-view-format-icon-dark.svg"
                                         alt=""
                                     />
                                     <h2
-                                        style={{ color: headerData.client_color, marginBottom:0 }}
+                                        style={{ color: headerData.client_color, marginBottom: 0 }}
                                         className="view-format-text"
                                     >
-                                        <span style={{ fontWeight : 700}}>Nouveau !</span> choisissez votre mode de lecture...
+                                        <span style={{ fontWeight: 700 }}>Nouveau !</span> choisissez votre mode de lecture...
                                     </h2 >
-                                    <p>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
+                                    <p style={{ color: "black" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
                                         de courses, ou continuer en <span className="text-gras" >version feuilletable.</span>
                                     </p>
                                 </div>
@@ -134,10 +135,10 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/view-format-icon.svg"
+                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/view-format-icon-dark.svg"
                                     alt=""
                                 />
-                                <h2 className="view-format-text" style={{ color: headerData.client_color , fontWeight: 900}}>
+                                <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
                                     Choisissez votre mode de lecture
                                 </h2>
                             </div>
