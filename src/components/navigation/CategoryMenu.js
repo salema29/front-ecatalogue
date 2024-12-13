@@ -13,7 +13,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
     const { categoryList } = CategoryPerCatalogue(catalogId);
 
     return (
-        <div>
+        <>
             {categoryList.length > 0 ? (
                 <div className="circular-icons-row">
                     {categoryList.map((category, index) => (
@@ -38,7 +38,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
                     <p> Chargement en cours ... </p>
                 </>
             )}
-        </div>
+        </>
     );
 };
 export default CategoryMenu;

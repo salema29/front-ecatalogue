@@ -17,7 +17,7 @@
 .circular-icons-row {
     display: flex;
     align-items: center;
-    background-color: black;
+    background-color: white;
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
 }
@@ -71,7 +71,7 @@
 
 .icon-label {
     font-size: 14px;
-    color: var(--main-bg);
+    color: var(--dark-bg);
     text-transform: capitalize;
     margin-bottom: 0;
 }

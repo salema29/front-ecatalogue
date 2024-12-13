@@ -54,7 +54,7 @@ function MainProduct() {
                                     {headerData.catalogue_name_ln_un}{" "}
                                     {headerData.catalogue_name_ln_deux}{" "}
                                 </p>
-                                <p>
+                                <p style={{ color: "black" }}>
                                     du {headerData.catalogue_date_validite_debut} au{" "}
                                     {headerData.catalogue_date_validite_fin}
                                 </p>
@@ -83,7 +83,8 @@ function MainProduct() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
                                     alt="Fermer"
                                     width="25"
                                 />

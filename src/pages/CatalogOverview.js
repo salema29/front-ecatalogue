@@ -42,7 +42,7 @@ function Catalog() {
                   {headerData.catalogue_name_ln_un}{" "}
                   {headerData.catalogue_name_ln_deux}
                 </p>
-                <p>
+                <p style={{ color: "black" }}>
                   du {headerData.catalogue_date_validite_debut} auuy{" "}
                   {headerData.catalogue_date_validite_fin}
                 </p>
@@ -68,7 +68,8 @@ function Catalog() {
                 onClick={handleClose}
               >
                 <img
-                  src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                  // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
+                  src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
                   width="25"
                   alt="Fermer"
                 />

@@ -70,3 +70,8 @@ iframe>html>body {
   height: inherit;
   /* overflow-y: scroll; */
 }
+
+.header {
+  position: relative;
+  background: white!important;
+}
