@@ -23,6 +23,7 @@ function Banner() {
 
     return (
         <div className='section-banner'>
+            <div className="banner-overlay"></div> {/* Overlay sombre */}
             <img
                 alt='ecatalogue header media'
                 className='banner-media'
