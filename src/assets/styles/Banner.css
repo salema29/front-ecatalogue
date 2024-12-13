@@ -16,6 +16,7 @@
 }
 
 .banner-media {
+    filter: brightness(60%);
     min-height: 230px;
     max-height: 290px;
     object-fit: cover;
