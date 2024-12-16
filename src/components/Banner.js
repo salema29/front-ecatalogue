@@ -14,8 +14,8 @@ function Banner() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getClientImage/${client_id}`)
-        // fetch(`${API_BASE_URL}/api/getClientImage/194`) // Static data for testing
+        fetch(`${API_BASE_URL}/api/getDataClient/${client_id}`)
+        // fetch(`${API_BASE_URL}/api/getDataClient/194`) // Static data for testing
             .then((response) => response.json())
             .then((fetchedData) => {
                 setBannerMedia(fetchedData.client_global_image);
