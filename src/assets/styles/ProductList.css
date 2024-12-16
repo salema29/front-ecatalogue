@@ -75,3 +75,20 @@ iframe>html>body {
   position: relative;
   background: white!important;
 }
+
+.empty_products {
+  text-align: center;
+  /* background: white!important; */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.empty_products h1 {
+  font-size: 2em;
+  color: #ff0000;
+  margin-bottom: 10px;
+}
+.empty_products p {
+  font-size: 1.2em;
+  color: #555;
+}

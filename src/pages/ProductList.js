@@ -9,6 +9,7 @@ function Product() {
     const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const navigate = useNavigate();
 
@@ -34,21 +35,28 @@ function Product() {
 
     useEffect(() => {
         const fetchHeaderData = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(
                     `${API_BASE_URL}/api/getOneSlide/${catalogId}`
                 );
                 if (!response.ok) {
+                    setIsLoading(false);
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
                 if (data && Object.keys(data).length > 0) {
                     setHeaderData(data);
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 1000);
                 } else {
                     console.warn("Empty or invalid slide data received");
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error("Error fetching slide data: ", error);
+                setIsLoading(false);
             }
         };
 
@@ -132,69 +140,82 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        <CategoryMenu categoryIdSelected={categoryId} />
+                        {productData.length > 0 ? (
+                            <CategoryMenu categoryIdSelected={categoryId} />)
+                            :
+                            (<></>)
+                        }
                     </div>
                     <div className="wrapper">
-
-
                         <div className="product-list-container" >
-                            <div className="grid-container">
-                                {productData.length > 0 ? (
-                                    productData.map((product, index) => {
-                                        // Retourne uniquement les produit de type vue resumé
-                                        if (product.view_type === '1' ) {
-                                            return (
-                                                <div
-                                                    key={index}
-                                                    className={`grid-item ${isMobileView ? 'mobile-items' : 'desktop-items'}`}
-                                                    style={{
-                                                        gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
-                                                        gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
-                                                        order: product.view_order,
-                                                    }}
-                                                >
-                                                        {product.type == 0 ?
-                                                            (   <div className="item-wrapper">
-                                                                    <div
-                                                                        onClick={() => handleDetailedView(product.view_order)}
-                                                                        className="item-link"
-                                                                        style={{
-                                                                            cursor: 'pointer',
-                                                                        }}
-                                                                    >
-                                                                        <iframe
-                                                                            src={product.html_name}
-                                                                            className="product-item"
-                                                                            title={`Product ${index}`}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                                :
-                                                            (
-                                                                <div className="item-wrapper">
-                                                                    <div
-                                                                        className="item-link"
-                                                                    >
-                                                                    <iframe
-                                                                        src={product.html_name}
-                                                                        className="product-item"
-                                                                        title={`Product ${index}`}
-                                                                    />
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        }
-                                                </div>
-                                            );
-                                        }
-
-                                        return null;
-                                    })
-                                ) : (
-                                    <p>Chargement en cours... </p>
-                                )}
-                            </div>
+                            {isLoading === false && (
+                                productData.length > 0 ?
+                                    (
+                                        <div className="grid-container">
+                                            {
+                                                productData.map((product, index) => {
+                                                    // Retourne uniquement les produit de type vue resumé
+                                                    if (product.view_type === '1' )
+                                                    {
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className={`grid-item ${isMobileView ? 'mobile-items' : 'desktop-items'}`}
+                                                                style={{
+                                                                    gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
+                                                                    gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
+                                                                    order: product.view_order,
+                                                                }}
+                                                            >
+                                                                    {product.type == 0 ?
+                                                                        (   <div className="item-wrapper">
+                                                                                <div
+                                                                                    onClick={() => handleDetailedView(product.view_order)}
+                                                                                    className="item-link"
+                                                                                    style={{
+                                                                                        cursor: 'pointer',
+                                                                                    }}
+                                                                                >
+                                                                                    <iframe
+                                                                                        src={product.html_name}
+                                                                                        className="product-item"
+                                                                                        title={`Product ${index}`}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        )
+                                                                            :
+                                                                        (
+                                                                            <div className="item-wrapper">
+                                                                                <div
+                                                                                    className="item-link"
+                                                                                >
+                                                                                <iframe
+                                                                                    src={product.html_name}
+                                                                                    className="product-item"
+                                                                                    title={`Product ${index}`}
+                                                                                />
+                                                                                </div>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                            </div>
+                                                        );
+                                                    }
+                                                    return null;
+                                                })
+                                            }
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <div class="empty_products">
+                                            <h1>Produits Indisponibles</h1>
+                                            <p>Nous sommes désolés, mais nos produits ne sont pas encore disponibles. Revenez bientôt pour plus de nouveautés !</p>
+                                        </div>
+                                    )
+                            )}
+                            {isLoading === true && (  <LoadingSpinner /> )}
                         </div>
                     </div>
                 </div>
