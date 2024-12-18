@@ -1,24 +1,49 @@
+/* Afficher les points de pagination */
+.show-page-dots .flickity-page-dots {
+  display: block;
+}
+
+/* Masquer les points de pagination */
+.hide-page-dots .flickity-page-dots {
+  display: none;
+}
+
 .slider-container {
-  margin: 4rem 1rem 1rem 1rem;
+  padding-right: 15px;
+  padding-left: 15px;
+  height: fit-content;
 }
 
 .slide-element {
   align-items: flex-end;
   display: flex;
-  margin-right: 10px;
+  margin-right: 5px;
   border-radius: 5px;
   counter-increment: gallery-cell;
+  height: 260px;
 }
 
 .slide-meta {
   color: white;
   display: flex;
   flex-direction: column;
-  margin: 1rem;
+  /* margin: 1rem; */
+  gap: 8px;
+  padding: 1.5rem;
   position: absolute;
+  justify-content: flex-end;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.slide-headline {
+  color: #fff;
+  font-size: 2.25rem;
+  line-height: 2.25rem;
+  text-transform: uppercase;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .slide-head-title {
@@ -26,22 +51,44 @@
   line-height: 1;
 }
 
+.slide-head-subtitle {
+  line-height: 22px;
+}
+
 .slide-media {
+  border-radius: 5px;
   max-width: 640px;
 }
 
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
   .slide-media {
-    min-width: 640px;
+    max-width: 640px;
     width: 100%;
+    height: 100%;
   }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
   .slide-media {
     min-width: 100%;
     height: 260px;
     object-fit: cover;
+  }
+
+  .slider-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    height: fit-content;
+    margin: 0 0 1rem 0;
+  }
+
+  .slide-headline {
+    color: #fff;
+    font-size: 1.85rem;
+    line-height: 2.25rem;
+    text-transform: uppercase;
+    word-wrap: break-word;
+    word-break: break-all;
   }
 }
 
@@ -75,13 +122,13 @@
 .flickity-prev-next-button.next {
   width: 30px;
   height: 30px;
-  background: url('../../assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: url('https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/dark-arrow-right.svg') no-repeat center;
 }
 
 .flickity-prev-next-button.previous {
   width: 30px;
   height: 30px;
-  background: url('../../assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: url('https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/dark-arrow-right.svg') no-repeat center;
   transform: rotate(180deg);
 }
 
@@ -217,22 +264,22 @@ https://flickity.metafizzy.co
 }
 
 .flickity-prev-next-button.previous {
-  left: 10px;
+  left: 24px;
 }
 
 .flickity-prev-next-button.next {
-  right: 10px;
+  right: 24px;
 }
 
 /* right to left */
 .flickity-rtl .flickity-prev-next-button.previous {
   left: auto;
-  right: 10px;
+  right: 24px;
 }
 
 .flickity-rtl .flickity-prev-next-button.next {
   right: auto;
-  left: 10px;
+  left: 24px;
 }
 
 .flickity-prev-next-button .flickity-button-icon {

@@ -3,15 +3,20 @@
     justify-content: center;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    margin-bottom: 42px;
 }
 
 .banner-text {
-    color: white;
+    line-height: 1.5;
     font-weight: 300;
+    font-size: 60px;
+    text-transform: none;
     position: absolute;
+    color: #FFFF;
 }
 
 .banner-media {
+    filter: brightness(60%);
     min-height: 230px;
     max-height: 290px;
     object-fit: cover;
@@ -28,13 +33,13 @@
     z-index: 1;
 }
 
-@media screen and (min-width : 747px) {
+@media screen and (min-width : 768px) {
     .banner-text {
         font-size: 60px;
     }
 }
 
-@media screen and (max-width : 746px) {
+@media screen and (max-width : 767px) {
     .banner-text {
         font-size: 34px;
     }
