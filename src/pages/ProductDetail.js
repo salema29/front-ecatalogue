@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import '../assets/styles/ProductDetail.css';
+import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -84,7 +85,7 @@ function MainProduct() {
                             >
                                 <img
                                     // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
+                                    src={cross}
                                     alt="Fermer"
                                     width="25"
                                 />
