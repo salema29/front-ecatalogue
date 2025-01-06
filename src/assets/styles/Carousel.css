@@ -122,13 +122,13 @@
 .flickity-prev-next-button.next {
   width: 30px;
   height: 30px;
-  background: url('https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: url('../icons/dark-arrow-right.svg') no-repeat center;
 }
 
 .flickity-prev-next-button.previous {
   width: 30px;
   height: 30px;
-  background: url('https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: url('../icons/dark-arrow-right.svg') no-repeat center;
   transform: rotate(180deg);
 }
 
