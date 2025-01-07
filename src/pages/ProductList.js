@@ -7,6 +7,7 @@ import cross from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const ASSET_BASE_URL = process.env.ASSET_BASE_URL;
     const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
@@ -135,7 +136,8 @@ function Product() {
                                 >
                                     <img
                                         // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                        src={cross}
+                                        // src={cross}
+                                        src={`${ASSET_BASE_URL}icons/cross-icon-dark.svg`}
                                         width="25"
                                         alt="Fermer"
                                     />
