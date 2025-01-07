@@ -140,7 +140,7 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    src={cross}
+                                    src={desktop}
                                     alt=""
                                 />
                                 <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
