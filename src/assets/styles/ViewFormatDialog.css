@@ -44,13 +44,14 @@
 
 @media screen and (min-width: 768px) {
     .header-logo {
-        width: 50px;
+        height: 100%;
     }
 }
 
 @media screen and (max-width: 767px) {
     .header-logo {
-        width: 35px;
+        width: 50%;
+        height: 50%;
     }
 
     .sticky {
