@@ -52,7 +52,7 @@ iframe>html>body {
 }
 
 .product-list-container {
-  height: 100%;
+  height: fit-content;
   /* overflow-y: scroll; */
 }
 
@@ -63,9 +63,11 @@ iframe>html>body {
 }
 
 .wrapper {
-  height: 70vh;
+  height: 60vh;
   overflow-y: scroll;
+  padding-bottom: 16px;
 }
+
 .wrapper_one {
   height: inherit;
   /* overflow-y: scroll; */
