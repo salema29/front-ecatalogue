@@ -3,9 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import '../assets/styles/ProductDetail.css';
+import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId, product_id } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
@@ -61,7 +63,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <button
+                            {/* <button
                                 className="view-format-switcher btn"
                                 onClick={handleCatalogView}
                             >
@@ -77,14 +79,15 @@ function MainProduct() {
                                             <path fill="#fff" d="M0 0h50.021v30H0z" /></clipPath></defs>
                                     </svg>
                                 </span>
-                            </button>
+                            </button> */}
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
                             >
                                 <img
                                     // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
+                                    // src={cross}
+                                    src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                                     alt="Fermer"
                                     width="25"
                                 />
