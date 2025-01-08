@@ -3,6 +3,7 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
+import AbsCatalogue from "./AbsCatalogue";
 // import { dataSlide } from "./slide.data";
 
 function Carousel() {
@@ -66,8 +67,8 @@ function Carousel() {
     }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
 
     const fetchSlideData = () => {
-        // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
-        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
+        // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -110,7 +111,8 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            <Flickity
+            {(slidesData && slidesData.length > 0) ? (
+                <Flickity
                 options={flickityOptions}
                 className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
             >
@@ -168,6 +170,9 @@ function Carousel() {
                     );
                 })}
             </Flickity>
+            ) : (
+                <AbsCatalogue/>
+            )}
             <div className="section-confidentiality container btn">
                 <div
                     className="confidentiality-button"
