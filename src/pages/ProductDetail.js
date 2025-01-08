@@ -63,7 +63,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <button
+                            {/* <button
                                 className="view-format-switcher btn"
                                 onClick={handleCatalogView}
                             >
@@ -79,7 +79,7 @@ function MainProduct() {
                                             <path fill="#fff" d="M0 0h50.021v30H0z" /></clipPath></defs>
                                     </svg>
                                 </span>
-                            </button>
+                            </button> */}
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
