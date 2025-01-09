@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import cross from "../assets/icons/cross-icon-dark.svg";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;

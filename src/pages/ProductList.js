@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/ProductList.css";
+import cross from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -97,6 +98,7 @@ function Product() {
                                 <img
                                     className="header-logo"
                                     src={headerData.client_logo}
+                                    // src="https://v2.ecatalogues.fr/clients/Gutenberg/Client_logo/logo_gut_noir.png"
                                     alt=""
                                 />
                                 <div className="header-text">
