@@ -6,6 +6,7 @@ import '../assets/styles/ProductDetail.css';
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId, product_id } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
@@ -83,8 +84,7 @@ function MainProduct() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
+                                    src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                                     alt="Fermer"
                                     width="25"
                                 />

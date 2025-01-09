@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
@@ -62,8 +63,7 @@ function ViewFormatDialog() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon-dark.svg"
+                                    src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                                     alt="Fermer"
                                     width="25"
                                 />
@@ -84,7 +84,7 @@ function ViewFormatDialog() {
                                 <div className="view-format-icon-container">
                                     <img
                                         className="view-format-icon"
-                                        src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/desktop-view-format-icon-dark.svg"
+                                        src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
                                         alt=""
                                     />
                                     <h2
@@ -108,7 +108,7 @@ function ViewFormatDialog() {
                                         </span>
                                         <span className="view-format-dialog-button-icon">
                                             <img
-                                                src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg"
+                                                src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
                                                 alt=""
                                             />
                                         </span>
@@ -123,7 +123,7 @@ function ViewFormatDialog() {
                                         </span>
                                         <span className="view-format-dialog-button-icon">
                                             <img
-                                                src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg"
+                                                src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
                                                 alt=""
                                             />
                                         </span>
@@ -135,7 +135,7 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/view-format-icon-dark.svg"
+                                    src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
                                     alt=""
                                 />
                                 <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
@@ -156,7 +156,7 @@ function ViewFormatDialog() {
                                     </span>
                                     <span className="view-format-dialog-button-icon">
                                         <img
-                                            src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-product-icon.svg"
+                                            src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
                                             alt=""
                                         />
                                     </span>
@@ -174,7 +174,7 @@ function ViewFormatDialog() {
                                     </span>
                                     <span className="view-format-dialog-button-icon">
                                         <img
-                                            src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/by-catalog-icon.svg"
+                                            src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
                                             alt=""
                                         />
                                     </span>
