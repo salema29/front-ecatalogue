@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import cross from "../assets/icons/cross-icon-dark.svg";
-import desktop from "../assets/icons/desktop-view-format-icon-dark.svg";
-import byProduct from "../assets/icons/by-product-icon.svg";
-import byCatalog from "../assets/icons/by-catalog-icon.svg";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
@@ -10,7 +6,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL; 
     const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
