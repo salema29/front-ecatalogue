@@ -22,8 +22,8 @@ function Product() {
         navigate(`/catalog/${catalogId}`);
     };
 
-    const handleDetailedView = (product_id) => {
-        navigate(`/product/${catalogId}/${product_id}`);
+    const handleDetailedView = (product_id, product_categorie_id) => {
+        navigate(`/product/${product_categorie_id}/${product_id}`);
     };
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -170,7 +170,7 @@ function Product() {
                                                                     {product.type == 0 ?
                                                                         (   <div className="item-wrapper">
                                                                                 <div
-                                                                                    onClick={() => handleDetailedView(product.view_order)}
+                                                                                    onClick={() => handleDetailedView(product.view_order, product.product_categorie_id)}
                                                                                     className="item-link"
                                                                                     style={{
                                                                                         cursor: 'pointer',
