@@ -7,7 +7,7 @@ import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL; 
     const { catalogId, product_id } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
