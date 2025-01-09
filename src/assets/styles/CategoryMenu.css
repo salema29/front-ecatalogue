@@ -13,7 +13,7 @@ body {
 @media screen and (max-width : 767px) {
     .circular-icons-row {
         justify-content: left;
-        column-gap: 10%;
+        column-gap: 20px;
     }
 }
 
@@ -63,7 +63,7 @@ body {
     }
 
     .icon-container {
-        width: 70px;
+        width: 100%;
     }
 }
 
