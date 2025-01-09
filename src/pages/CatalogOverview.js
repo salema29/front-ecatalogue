@@ -45,7 +45,7 @@ function Catalog() {
                   {headerData.catalogue_name_ln_deux}
                 </p>
                 <p style={{ color: "black" }}>
-                  du {headerData.catalogue_date_validite_debut} au{" "}
+                  du {headerData.catalogue_date_validite_debut} au {" "}
                   {headerData.catalogue_date_validite_fin}
                 </p>
               </div>
