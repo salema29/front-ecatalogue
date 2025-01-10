@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import '../assets/styles/ProductDetail.css';
 import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL; 
-    const { catalogId, product_id } = useParams();
+    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
+    const { catalogId, product_id, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
     const navigate = useNavigate();
-    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
 
     const handleClose = () => {
-        navigate(`/product-list/${catalogId}/${firstCategorieId}`);
+        navigate(`/product-list/${catalogId}/${categoryId}`);
     };
 
     useEffect(() => {
@@ -85,8 +83,6 @@ function MainProduct() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                    // src={cross}
                                     src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                                     alt="Fermer"
                                     width="25"
