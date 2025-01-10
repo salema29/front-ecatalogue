@@ -87,6 +87,14 @@ function Product() {
 
         fetchProductData();
     }, [categoryId, API_BASE_URL]);
+
+    useEffect(() => {
+        const wrapper = document.querySelector('.wrapper');
+        if (wrapper) {
+          wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
+        }
+    }, [categoryId]); 
+    
     return (
         <>
             {headerData ? (
