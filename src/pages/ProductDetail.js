@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import '../assets/styles/ProductDetail.css';
-import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -13,6 +12,9 @@ function MainProduct() {
     const [productData, setProductData] = useState(null);
     const navigate = useNavigate();
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
+    const heightToMinus = 0;
+    const headerHeight = 20; // class "header" height
+    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
 
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
@@ -39,6 +41,24 @@ function MainProduct() {
                 console.error("Error fetching data:", error);
             });
     }, [product_id, API_BASE_URL]);
+
+    useEffect(() => {
+        if (headerData) {
+            const updateHeight = () => {
+                const stickyElement = document.querySelector('.header');
+                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+                const height = window.innerHeight - stickyHeight - heightToMinus;
+                setWrapperHeight(height);
+            };
+    
+            setTimeout(updateHeight, 0); // Assurez-vous que le DOM est à jour.
+            window.addEventListener('resize', updateHeight);
+    
+            return () => {
+                window.removeEventListener('resize', updateHeight);
+            };
+        }
+    }, [headerData]);
 
     return (
         <>
@@ -95,14 +115,18 @@ function MainProduct() {
                         </div>
                     </header>
                     <div className="product-detail-container">
-                        <div className="single-item-wrapper">
+                        <div className="single-item-wrapper"
+                            style={{
+                                height: `${wrapperHeight}px`
+                            }}
+                        >
                             {productData ? (
                                 <iframe
                                     src={productData.html.html_name}
                                     className="product-item"
                                     title={productData.html.html_name}
                                     width="auto"
-                                    height="590px"
+                                    // height="590px"
                                 />
                             ) : (
                                 <LoadingSpinner />
