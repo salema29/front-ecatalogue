@@ -172,7 +172,7 @@ function Product() {
                                                                     {product.type == 0 ?
                                                                         (   <div className="item-wrapper">
                                                                                 <div
-                                                                                    onClick={() => handleDetailedView(product.view_order, product.product_categorie_id)}
+                                                                                    onClick={() => handleDetailedView(product.view_order, product.categoryId)}
                                                                                     className="item-link"
                                                                                     style={{
                                                                                         cursor: 'pointer',

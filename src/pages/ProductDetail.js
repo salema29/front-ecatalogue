@@ -30,7 +30,7 @@ function MainProduct() {
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getProductDetail/${product_categorie_id}/${product_id}`)
+        fetch(`${API_BASE_URL}/api/getProductDetail/${categoryId}/${product_id}`)
             .then((response) => response.json())
             .then((fetchedData) => setProductData(fetchedData))
             .catch((error) => {
