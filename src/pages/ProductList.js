@@ -23,6 +23,7 @@ function Product() {
         navigate(`/catalog/${catalogId}`);
     };
 
+    // product_id = pair of view_order
     const handleDetailedView = (product_id, product_categorie_id) => {
         navigate(`/product/${product_categorie_id}/${product_id}`);
     };
