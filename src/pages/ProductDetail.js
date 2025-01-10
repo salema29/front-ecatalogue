@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
+import cross from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -60,7 +61,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <button
+                            {/* <button
                                 className="view-format-switcher btn"
                                 onClick={handleCatalogView}
                             >
@@ -76,7 +77,7 @@ function MainProduct() {
                                             <path fill="#fff" d="M0 0h50.021v30H0z" /></clipPath></defs>
                                     </svg>
                                 </span>
-                            </button>
+                            </button> */}
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
