@@ -23,7 +23,7 @@ function Product() {
     };
 
     const handleDetailedView = (product_id) => {
-        navigate(`/product/${catalogId}/${product_id}`);
+        navigate(`/product/${catalogId}/${product_id}/${categoryId}`);
     };
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
