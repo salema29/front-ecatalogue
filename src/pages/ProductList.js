@@ -96,11 +96,12 @@ function Product() {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+
                 const height = window.innerHeight - stickyHeight;
                 setWrapperHeight(height);
             };
     
-            setTimeout(updateHeight, 5); // Assurez-vous que le DOM est à jour.
+            setTimeout(updateHeight, 1000); // Assurez-vous que le DOM est à jour.
             window.addEventListener('resize', updateHeight);
     
             return () => {

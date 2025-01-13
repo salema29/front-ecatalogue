@@ -51,7 +51,7 @@ function MainProduct() {
                 setWrapperHeight(height);
             };
     
-            setTimeout(updateHeight, 0); // Assurez-vous que le DOM est à jour.
+            setTimeout(updateHeight, 500); // Assurez-vous que le DOM est à jour.
             window.addEventListener('resize', updateHeight);
     
             return () => {
