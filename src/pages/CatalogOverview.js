@@ -70,8 +70,6 @@ function Catalog() {
                 onClick={handleClose}
               >
                 <img
-                  // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                  // src={cross}
                   src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                   width="25"
                   alt="Fermer"

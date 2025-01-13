@@ -26,7 +26,7 @@ function Product() {
     };
 
     const handleDetailedView = (product_id) => {
-        navigate(`/product/${catalogId}/${product_id}`);
+        navigate(`/product/${catalogId}/${product_id}/${categoryId}`);
     };
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -157,8 +157,6 @@ function Product() {
                                     onClick={handleClose}
                                 >
                                     <img
-                                        // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
-                                        // src={cross}
                                         src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
                                         width="25"
                                         alt="Fermer"
@@ -197,29 +195,29 @@ function Product() {
                                                                     order: product.view_order,
                                                                 }}
                                                             >
-                                                                {product.type == 0 ?
-                                                                    (<div className="item-wrapper">
-                                                                        <div
-                                                                            onClick={() => handleDetailedView(product.view_order)}
-                                                                            className="item-link"
-                                                                            style={{
-                                                                                cursor: 'pointer',
-                                                                            }}
-                                                                        >
-                                                                            <iframe
-                                                                                src={product.html_name}
-                                                                                className="product-item"
-                                                                                title={`Product ${index}`}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    )
-                                                                    :
-                                                                    (
-                                                                        <div className="item-wrapper">
-                                                                            <div
-                                                                                className="item-link"
-                                                                            >
+                                                                    {product.type == 0 ?
+                                                                        (   <div className="item-wrapper">
+                                                                                <div
+                                                                                    onClick={() => handleDetailedView(product.view_order, product.categoryId)}
+                                                                                    className="item-link"
+                                                                                    style={{
+                                                                                        cursor: 'pointer',
+                                                                                    }}
+                                                                                >
+                                                                                    <iframe
+                                                                                        src={product.html_name}
+                                                                                        className="product-item"
+                                                                                        title={`Product ${index}`}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+                                                                        )
+                                                                            :
+                                                                        (
+                                                                            <div className="item-wrapper">
+                                                                                <div
+                                                                                    className="item-link"
+                                                                                >
                                                                                 <iframe
                                                                                     src={product.html_name}
                                                                                     className="product-item"
