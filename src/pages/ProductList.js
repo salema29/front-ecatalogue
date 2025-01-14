@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/ProductList.css";
-import cross from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -110,6 +109,14 @@ function Product() {
         }
     }, [headerData]);
 
+
+    useEffect(() => {
+        const wrapper = document.querySelector('.wrapper');
+        if (wrapper) {
+          wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
+        }
+    }, [categoryId]); 
+    
     return (
         <>
             {headerData ? (
