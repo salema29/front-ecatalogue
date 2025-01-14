@@ -66,8 +66,8 @@ function Carousel() {
     }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
 
     const fetchSlideData = () => {
-        // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
-        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+        fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
+        // fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
