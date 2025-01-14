@@ -17,6 +17,13 @@ function App() {
         linkElement.href = fontsPath;
         document.head.appendChild(linkElement);
 
+        // orientation mobile
+        const ecatalogueDiv = document.getElementById("ecatalogue");
+        // Ajouter le style overflow-y: auto
+        if (ecatalogueDiv) {
+            ecatalogueDiv.style.overflowY = "auto";
+        }
+
         // Nettoyage si nécessaire lors du démontage du composant
         return () => {
             document.head.removeChild(linkElement);
@@ -30,7 +37,7 @@ function App() {
                 <Route path="view/:catalogId" element={<ViewFormatModal />} /> {/* Modal to view details */}
                 <Route path="product-list/:catalogId/:categoryId" element={<ProductList />} /> {/* Product resume view */}
                 <Route path="catalog/:catalogId" element={<CatalogOverview />} /> {/* Catalog overview */}
-                <Route path="product/:catalogId/:product_id" element={<ProductDetail />} /> {/* Individual product details */}
+                <Route path="product/:catalogId/:product_id/:categoryId" element={<ProductDetail />} /> {/* Individual product details */}
                 <Route path="confidentiality" element={<Confidentiality />} /> {/* Confidentiality text */}
             </Routes>
         </Router>
