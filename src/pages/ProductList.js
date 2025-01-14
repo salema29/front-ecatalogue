@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import "../assets/styles/ProductList.css";
-import cross from "../assets/icons/cross-icon-dark.svg";
-import cross from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -14,8 +12,6 @@ function Product() {
     const [productData, setProductData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
-    const headerHeight = document.querySelector('.sticky'); // class "sticky" height
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
     const headerHeight = document.querySelector('.sticky'); // class "sticky" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
     const navigate = useNavigate();
@@ -132,7 +128,6 @@ function Product() {
                                     className="header-logo"
                                     src={headerData.client_logo}
                                     // src="https://v2.ecatalogues.fr/clients/Gutenberg/Client_logo/logo_gut_noir.png"
-                                    // src="https://v2.ecatalogues.fr/clients/Gutenberg/Client_logo/logo_gut_noir.png"
                                     alt=""
                                 />
                                 <div className="header-text">
@@ -188,12 +183,6 @@ function Product() {
                             overflowY: 'scroll'
                         }}
                     >
-                    <div className="wrapper"
-                        style={{
-                            height: `${wrapperHeight}px`, 
-                            overflowY: 'scroll'
-                        }}
-                    >
                         <div className="product-list-container" >
                             {isLoading === false && (
                                 productData.length > 0 ?
@@ -202,7 +191,6 @@ function Product() {
                                             {
                                                 productData.map((product, index) => {
                                                     // Retourne uniquement les produit de type vue resumé
-                                                    if (product.view_type === '1') {
                                                     if (product.view_type === '1') {
                                                         return (
                                                             <div
@@ -217,7 +205,6 @@ function Product() {
                                                                     {product.type == 0 ?
                                                                         (   <div className="item-wrapper">
                                                                                 <div
-                                                                                    onClick={() => handleDetailedView(product.view_order, product.categoryId)}
                                                                                     onClick={() => handleDetailedView(product.view_order, product.categoryId)}
                                                                                     className="item-link"
                                                                                     style={{
@@ -247,10 +234,6 @@ function Product() {
                                                                         </div>
                                                                     )
                                                                 }
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                }
                                                             </div>
                                                         );
                                                     }
@@ -267,7 +250,6 @@ function Product() {
                                         </div>
                                     )
                             )}
-                            {isLoading === true && (<LoadingSpinner />)}
                             {isLoading === true && (<LoadingSpinner />)}
                         </div>
                     </div>
