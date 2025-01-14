@@ -80,6 +80,11 @@ body {
     .icon-container {
         width: 100%;
     }
+
+    .circular-icons-row {
+        justify-content: left;
+        column-gap: 20px;
+    }
 }
 
 .icon-container:hover {
