@@ -67,6 +67,21 @@ body {
     }
 }
 
+@media (orientation: landscape) and (max-height: 767px) {
+    .icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .icon-label {
+        margin: 0.5rem 0;
+    }
+
+    .icon-container {
+        width: 100%;
+    }
+}
+
 .icon-container:hover {
     transform: scale(1.08);
     transition: transform 0.3s;
