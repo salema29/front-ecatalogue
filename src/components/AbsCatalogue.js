@@ -32,11 +32,11 @@ function AbsCatalogue() {
                 {/* <h3 style="font-family:'titre typo',-apple-system,BlinkMacSystemFont;">NOS NOUVEAUX CATALOGUES ARRIVENT BIENTÔT !</h3> */}
                 <h3 style={{ fontFamily: 'SanaSansAlt-Bold,BlinkMacSystemFont' }}>NOS NOUVEAUX CATALOGUES ARRIVENT BIENTÔT !</h3>
                 {/* <p style="font-family:'desc typo',-apple-system,BlinkMacSystemFont;">En attendant, découvrez nos offres exclusives sur notre boutique en ligne.</p> */}
-                <p style={{ fontFamily: 'SanaSansAlt-Bold,BlinkMacSystemFont' }}>En attendant, découvrez nos offres exclusives sur notre boutique en ligne.</p>
+                <p style={{ fontFamily: 'OpenSans-Regular,BlinkMacSystemFont' }}>En attendant, découvrez nos offres exclusives sur notre boutique en ligne.</p>
             </div>
             <div className="card-info-btn">
                 {/* <a href="{{ client.client_cat_link_info }}" style="font-family:'{{client.btn_abs_cat_typos_name}}',-apple-system,BlinkMacSystemFont;">Retrouvez nos bons plans</a> */}
-                <a href="#" style={{ fontFamily: 'SanaSansAlt-Bold,BlinkMacSystemFont' }}>Retrouvez nos bons plans</a>
+                <a href="#" style={{ fontFamily: 'OpenSans-Regular,BlinkMacSystemFont' }} target='_top'>Retrouvez nos bons plans</a>
             </div>
         </div>
     );

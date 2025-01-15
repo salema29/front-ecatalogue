@@ -23,9 +23,10 @@
     margin-top: 40px;
 }
 .card-info-btn a {
-    background-color: #111e64;
+    background-color: #264292;
     color: #fff !important;
     padding: 10px 20px;
     border-radius: 50px;
     cursor: pointer;
+    text-decoration: none;
 }
