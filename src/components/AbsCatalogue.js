@@ -14,8 +14,7 @@ function AbsCatalogue() {
     }, []);
 
     useEffect(() => {
-        // fetch(`${API_BASE_URL}/api/getDataClient/${client_id}`)
-        fetch(`${API_BASE_URL}/api/getDataClientV2/202`) // Static data for testing
+        fetch(`${API_BASE_URL}/api/getDataClientV2/${client_id}`)
             .then((response) => response.json())
             .then((fetchedData) => {
                 setAbsCatData(fetchedData);
@@ -26,18 +25,14 @@ function AbsCatalogue() {
     return (
         <>
             {abs_cat_data ? (<div className="card-info-container">
-                {/* <div className="card-info-desc" style="font-family:'desc typo',-apple-system,BlinkMacSystemFont;" > */}
-                <div className="card-info-desc" style={{ fontFamily: 'SanaSansAlt-Bold,BlinkMacSystemFont' }}>
-                    {/* <h3 style="font-family:'titre typo',-apple-system,BlinkMacSystemFont;">NOS NOUVEAUX CATALOGUES ARRIVENT BIENTÔT !</h3> */}
-                    <h3 style={{ fontFamily: 'SanaSansAlt-Bold,BlinkMacSystemFont' }}>{ abs_cat_data.cat_abs_title }</h3>
-                    {/* <p style="font-family:'desc typo',-apple-system,BlinkMacSystemFont;">En attendant, découvrez nos offres exclusives sur notre boutique en ligne.</p> */}
-                    <p style={{ fontFamily: 'OpenSans-Regular,BlinkMacSystemFont' }}>{ abs_cat_data.cat_abs_descri }</p>
+                <div className="card-info-desc" style={{ fontFamily: `SanaSansAlt-Bold,BlinkMacSystemFont` }}>
+                    <h3 style={{ fontFamily: `${abs_cat_data.title_abs_cat_typos_name},SanaSansAlt-Bold,BlinkMacSystemFont` }}>{ abs_cat_data.cat_abs_title }</h3>
+                    <p style={{ fontFamily: `${abs_cat_data.desc_abs_cat_typos_name},OpenSans-Regular,BlinkMacSystemFont` }}>{ abs_cat_data.cat_abs_descri }</p>
                 </div>
                 <div className="card-info-btn">
-                    {/* <a href="{{ client.client_cat_link_info }}" style="font-family:'{{client.btn_abs_cat_typos_name}}',-apple-system,BlinkMacSystemFont;">Retrouvez nos bons plans</a> */}
                     <a href={abs_cat_data.cat_abs_btn_link}
                         style={{ 
-                            fontFamily: 'OpenSans-Regular,BlinkMacSystemFont',
+                            fontFamily: `${abs_cat_data.btn_abs_cat_typos_name},OpenSans-Regular,BlinkMacSystemFont`,
                             backgroundColor: `${abs_cat_data.cat_abs_btn_bg}`,
                             color: `${abs_cat_data.cat_abs_btn_info_color}`
                         }} 
