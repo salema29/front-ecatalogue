@@ -14,12 +14,29 @@ function AbsCatalogue() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getDataClientV2/${client_id}`)
-            .then((response) => response.json())
-            .then((fetchedData) => {
-                setAbsCatData(fetchedData);
-            })
-            .catch((error) => console.error("Error fetching data:", error));
+        const fetchClientData = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/${client_id}`);
+                // const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/202`);
+                
+                if (!response.ok) {
+                    console.error(`Erreur HTTP : ${response.status}`);
+                    return;
+                }
+    
+                const fetchedData = await response.json();
+    
+                if (fetchedData.status === 'success') {
+                    setAbsCatData(fetchedData.data);
+                } else {
+                    console.error('Erreur API:', fetchedData.message);
+                }
+            } catch (error) {
+                console.error('Erreur de récupération des données:', error);
+            }
+        };
+    
+        fetchClientData();
     }, []);
 
     return (
