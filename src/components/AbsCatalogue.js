@@ -17,7 +17,6 @@ function AbsCatalogue() {
         const fetchClientData = async () => {
             try {
                 const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/${client_id}`);
-                // const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/202`);
                 
                 if (!response.ok) {
                     console.error(`Erreur HTTP : ${response.status}`);
@@ -37,7 +36,7 @@ function AbsCatalogue() {
         };
     
         fetchClientData();
-    }, []);
+    }, [client_id]);
 
     return (
         <>
