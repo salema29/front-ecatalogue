@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import cross from "../assets/icons/cross-icon-dark.svg";
-import desktop from "../assets/icons/desktop-view-format-icon-dark.svg";
-import byProduct from "../assets/icons/by-product-icon.svg";
-import byCatalog from "../assets/icons/by-catalog-icon.svg";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
@@ -68,9 +64,7 @@ function ViewFormatDialog() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    // src="https://preprod-appli-server.vivetic.com/web_si/front-ecatalogue-v2/assets/icons/cross-icon.svg"
                                     src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
-                                    // src={cross}
                                     alt="Fermer"
                                     width="25"
                                 />
@@ -91,7 +85,6 @@ function ViewFormatDialog() {
                                 <div className="view-format-icon-container">
                                     <img
                                         className="view-format-icon"
-                                        // src={desktop}
                                         src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
                                         alt=""
                                     />
@@ -116,7 +109,6 @@ function ViewFormatDialog() {
                                         </span>
                                         <span className="view-format-dialog-button-icon">
                                             <img
-                                                // src={byProduct}
                                                 src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
                                                 alt=""
                                             />
@@ -132,7 +124,6 @@ function ViewFormatDialog() {
                                         </span>
                                         <span className="view-format-dialog-button-icon">
                                             <img
-                                                // src={byCatalog}
                                                 src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
                                                 alt=""
                                             />
@@ -145,7 +136,6 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    // src={desktop}
                                     src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
                                     alt=""
                                 />
@@ -167,7 +157,6 @@ function ViewFormatDialog() {
                                     </span>
                                     <span className="view-format-dialog-button-icon">
                                         <img
-                                            // src={byProduct}
                                             src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
                                             alt=""
                                         />
@@ -186,7 +175,6 @@ function ViewFormatDialog() {
                                     </span>
                                     <span className="view-format-dialog-button-icon">
                                         <img
-                                            // src={byCatalog}
                                             src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
                                             alt=""
                                         />
