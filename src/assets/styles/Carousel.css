@@ -154,11 +154,14 @@
 }
 
 .slide-button::after {
-  content: '🡢';
-  font-weight: bold;
+  content: '';
+  background-image: url('https://v2.ecatalogues.fr/assets/icons/btn-arrow-right.svg'); 
+  background-size: contain;
+  background-repeat: no-repeat;
   position: absolute;
-  right: 20px;
+  top: 14px;
   height: 20px;
+  width: 20px;
   opacity: 0;
   transition: all 0.3s ease-in-out;
 }
