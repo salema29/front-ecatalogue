@@ -1,3 +1,8 @@
+:root {
+  --icon-arrow-right: url('https://v2.ecatalogues.fr/assets/icons/dark-arrow-right.svg');
+  --btn-arrow-right: url('https://v2.ecatalogues.fr/assets/icons/btn-arrow-right.svg');
+}
+
 /* Afficher les points de pagination */
 .show-page-dots .flickity-page-dots {
   display: block;
@@ -122,13 +127,13 @@
 .flickity-prev-next-button.next {
   width: 30px;
   height: 30px;
-  background: url('https://v2.ecatalogues.fr/assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: var(--icon-arrow-right) no-repeat center;
 }
 
 .flickity-prev-next-button.previous {
   width: 30px;
   height: 30px;
-  background: url('https://v2.ecatalogues.fr/assets/icons/dark-arrow-right.svg') no-repeat center;
+  background: var(--icon-arrow-right) no-repeat center;
   transform: rotate(180deg);
 }
 
@@ -155,7 +160,7 @@
 
 .slide-button::after {
   content: '';
-  background-image: url('https://v2.ecatalogues.fr/assets/icons/btn-arrow-right.svg'); 
+  background-image: var(--btn-arrow-right); 
   background-size: contain;
   background-repeat: no-repeat;
   position: absolute;
