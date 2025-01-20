@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
-import cross from "../assets/icons/cross-icon-dark.svg";
+import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -27,6 +27,10 @@ function Catalog() {
         console.error("Error fetching data:", error);
       });
   }, [catalogId, API_BASE_URL]);
+
+  useEffect(() => {
+    disableEcatalogueAutoScroll();
+  }, []);
 
   return (
     <>

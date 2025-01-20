@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
-import LoadingSpinner from '../components/spinner/LoadingSpinner'
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import LoadingSpinner from '../components/spinner/LoadingSpinner';
+import handleOrientationChange from "./functions/Orientation";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -23,6 +24,18 @@ function ViewFormatDialog() {
                 console.error("Error fetching data:", error);
             });
     }, [catalogId, API_BASE_URL]);
+
+    useEffect(() => {
+        handleOrientationChange();
+
+        window.addEventListener("resize", handleOrientationChange);
+        window.addEventListener("orientationchange", handleOrientationChange);
+
+        return () => {
+            window.removeEventListener("resize", handleOrientationChange);
+            window.removeEventListener("orientationchange", handleOrientationChange);
+        };
+    }, []);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 

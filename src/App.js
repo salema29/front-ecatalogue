@@ -17,13 +17,6 @@ function App() {
         linkElement.href = fontsPath;
         document.head.appendChild(linkElement);
 
-        // orientation mobile
-        const ecatalogueDiv = document.getElementById("ecatalogue");
-        // Ajouter le style overflow-y: auto
-        if (ecatalogueDiv) {
-            ecatalogueDiv.style.overflowY = "auto";
-        }
-
         // Nettoyage si nécessaire lors du démontage du composant
         return () => {
             document.head.removeChild(linkElement);

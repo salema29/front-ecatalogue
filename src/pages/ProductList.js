@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
-import LoadingSpinner from '../components/spinner/LoadingSpinner'
+import LoadingSpinner from '../components/spinner/LoadingSpinner';
+import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import "../assets/styles/ProductList.css";
 
 function Product() {
@@ -116,6 +117,10 @@ function Product() {
           wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
         }
     }, [categoryId]); 
+
+    useEffect(() => {
+        disableEcatalogueAutoScroll();
+    }, []);
     
     return (
         <>

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -60,6 +61,10 @@ function MainProduct() {
             };
         }
     }, [headerData]);
+
+    useEffect(() => {
+        disableEcatalogueAutoScroll();
+    }, []);
 
     return (
         <>
