@@ -95,7 +95,7 @@ function Product() {
                             <div className="view-format-dialog-left-part">
                                 <img
                                     className="header-logo"
-                                    src={headerData.client_logo}
+                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                                     alt=""
                                 />
                                 <div className="header-text">

@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ function ViewFormatDialog() {
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src={headerData.client_logo}
+                                src = {isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                                 alt=""
                             />
                             <div className="header-text">
