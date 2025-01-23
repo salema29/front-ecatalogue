@@ -3,6 +3,7 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
+import AbsCatalogue from "./AbsCatalogue";
 // import { dataSlide } from "./slide.data";
 
 function Carousel() {
@@ -110,7 +111,8 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            <Flickity
+            {(slidesData && slidesData.length > 0) ? (
+                <Flickity
                 options={flickityOptions}
                 className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
             >
@@ -168,6 +170,9 @@ function Carousel() {
                     );
                 })}
             </Flickity>
+            ) : (
+                <AbsCatalogue/>
+            )}
             <div className="section-confidentiality container btn">
                 <div
                     className="confidentiality-button"
