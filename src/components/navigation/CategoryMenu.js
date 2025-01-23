@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "./CategoryPerCatalogue"
 import '../../assets/styles/CategoryMenu.css';
 
-const CategoryMenu = ({categoryIdSelected}) => {
+const CategoryMenu = ({ categoryIdSelected }) => {
     const { catalogId } = useParams();
     const navigate = useNavigate();
 
@@ -13,24 +13,25 @@ const CategoryMenu = ({categoryIdSelected}) => {
     const { categoryList } = CategoryPerCatalogue(catalogId);
 
     return (
-        <>
+        <div className="category-container">
             {categoryList.length > 0 ? (
                 <div className="circular-icons-row">
                     {categoryList.map((category, index) => (
-                            <div className="icon-container" key={category.categorie_id} height="186px"  onClick={() => handleProductsPerCategory(catalogId, category.categorie_id)} >
-                                <img src={category.categorie_image} alt={category.categorie_name} className="icon" />
-                                <p 
-                                    style={
-                                        category.categorie_id === categoryIdSelected
-                                            ? { fontWeight: "bolder" }
-                                            : {}
-                                    }
-                                    className="icon-label" 
-                                >
-                                    {category.categorie_name}
-                                </p>
+                        <div className="icon-container" key={category.categorie_id} height="186px" onClick={() => handleProductsPerCategory(catalogId, category.categorie_id)} >
+                            <img src={category.categorie_image} alt={category.categorie_name} className="icon" />
+                            <p
+                                style={
+                                    category.categorie_id === categoryIdSelected
+                                        ? { fontWeight: "bolder" }
+                                        : {}
+                                }
+                                className="icon-label"
+                            >
+                                {category.categorie_name}
+                            </p>
                         </div>
                     ))}
+
                 </div>
             ) : (
                 <>
@@ -38,7 +39,7 @@ const CategoryMenu = ({categoryIdSelected}) => {
                     <p> Chargement en cours ... </p>
                 </>
             )}
-        </>
+        </div>
     );
 };
 export default CategoryMenu;

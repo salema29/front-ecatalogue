@@ -3,7 +3,7 @@ import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
-// import { dataSlide } from "./slide.data";
+import AbsCatalogue from "./AbsCatalogue";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -85,12 +85,12 @@ function Carousel() {
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
         if (!isMobileView && sliderContainerRef.current) {
-            const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+            const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
             const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
             const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
             const minWidth = 600;
             const maxWidth = 640;
-            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth); 
+            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth);
             const theoricalNewSlideWidth = containerWidth / slidesPerView;
             const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
             setSlideWidth(newSlideWidth);
@@ -99,7 +99,7 @@ function Carousel() {
 
     const calculatePaginationVisibility = () => {
         const dataSlideLength = slidesData.length;
-        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
         const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
         const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
         if (sliderContainerRef.current && slidesData) {
@@ -110,9 +110,10 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            <Flickity
+            {(slidesData && slidesData.length > 0) ? (
+                <Flickity
                 options={flickityOptions}
-                className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
+                className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"}
             >
                 {slidesData.map((slide, key) => {
                     const handleClick = () => {
@@ -168,6 +169,9 @@ function Carousel() {
                     );
                 })}
             </Flickity>
+            ) : (
+                <AbsCatalogue/>
+            )}
             <div className="section-confidentiality container btn">
                 <div
                     className="confidentiality-button"
