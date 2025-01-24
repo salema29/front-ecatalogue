@@ -72,18 +72,18 @@ function Carousel() {
         // setClientId(202);
         // fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
         fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((fetchedData) => {
-            setSlidesData(fetchedData);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((fetchedData) => {
+                setSlidesData(fetchedData);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
     }
 
     const updateSlideWidth = () => {
@@ -94,7 +94,7 @@ function Carousel() {
             const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
             const minWidth = 600;
             const maxWidth = 640;
-            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth); 
+            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth);
             const theoricalNewSlideWidth = containerWidth / slidesPerView;
             const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
             setSlideWidth(newSlideWidth);
@@ -116,114 +116,116 @@ function Carousel() {
         <div ref={sliderContainerRef}>
             {(slidesData && slidesData.length > 0) ? (
                 <Flickity
-                options={flickityOptions}
-                className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
-            >
-                {slidesData.map((slide, key) => {
-                    // Handle opening a popup with the ecatalogue content
-                    const handleClick = () => {
-                        const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
-                        const placeholderFavicon = `${API_ASSETS_URL}/icons/popup-svgrepo-com.svg`
-
-                        // Ouvrir une fenêtre popup L
-                        const screenWidth = window.screen.availWidth; // Largeur de l'écran disponible
-                        const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
-                    
-                        // Ouvrir une nouvelle fenêtre avec des dimensions maximales
-                        const popupWindow = window.open(
-                            "",
-                            "_blank",
-                            `width=${screenWidth},height=${screenHeight},left=0,top=0`
-                        );
+                    options={flickityOptions}
+                    className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"}
+                >
+                    {slidesData.map((slide, key) => {
+                        const handleClick = () => {
+                            const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
+                            const placeholderFavicon = `${API_ASSETS_URL}/icons/popup-svgrepo-com.svg`;
                         
-                        if (popupWindow) {
-                            const cssLink = `
-                                <link rel="stylesheet" href="${API_BUILD_URL}/static/css/main.css">
-                            `;
-                            popupWindow.document.open();
-                            popupWindow.document.write(`
-                                <html lang="en">
-                                    <head>
-                                        <meta charset="UTF-8">
-                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                        <title>E-catalogue</title>
-                                        <link rel="icon" href="${placeholderFavicon}" type="image/x-icon" id="favicon"> <!-- Placeholder favicon -->
-                                        ${cssLink}
-                                        <script>
-                                            // Rediriger automatiquement vers l'URL cible
-                                            window.location.href = '${targetUrl}';
-                                        </script>
-                                    </head>
-                                    <body>
-                                        <div id='ecatalogue'>
+                            // Vérifier si on est déjà dans un popup
+                            const isPopup = window.opener !== null && window.opener !== undefined;
+                        
+                            if (isPopup) {
+                                // Si on est dans un popup, rediriger directement
+                                window.location.href = targetUrl;
+                            } else {
+                                // Si on n'est pas dans un popup, ouvrir un popup
+                                const screenWidth = window.screen.availWidth; // Largeur de l'écran disponible
+                                const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
+                        
+                                const popupWindow = window.open(
+                                    "",
+                                    "_blank",
+                                    `width=${screenWidth},height=${screenHeight},left=0,top=0`
+                                );
+                        
+                                if (popupWindow) {
+                                    const cssLink = `
+                                        <link rel="stylesheet" href="${API_BUILD_URL}/static/css/main.css">
+                                    `;
+                                    popupWindow.document.open();
+                                    popupWindow.document.write(`
+                                        <html lang="en">
+                                            <head>
+                                                <meta charset="UTF-8">
+                                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                                <title>E-catalogue</title>
+                                                <link rel="icon" href="${placeholderFavicon}" type="image/x-icon" id="favicon">
+                                                ${cssLink}
+                                                <script>
+                                                    // Rediriger automatiquement vers l'URL cible
+                                                    window.location.href = '${targetUrl}';
+                                                </script>
+                                            </head>
+                                            <body>
+                                                <div id='ecatalogue'></div>
+                                                <input type='hidden' id='catalogue-client' value='${clientId}'></input>
+                                                <script type='text/javascript' src='${API_BUILD_URL}/static/js/main.js'></script>
+                                                <script type='text/javascript' src='${API_BUILD_URL}/static/js/chunk.js'></script>
+                                            </body>
+                                        </html>
+                                    `);
+                                    popupWindow.document.close();
+                                } else {
+                                    alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
+                                }
+                            }
+                        };                        
+
+                        return (
+                            <div
+                                key={key}
+                                className="slide-element"
+                                style={{
+                                    width: isMobileView ? "100%" : `${slideWidth}px`,
+                                }}
+                            >
+                                <img
+                                    alt={`slide${slide.catalogue_id} media`}
+                                    className="slide-media"
+                                    src={slide.slide_image}
+                                />
+                                <div className="slide-meta">
+                                    <div className="slide-head">
+                                        <div
+                                            className="slide-head-subtitle"
+                                            style={{ fontFamily: slide.date_typo_name }}
+                                        >
+                                            Du {slide.catalogue_date_validite_debut} au{" "}{slide.catalogue_date_validite_fin}
                                         </div>
-                                        <input type='hidden' id='catalogue-client' value='${clientId}'>
-                                        </input>
-                                        <script type='text/javascript' src='${API_BUILD_URL}/static/js/main.js'>
-                                        </script>
-                                        <script type='text/javascript' src='${API_BUILD_URL}/static/js/chunk.js'>
-                                        </script>
-                                    </body>
-                                </html>
-                            `);
-                            popupWindow.document.close();
-                        } else {
-                            alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
-                        }
-                    };
-                    
-                    return (
-                        <div
-                            key={key}
-                            className="slide-element"
-                            style={{
-                                width: isMobileView ? "100%" : `${slideWidth}px`,
-                            }}
-                        >
-                            <img
-                                alt={`slide${slide.catalogue_id} media`}
-                                className="slide-media"
-                                src={slide.slide_image}
-                            />
-                            <div className="slide-meta">
-                                <div className="slide-head">
-                                    <div
-                                        className="slide-head-subtitle"
-                                        style={{ fontFamily: slide.date_typo_name }}
-                                    >
-                                        Du {slide.catalogue_date_validite_debut} au{" "}{slide.catalogue_date_validite_fin}
+                                        <div
+                                            className="slide-head-title"
+                                            style={{ fontFamily: slide.nom_catalogue_typo_name }}
+                                        >
+                                            <div className="slide-headline">
+                                                E-CATALOGUE
+                                            </div>
+                                            <div className="slide-headline">
+                                                {slide.catalogue_name_ln_un}
+                                            </div>
+                                            <div className="slide-headline">
+                                                {slide.catalogue_name_ln_deux}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
-                                        className="slide-head-title"
-                                        style={{ fontFamily: slide.nom_catalogue_typo_name }}
+                                        className="slide-button btn"
+                                        onClick={handleClick}
+                                        style={{
+                                            fontFamily: slide.btn_discover_typos_name,
+                                        }}
                                     >
-                                        <div className="slide-headline">
-                                            E-CATALOGUE
-                                        </div>
-                                        <div className="slide-headline">
-                                            {slide.catalogue_name_ln_un}
-                                        </div>
-                                        <div className="slide-headline">
-                                            {slide.catalogue_name_ln_deux}
-                                        </div>
+                                        Découvrir
                                     </div>
-                                </div>
-                                <div
-                                    className="slide-button btn"
-                                    onClick={handleClick}
-                                    style={{
-                                        fontFamily: slide.btn_discover_typos_name,
-                                    }}
-                                >
-                                    Découvrir
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </Flickity>
+                        );
+                    })}
+                </Flickity>
             ) : (
-                <AbsCatalogue/>
+                <AbsCatalogue />
             )}
             <div className="section-confidentiality container btn">
                 <div
