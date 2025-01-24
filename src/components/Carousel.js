@@ -122,7 +122,7 @@ function Carousel() {
                 {slidesData.map((slide, key) => {
                     // Handle opening a popup with the ecatalogue content
                     const handleClick = () => {
-                        const targetUrl = `/#/view/${slide.catalogue_id}`;
+                        const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
                         const placeholderFavicon = `${API_ASSETS_URL}/icons/popup-svgrepo-com.svg`
 
                         // Ouvrir une fenêtre popup L
