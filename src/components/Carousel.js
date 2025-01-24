@@ -8,8 +8,6 @@ import AbsCatalogue from "./AbsCatalogue";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const API_BUILD_URL = process.env.REACT_APP_API_BUILD_URL;
-    const API_ASSETS_URL = process.env.REACT_APP_API_ASSET_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
@@ -122,7 +120,6 @@ function Carousel() {
                     {slidesData.map((slide, key) => {
                         const handleClick = () => {
                             const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
-                            const placeholderFavicon = `${API_ASSETS_URL}/icons/popup-svgrepo-com.svg`;
                         
                             // Vérifier si on est déjà dans un popup
                             const isPopup = window.opener !== null && window.opener !== undefined;
