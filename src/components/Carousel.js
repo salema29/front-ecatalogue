@@ -72,18 +72,18 @@ function Carousel() {
         // setClientId(202);
         // fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
         fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((fetchedData) => {
-                setSlidesData(fetchedData);
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((fetchedData) => {
+            setSlidesData(fetchedData);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
     }
 
     const updateSlideWidth = () => {
@@ -94,7 +94,7 @@ function Carousel() {
             const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
             const minWidth = 600;
             const maxWidth = 640;
-            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth);
+            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth); 
             const theoricalNewSlideWidth = containerWidth / slidesPerView;
             const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
             setSlideWidth(newSlideWidth);
@@ -136,39 +136,12 @@ function Carousel() {
                                 const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
                         
                                 const popupWindow = window.open(
-                                    "",
+                                    `${targetUrl}`,
                                     "_blank",
                                     `width=${screenWidth},height=${screenHeight},left=0,top=0`
                                 );
                         
-                                if (popupWindow) {
-                                    const cssLink = `
-                                        <link rel="stylesheet" href="${API_BUILD_URL}/static/css/main.css">
-                                    `;
-                                    popupWindow.document.open();
-                                    popupWindow.document.write(`
-                                        <html lang="en">
-                                            <head>
-                                                <meta charset="UTF-8">
-                                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                                <title>E-catalogue</title>
-                                                <link rel="icon" href="${placeholderFavicon}" type="image/x-icon" id="favicon">
-                                                ${cssLink}
-                                                <script>
-                                                    // Rediriger automatiquement vers l'URL cible
-                                                    window.location.href = '${targetUrl}';
-                                                </script>
-                                            </head>
-                                            <body>
-                                                <div id='ecatalogue'></div>
-                                                <input type='hidden' id='catalogue-client' value='${clientId}'></input>
-                                                <script type='text/javascript' src='${API_BUILD_URL}/static/js/main.js'></script>
-                                                <script type='text/javascript' src='${API_BUILD_URL}/static/js/chunk.js'></script>
-                                            </body>
-                                        </html>
-                                    `);
-                                    popupWindow.document.close();
-                                } else {
+                                if (!popupWindow) {
                                     alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
                                 }
                             }
