@@ -8,6 +8,8 @@ import AbsCatalogue from "./AbsCatalogue";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const API_BUILD_URL = process.env.REACT_APP_API_BUILD_URL;
+    const API_ASSETS_URL = process.env.REACT_APP_API_ASSET_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
@@ -67,7 +69,8 @@ function Carousel() {
     }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
 
     const fetchSlideData = () => {
-        // fetch(`${API_BASE_URL}/api/getSlides/190/0`) //Static data for testing
+        // setClientId(202);
+        // fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
         fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
@@ -117,9 +120,58 @@ function Carousel() {
                 className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"} 
             >
                 {slidesData.map((slide, key) => {
+                    // Handle opening a popup with the ecatalogue content
                     const handleClick = () => {
-                        navigate(`/view/${slide.catalogue_id}`);
+                        const targetUrl = `/#/view/${slide.catalogue_id}`;
+                        const placeholderFavicon = `${API_ASSETS_URL}/icons/popup-svgrepo-com.svg`
+
+                        // Ouvrir une fenêtre popup L
+                        const screenWidth = window.screen.availWidth; // Largeur de l'écran disponible
+                        const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
+                    
+                        // Ouvrir une nouvelle fenêtre avec des dimensions maximales
+                        const popupWindow = window.open(
+                            "",
+                            "_blank",
+                            `width=${screenWidth},height=${screenHeight},left=0,top=0`
+                        );
+                        
+                        if (popupWindow) {
+                            const cssLink = `
+                                <link rel="stylesheet" href="${API_BUILD_URL}/static/css/main.css">
+                            `;
+                            popupWindow.document.open();
+                            popupWindow.document.write(`
+                                <html lang="en">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                        <title>E-catalogue</title>
+                                        <link rel="icon" href="${placeholderFavicon}" type="image/x-icon" id="favicon"> <!-- Placeholder favicon -->
+                                        ${cssLink}
+                                        <script>
+                                            // Rediriger automatiquement vers l'URL cible
+                                            window.location.href = '${targetUrl}';
+                                        </script>
+                                    </head>
+                                    <body>
+                                        <div id='ecatalogue'>
+                                        </div>
+                                        <input type='hidden' id='catalogue-client' value='${clientId}'>
+                                        </input>
+                                        <script type='text/javascript' src='${API_BUILD_URL}/static/js/main.js'>
+                                        </script>
+                                        <script type='text/javascript' src='${API_BUILD_URL}/static/js/chunk.js'>
+                                        </script>
+                                    </body>
+                                </html>
+                            `);
+                            popupWindow.document.close();
+                        } else {
+                            alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
+                        }
                     };
+                    
                     return (
                         <div
                             key={key}
