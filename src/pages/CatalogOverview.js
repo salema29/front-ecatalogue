@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
+import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -32,6 +33,8 @@ function Catalog() {
   useEffect(() => {
     disableEcatalogueAutoScroll();
   }, []);
+
+  showOnlyEcatalogue();
 
   return (
     <>
