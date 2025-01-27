@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import handleOrientationChange from "./functions/Orientation";
+import showOnlyEcatalogue from "./functions/ShowOnlyEcatalogue";
 import MiniSpinner from "./spinner/MiniSpinner";
 
 function ViewFormatDialog() {
@@ -47,6 +48,8 @@ function ViewFormatDialog() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
+
+    showOnlyEcatalogue();
 
     return (
         <>

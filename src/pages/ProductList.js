@@ -4,6 +4,7 @@ import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import "../assets/styles/ProductList.css";
+import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -121,6 +122,8 @@ function Product() {
     useEffect(() => {
         disableEcatalogueAutoScroll();
     }, []);
+
+    showOnlyEcatalogue();
     
     return (
         <>
