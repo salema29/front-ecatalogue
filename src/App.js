@@ -22,7 +22,7 @@ function App() {
             document.head.removeChild(linkElement);
         };
     }, []);
-    
+
     return (
         <Router>
             <Routes>

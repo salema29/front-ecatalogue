@@ -4,7 +4,6 @@ import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
-// import { dataSlide } from "./slide.data";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -87,12 +86,12 @@ function Carousel() {
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
         if (!isMobileView && sliderContainerRef.current) {
-            const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+            const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
             const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
             const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
             const minWidth = 600;
             const maxWidth = 640;
-            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth); 
+            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth);
             const theoricalNewSlideWidth = containerWidth / slidesPerView;
             const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
             setSlideWidth(newSlideWidth);
@@ -101,7 +100,7 @@ function Carousel() {
 
     const calculatePaginationVisibility = () => {
         const dataSlideLength = slidesData.length;
-        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding 
+        const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
         const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
         const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
         if (sliderContainerRef.current && slidesData) {
@@ -120,10 +119,10 @@ function Carousel() {
                     {slidesData.map((slide, key) => {
                         const handleClick = () => {
                             const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
-                        
+
                             // Vérifier si on est déjà dans un popup
                             const isPopup = window.opener !== null && window.opener !== undefined;
-                        
+
                             if (isPopup) {
                                 // Si on est dans un popup, rediriger directement
                                 window.location.href = targetUrl;
@@ -131,18 +130,18 @@ function Carousel() {
                                 // Si on n'est pas dans un popup, ouvrir un popup
                                 const screenWidth = window.screen.availWidth; // Largeur de l'écran disponible
                                 const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
-                        
+
                                 const popupWindow = window.open(
                                     `${targetUrl}`,
                                     "_blank",
                                     `width=${screenWidth},height=${screenHeight},left=0,top=0`
                                 );
-                        
+
                                 if (!popupWindow) {
                                     alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
                                 }
                             }
-                        };                        
+                        };
 
                         return (
                             <div

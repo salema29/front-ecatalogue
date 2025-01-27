@@ -9,6 +9,7 @@ function Catalog() {
   const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
@@ -43,7 +44,7 @@ function Catalog() {
             <div className="view-format-dialog-left-part">
               <img
                 className="header-logo"
-                src={headerData.client_logo}
+                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                 alt=""
               />
               <div className="header-text">
