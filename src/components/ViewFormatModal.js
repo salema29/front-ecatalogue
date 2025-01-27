@@ -5,6 +5,7 @@ import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import handleOrientationChange from "./functions/Orientation";
 import showOnlyEcatalogue from "./functions/ShowOnlyEcatalogue";
+import MiniSpinner from "./spinner/MiniSpinner";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -118,17 +119,30 @@ function ViewFormatDialog() {
                                     <button
                                         className="view-format-dialog-button btn"
                                         style={{ backgroundColor: headerData.client_color }}
-                                        onClick={handleProductView}
+                                        onClick={firstCategorieId ? handleProductView : () => { }}
                                     >
-                                        <span className="view-format-dialog-button-text">
-                                            Vue produit
-                                        </span>
-                                        <span className="view-format-dialog-button-icon">
-                                            <img
-                                                src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
-                                                alt=""
-                                            />
-                                        </span>
+                                        {firstCategorieId ? (
+                                            <>
+                                                <span className="view-format-dialog-button-text">
+                                                    Vue produit
+                                                </span>
+                                                <span className="view-format-dialog-button-icon">
+                                                    <img
+                                                        src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
+                                                        alt=""
+                                                    />
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="view-format-dialog-button-text">
+                                                    Vue produit
+                                                </span>
+                                                <span className="view-format-dialog-button-icon">
+                                                    <MiniSpinner />
+                                                </span>
+                                            </>
+                                        )}
                                     </button>
                                     <button
                                         className="view-format-dialog-button btn"
@@ -160,24 +174,34 @@ function ViewFormatDialog() {
                                 </h2>
                             </div>
                             <div className="view-format-dialog-button-container">
-                                <button
-                                    style={{ backgroundColor: headerData.client_color }}
-                                    className="view-format-dialog-button"
-                                    onClick={handleProductView}
-                                >
-                                    <span
-                                        className="view-format-dialog-button-text"
-                                        style={{ cursor: "pointer" }}
+                            <button
+                                        className="view-format-dialog-button btn"
+                                        style={{ backgroundColor: headerData.client_color }}
+                                        onClick={firstCategorieId ? handleProductView : () => { }}
                                     >
-                                        Vue produit
-                                    </span>
-                                    <span className="view-format-dialog-button-icon">
-                                        <img
-                                            src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
-                                            alt=""
-                                        />
-                                    </span>
-                                </button>
+                                        {firstCategorieId ? (
+                                            <>
+                                                <span className="view-format-dialog-button-text">
+                                                    Vue produit
+                                                </span>
+                                                <span className="view-format-dialog-button-icon">
+                                                    <img
+                                                        src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
+                                                        alt=""
+                                                    />
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="view-format-dialog-button-text">
+                                                    Vue produit
+                                                </span>
+                                                <span className="view-format-dialog-button-icon">
+                                                    <MiniSpinner />
+                                                </span>
+                                            </>
+                                        )}
+                                    </button>
                                 <button
                                     style={{ backgroundColor: headerData.client_color }}
                                     className="view-format-dialog-button"
