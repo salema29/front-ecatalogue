@@ -166,7 +166,7 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
+                                    src={`${ASSET_BASE_URL}/icons/view-format-icon-dark.svg`}
                                     alt=""
                                 />
                                 <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
