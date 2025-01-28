@@ -3,6 +3,7 @@ import '../assets/styles/Home.css'
 import Banner from '../components/Banner'
 import Carousel from '../components/Carousel';
 import handleOrientationChange from "../components/functions/Orientation";
+import showAllElements from "../components/functions/ShowAllElements";
 
 function Home() {
     useEffect(() => {
@@ -16,6 +17,8 @@ function Home() {
             window.removeEventListener("orientationchange", handleOrientationChange);
         };
     }, []);
+
+    showAllElements();
 
     return (
         <>
