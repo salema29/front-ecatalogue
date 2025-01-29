@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
+import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
@@ -32,6 +34,8 @@ function Catalog() {
     disableEcatalogueAutoScroll();
   }, []);
 
+  showOnlyEcatalogue();
+
   return (
     <>
       {headerData ? (
@@ -40,7 +44,7 @@ function Catalog() {
             <div className="view-format-dialog-left-part">
               <img
                 className="header-logo"
-                src={headerData.client_logo}
+                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                 alt=""
               />
               <div className="header-text">

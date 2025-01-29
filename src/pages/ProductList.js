@@ -4,6 +4,7 @@ import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import "../assets/styles/ProductList.css";
+import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -14,7 +15,7 @@ function Product() {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const headerHeight = document.querySelector('.sticky'); // class "sticky" height
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
+    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
     const navigate = useNavigate();
 
     const handleClose = () => {
@@ -100,10 +101,10 @@ function Product() {
                 const height = window.innerHeight - stickyHeight;
                 setWrapperHeight(height);
             };
-    
+
             setTimeout(updateHeight, 1000); // Assurez-vous que le DOM est à jour.
             window.addEventListener('resize', updateHeight);
-    
+
             return () => {
                 window.removeEventListener('resize', updateHeight);
             };
@@ -116,11 +117,13 @@ function Product() {
         if (wrapper) {
           wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
         }
-    }, [categoryId]); 
+    }, [categoryId]);
 
     useEffect(() => {
         disableEcatalogueAutoScroll();
     }, []);
+
+    showOnlyEcatalogue();
     
     return (
         <>
@@ -131,8 +134,7 @@ function Product() {
                             <div className="view-format-dialog-left-part">
                                 <img
                                     className="header-logo"
-                                    src={headerData.client_logo}
-                                    // src="https://v2.ecatalogues.fr/clients/Gutenberg/Client_logo/logo_gut_noir.png"
+                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                                     alt=""
                                 />
                                 <div className="header-text">
@@ -184,7 +186,7 @@ function Product() {
                     </div>
                     <div className="wrapper"
                         style={{
-                            height: `${wrapperHeight}px`, 
+                            height: `${wrapperHeight}px`,
                             overflowY: 'scroll'
                         }}
                     >

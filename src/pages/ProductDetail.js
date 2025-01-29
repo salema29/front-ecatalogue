@@ -4,6 +4,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
+import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -11,6 +12,7 @@ function MainProduct() {
     const { catalogId, product_id, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const navigate = useNavigate();
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
     const heightToMinus = 0;
@@ -66,6 +68,8 @@ function MainProduct() {
         disableEcatalogueAutoScroll();
     }, []);
 
+    showOnlyEcatalogue();
+
     return (
         <>
             {headerData ? (
@@ -74,7 +78,7 @@ function MainProduct() {
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src={headerData.client_logo}
+                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
                                 alt=""
                             />
                             <div className="header-text">

@@ -36,7 +36,7 @@ const CategoryPerCatalogue = (catalogId) => {
                 for (const category of categories) {
                     const hasProduct = await hasProducts(category.categorie_id);
                     // console.log(`categorie ${category.categorie_name} has product ? ${hasProduct}`);
-                    
+
                     if (hasProduct) {
                         filteredCategories.push(category);
                     }
