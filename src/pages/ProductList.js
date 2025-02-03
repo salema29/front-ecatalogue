@@ -205,12 +205,8 @@ function Product() {
                                     ))}
                                 </div>
                             ) : (
-                                <div className="empty_products">
-                                    {/* <h1>Produits Indisponibles</h1> */}
-                                    <p>Veuillez patienter</p>
-                                </div>
+                                <LoadingSpinner />
                             )}
-                            {isLoading && (<LoadingSpinner />)}
                         </div>
                     </div>
                 </div>
