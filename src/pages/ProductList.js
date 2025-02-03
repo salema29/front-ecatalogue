@@ -21,6 +21,7 @@ function Product() {
 
     const handleClose = () => {
         navigate(`/`);
+        window.location.reload();
     };
 
     const handleCatalogView = () => {
