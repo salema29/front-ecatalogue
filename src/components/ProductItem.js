@@ -1,29 +1,81 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import '../assets/styles/ProductList.css';
 
-const ProductItem = ({ product, isMobileView, handleDetailedView, index }) => {
-    if (product.view_type !== '1') return null;
+function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNotFound, setIsNotFound] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+
+    const navigate = useNavigate();
+
+    const handleDetailedView = (product_id) => {
+        console.log('product clicked');
+        navigate(`/product/${catalogId}/${product_id}/${categoryId}`);
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 767);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [API_BASE_URL]);
+
+    if (isNotFound) {
+        return (
+            <div className="product-item not-found">
+                <p>Produit non trouvé</p>
+            </div>
+        );
+    }
 
     return (
         <div
             key={index}
-            className={`grid-item ${isMobileView ? 'mobile-items' : 'desktop-items'}`}
+            className={`grid-item ${isLoading ? 'placeholder-content' : ''} ${isMobileView ? 'mobile-items' : 'desktop-items'}`}
             style={{
                 gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
                 gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
                 order: product.view_order,
             }}
         >
-            <div className="item-wrapper">
-                <div onClick={handleDetailedView} className="item-link">
-                    <iframe
-                        src={`https://intranet.vivetic.com/labo/15556/sftp_simulation/catalogue_sftp/HTML/${product.html_name}`}
-                        className="product-item"
-                        title={`Product ${index}`}
-                    />
+            {product.type == 0 ? (
+                // Type 0: Produit avec clic pour détail
+                <div className="item-wrapper">
+                    <div
+                        onClick={() => handleDetailedView(product.view_order, product.categoryId)}
+                        className="item-link"
+                        style={{
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <iframe
+                            src={product.html_name}
+                            className="product-item"
+                            title={`Product ${index}`}
+                            scrolling="no"
+                            onLoad={() => setIsLoading(false)}
+                        />
+                    </div>
                 </div>
-            </div>
+            ) : (
+                // Autre type de produit : sans clic
+                <div className="item-wrapper">
+                    <div className="item-link">
+                        <iframe
+                            src={product.html_name}
+                            className="product-item"
+                            title={`Product ${index}`}
+                            scrolling="no"
+                            onLoad={() => setIsLoading(false)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
-};
+
+}
 
 export default ProductItem;

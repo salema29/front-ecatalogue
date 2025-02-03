@@ -61,7 +61,6 @@ iframe>html>body {
 
 .product-list-container {
   height: fit-content;
-  /* overflow-y: scroll; */
 }
 
 .sticky {
@@ -101,4 +100,27 @@ iframe>html>body {
 .empty_products p {
   font-size: 1.2em;
   color: #555;
+}
+
+.placeholder-content {
+  /* padding inspecté dans html source */
+  clip-path: inset(10px);
+  overflow: hidden;
+  background: #000;
+  position: relative;
+  
+  /* Animation */
+  animation-duration: 1.7s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: placeholderAnimate;
+  background: #f6f7f8; 
+  background: linear-gradient(to right, #eee 2%, #ddd 18%, #eee 33%);
+  background-size: 1300px; 
+}
+
+@keyframes placeholderAnimate {
+  0%{ background-position: -650px 0; }
+  100%{ background-position: 650px 0; }
 }
