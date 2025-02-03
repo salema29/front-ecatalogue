@@ -6,7 +6,6 @@ import ProductDetail from './pages/ProductDetail';
 import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
-import './App.css';
 
 function App() {
     useEffect(() => {
