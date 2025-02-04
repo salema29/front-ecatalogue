@@ -27,13 +27,8 @@ code {
 }
 
 html, body, #ecatalogue {
+  height: 100%;
   margin: 0;
   padding: 0;
   background: var(--main-bg);
-}
-
-html, body {
-  overflow: auto; /* Allow scrolling */
-  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling */
-  height: 100%; /* Ensure the page takes up full height */
 }
