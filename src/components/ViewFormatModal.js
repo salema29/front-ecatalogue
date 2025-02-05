@@ -17,6 +17,7 @@ function ViewFormatDialog() {
 
     const handleClose = () => {
         navigate(`/`);
+        window.location.reload();
     };
 
     useEffect(() => {

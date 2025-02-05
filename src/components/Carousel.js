@@ -118,29 +118,7 @@ function Carousel() {
                 >
                     {slidesData.map((slide, key) => {
                         const handleClick = () => {
-                            const targetUrl = `${window.location.href.split("#")[0]}#/view/${slide.catalogue_id}`;
-
-                            // Vérifier si on est déjà dans un popup
-                            const isPopup = window.opener !== null && window.opener !== undefined;
-
-                            if (isPopup) {
-                                // Si on est dans un popup, rediriger directement
-                                window.location.href = targetUrl;
-                            } else {
-                                // Si on n'est pas dans un popup, ouvrir un popup
-                                const screenWidth = window.screen.availWidth; // Largeur de l'écran disponible
-                                const screenHeight = window.screen.availHeight; // Hauteur de l'écran disponible
-
-                                const popupWindow = window.open(
-                                    `${targetUrl}`,
-                                    "_blank",
-                                    `width=${screenWidth},height=${screenHeight},left=0,top=0`
-                                );
-
-                                if (!popupWindow) {
-                                    alert("Popup bloqué ! Veuillez autoriser les fenêtres contextuelles pour ce site web.");
-                                }
-                            }
+                            navigate(`/view/${slide.catalogue_id}`);
                         };
 
                         return (
