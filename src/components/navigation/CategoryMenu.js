@@ -3,14 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "./CategoryPerCatalogue"
 import '../../assets/styles/CategoryMenu.css';
 
-const CategoryMenu = ({ categoryIdSelected }) => {
+const CategoryMenu = ({ categoryIdSelected, categoryList }) => {
     const { catalogId } = useParams();
     const navigate = useNavigate();
 
     const handleProductsPerCategory = (catalogId, categoryId) => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
-    const { categoryList } = CategoryPerCatalogue(catalogId);
 
     return (
         <div className="category-container">

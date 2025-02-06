@@ -6,6 +6,7 @@ import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import "../assets/styles/ProductList.css";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
+import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -18,6 +19,7 @@ function Product() {
     const headerHeight = document.querySelector('.sticky'); // class "sticky" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
     const navigate = useNavigate();
+    const { categoryList } = CategoryPerCatalogue(catalogId);
 
     const handleClose = () => {
         navigate(`/`);
@@ -92,7 +94,7 @@ function Product() {
     }, [categoryId, API_BASE_URL]);
 
     useEffect(() => {
-        if (headerData) {
+        if (headerData && categoryList) {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
@@ -108,7 +110,7 @@ function Product() {
                 window.removeEventListener('resize', updateHeight);
             };
         }
-    }, [headerData]);
+    }, [headerData, categoryId, categoryList]);
 
 
     useEffect(() => {
@@ -178,7 +180,7 @@ function Product() {
                             </div>
                         </header>
                         {productData.length > 0 ? (
-                            <CategoryMenu categoryIdSelected={categoryId} />)
+                            <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
                             :
                             (<></>)
                         }
