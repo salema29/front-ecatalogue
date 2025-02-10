@@ -4,7 +4,7 @@ import '../../assets/styles/ConfidentialTracking.css';
 import LoadingSpinner from '../../components/spinner/LoadingSpinner';
 import showOnlyEcatalogue from '../functions/ShowOnlyEcatalogue';
 import { getCookie, setCookie, deleteCookie } from '../../components/functions/RgpdCookieManager.js';
-import GtmLoader, { loadGtmScript } from '../functions/GtmCookiesHander';
+import GtmLoader from '../functions/GtmCookiesHander';
 
 function PrivacyPolicy() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
