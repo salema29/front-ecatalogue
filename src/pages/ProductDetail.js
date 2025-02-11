@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
@@ -14,7 +13,6 @@ function MainProduct() {
     const [productData, setProductData] = useState(null);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const navigate = useNavigate();
-    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
@@ -37,7 +35,6 @@ function MainProduct() {
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
-        // fetch(`${API_BASE_URL}/api/getProductDetail/${product_id}`)
         fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${product_id}`)
             .then((response) => response.json())
             .then((fetchedData) => setProductData(fetchedData))
@@ -114,7 +111,7 @@ function MainProduct() {
                             {productData ? (
                                 <iframe
                                     src={productData.html.html_name}
-                                    className="product-item placeholder-content"
+                                    className="product-item-detail placeholder-content"
                                     title={productData.html.html_name}
                                     width="auto"
                                     // height="590px"
