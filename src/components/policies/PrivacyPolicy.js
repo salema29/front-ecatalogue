@@ -43,10 +43,7 @@ function PrivacyPolicy() {
     };
 
     const handleBackClick = () => {
-        const lastVisitedLink = document.referrer;
-        if (lastVisitedLink) {
-            window.location.href = lastVisitedLink; // Redirige vers la dernière page visitée
-        }
+        window.location.href = '/';
     };
 
     showOnlyEcatalogue();
