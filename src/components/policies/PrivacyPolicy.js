@@ -5,11 +5,13 @@ import LoadingSpinner from '../../components/spinner/LoadingSpinner';
 import showOnlyEcatalogue from '../functions/ShowOnlyEcatalogue';
 import { getCookie, setCookie, deleteCookie } from '../../components/functions/RgpdCookieManager.js';
 import GtmLoader from '../functions/GtmCookiesHander';
+import { useNavigate } from "react-router-dom";
 
 function PrivacyPolicy() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [privacyPolicyContent, setPrivacyPolicyContent] = useState(null);
     const [isChecked, setIsChecked] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getTextConfidentiality`)
@@ -43,7 +45,7 @@ function PrivacyPolicy() {
     };
 
     const handleBackClick = () => {
-        window.location.href = '/';
+        navigate('/');
     };
 
     showOnlyEcatalogue();
