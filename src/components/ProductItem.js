@@ -4,7 +4,6 @@ import '../assets/styles/ProductList.css';
 
 function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [isNotFound, setIsNotFound] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
 
     const navigate = useNavigate();
@@ -22,14 +21,6 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
         return () => window.removeEventListener("resize", handleResize);
     }, [API_BASE_URL]);
 
-    if (isNotFound) {
-        return (
-            <div className="product-item not-found">
-                <p>Produit non trouvé</p>
-            </div>
-        );
-    }
-
     return (
         <div
             key={index}
@@ -40,7 +31,7 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                 order: product.view_order,
             }}
         >
-            {product.type == 0 ? (
+            {product.type === "0" ? (
                 // Type 0: Produit avec clic pour détail
                 <div className="item-wrapper">
                     <div

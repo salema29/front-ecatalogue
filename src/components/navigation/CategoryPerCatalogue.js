@@ -49,6 +49,8 @@ const CategoryPerCatalogue = (catalogId) => {
         };
 
         fetchCategoriesWithProducts();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [catalogId, API_BASE_URL]);
 
     return { categoryList, firstCategorieId };

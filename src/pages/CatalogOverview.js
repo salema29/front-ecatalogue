@@ -9,7 +9,7 @@ function Catalog() {
   const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+  const isMobileView = window.innerWidth <= 767;
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);

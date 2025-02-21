@@ -91,7 +91,7 @@ function Product() {
         };
 
         fetchProductData();
-    }, [categoryId, API_BASE_URL]);
+    }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
         if (headerData && categoryList) {

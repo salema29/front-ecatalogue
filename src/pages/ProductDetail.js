@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 
@@ -12,16 +11,11 @@ function MainProduct() {
     const { catalogId, product_id, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = window.innerWidth <= 767;
     const navigate = useNavigate();
-    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
-
-    const handleCatalogView = () => {
-        navigate(`/catalog/${catalogId}`);
-    };
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -44,7 +38,7 @@ function MainProduct() {
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
-    }, [product_id, API_BASE_URL]);
+    }, [product_id, API_BASE_URL, categoryId]);
 
     useEffect(() => {
         if (headerData) {
