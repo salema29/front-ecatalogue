@@ -1,0 +1,37 @@
+.rgpd-head {
+    display: flex;
+    gap: 25px;
+}
+input[type="checkbox"],
+.rgpd-back-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+.rgpd-back-btn:hover {
+    color: red;
+    text-decoration: underline;
+}
+.icon-back {
+    width: 15px;  
+    height: 15px; 
+    fill: red;    
+    margin: 0 5px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+    .rgpd-head {
+        display: flex;
+        gap: 15px;
+        font-size: 12px;
+    }
+
+    .checkbox-container {
+        width: 50vw;
+    }
+}
