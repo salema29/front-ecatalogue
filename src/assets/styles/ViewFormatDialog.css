@@ -2,7 +2,7 @@
     /* align-content: center; */
     background: white;
     color: white;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
     width: 100%;
 }
@@ -48,7 +48,7 @@
     }
 
     .view-format-dialog-content {
-        padding: 20vh 0;
+        padding: 10vh 0;
     }
 }
 
