@@ -31,6 +31,12 @@
     background-size: 1300px;
 }
 
+.product-item-detail {
+    border: none;
+    min-height: 100%;
+    width: 100%;
+}
+
 @keyframes placeholderAnimate {
     0% {
         background-position: -650px 0;
