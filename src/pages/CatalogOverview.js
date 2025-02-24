@@ -13,6 +13,7 @@ function Catalog() {
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
+    window.location.reload();
   };
 
   const { firstCategorieId } = CategoryPerCatalogue(catalogId);
