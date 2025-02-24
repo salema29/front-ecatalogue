@@ -1,5 +1,5 @@
 .view-format-dialog-content {
-    align-content: center;
+    /* align-content: center; */
     background: white;
     color: white;
     height: 100%;
@@ -46,6 +46,10 @@
     .header-logo {
         max-height: 60%;
     }
+
+    .view-format-dialog-content {
+        padding: 20vh 0;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -58,6 +62,10 @@
         position: sticky;
         top: 0;
         z-index: 1000;
+    }
+
+    .view-format-dialog-content {
+        padding: 50px 0;
     }
 }
 
@@ -97,12 +105,15 @@
 @media screen and (min-width : 768px) {
     .view-format-text {
         width: 80%;
-        text-align: left;
+        /* text-align: left; */
+        text-align: center;
     }
 
     .view-format-icon-container {
-        justify-content: flex-start;
-        align-items: flex-start;
+        /* justify-content: flex-start;
+        align-items: flex-start; */
+        justify-content: center;
+        align-items: center;
     }
 
     .header-text {
@@ -135,7 +146,8 @@
     .view-format-dialog-desktop-right-part {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        /* align-items: flex-start; */
+        align-items: center;
         width: 100%;
         margin: auto 3rem;
     }
