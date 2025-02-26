@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
+import { fetchViewChoice } from "../components/functions/Api";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -10,6 +11,10 @@ function Catalog() {
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+  const [viewChoice, setViewChoice] = useState({
+    is_vue_produit : true,
+    is_vue_feuilletable : true
+  });
   const navigate = useNavigate();
   const handleClose = () => {
     navigate(`/`);
@@ -33,6 +38,15 @@ function Catalog() {
 
   useEffect(() => {
     disableEcatalogueAutoScroll();
+  }, []);
+
+  useEffect(() => {
+    async function fetchChoiceForView() {
+      const choice = await fetchViewChoice(catalogId);
+      setViewChoice(choice);
+    }
+    fetchChoiceForView();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   showOnlyEcatalogue();
@@ -60,20 +74,22 @@ function Catalog() {
               </div>
             </div>
             <div className="view-format-dialog-right-part">
-              <button
-                className="view-format-switcher btn"
-                onClick={handleProductView}
-              >
-                <span style={{
-                  height: "25",
-                  width: "auto"
-                }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none">
-                    <path fill={headerData ? headerData.client_color : "#fff"} stroke={headerData ? headerData.client_color : "#fff"} d="M.5.5h13.962v14.542H.5z" />
-                    <path stroke={headerData ? headerData.client_color : "#fff"} d="M.5 18.632h13.962v14.542H.5zM19.203.5h13.962v14.542H19.203zM19.203 18.632h13.962v14.542H19.203z" />
-                  </svg>
-                </span>
-              </button>
+              {viewChoice.is_vue_produit && (
+                <button
+                  className="view-format-switcher btn"
+                  onClick={handleProductView}
+                >
+                  <span style={{
+                    height: "25",
+                    width: "auto"
+                  }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="none">
+                      <path fill={headerData ? headerData.client_color : "#fff"} stroke={headerData ? headerData.client_color : "#fff"} d="M.5.5h13.962v14.542H.5z" />
+                      <path stroke={headerData ? headerData.client_color : "#fff"} d="M.5 18.632h13.962v14.542H.5zM19.203.5h13.962v14.542H19.203zM19.203 18.632h13.962v14.542H19.203z" />
+                    </svg>
+                  </span>
+                </button>
+              )}
               <button
                 className="view-format-dialog-close btn"
                 onClick={handleClose}

@@ -4,6 +4,8 @@ import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
+import { fetchViewChoice } from "./functions/Api";
+import CategoryPerCatalogue from "./navigation/CategoryPerCatalogue";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -117,8 +119,23 @@ function Carousel() {
                     className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"}
                 >
                     {slidesData.map((slide, key) => {
-                        const handleClick = () => {
-                            navigate(`/view/${slide.catalogue_id}`);
+                        const handleClick = async () => {
+                            const viewChoice = await fetchViewChoice(slide.catalogue_id);
+                            // vue produit ET vue feuilletable
+                            if(viewChoice.is_vue_produit && viewChoice.is_vue_feuilletable) {
+                                navigate(`/view/${slide.catalogue_id}`);
+                            } 
+                            // vue feuilletable
+                            else if (viewChoice.is_vue_produit === false && viewChoice.is_vue_feuilletable === true) {
+                                navigate(`/catalog/${slide.catalogue_id}`);
+                            } 
+                            // vue produit
+                            else if (viewChoice.is_vue_produit === true && viewChoice.is_vue_feuilletable === false) {
+                                const { firstCategorieId } = CategoryPerCatalogue(slide.catalogue_id);
+                                navigate(`/product-list/${slide.catalogue_id}/${firstCategorieId}`);
+                            } else {
+                                navigate(`/view/${slide.catalogue_id}`);
+                            }
                         };
 
                         return (

@@ -7,6 +7,7 @@ import "../assets/styles/ProductList.css";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import { fetchViewChoice } from "../components/functions/Api";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -20,6 +21,10 @@ function Product() {
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
     const navigate = useNavigate();
     const { categoryList } = CategoryPerCatalogue(catalogId);
+    const [viewChoice, setViewChoice] = useState({
+        is_vue_produit : true,
+        is_vue_feuilletable : true
+    });
 
     const handleClose = () => {
         navigate(`/`);
@@ -124,6 +129,15 @@ function Product() {
         disableEcatalogueAutoScroll();
     }, []);
 
+    useEffect(() => {
+        async function fetchChoiceForView() {
+            const choice = await fetchViewChoice(catalogId);
+            setViewChoice(choice);
+        }
+        fetchChoiceForView();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     showOnlyEcatalogue();
     
     return (
@@ -150,23 +164,25 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
-                                <button
-                                    className="view-format-switcher btn"
-                                    onClick={handleCatalogView}
-                                >
-                                    <span style={{
-                                        height: "25",
-                                        width: "auto"
-                                    }}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="51" height="30" fill="none"><g stroke={headerData ? headerData.client_color : "#fff"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.401" clipPath="url(#a)">
-                                            <path d="M5.356 21.495h12.382c5.8 0 7.09 5.796 7.09 5.796V6.496S23.538.701 17.738.701H5.356v20.794ZM44.724 21.495H31.956c-5.8 0-7.09 5.796-7.09 5.796V6.496s1.29-5.795 7.09-5.795h12.768v20.794Z" />
-                                            <path d="M24.866 28.096h-.038s-1.29-4.569-7.09-4.569H2.94V2.694" />
-                                            <path d="M24.866 29.3h-.038s-1.29-3.548-7.09-3.548H.701V4.854M24.942 28.096h.038s1.289-4.569 7.09-4.569h15.013V2.694" />
-                                            <path d="M24.942 29.3h.038s1.289-3.548 7.09-3.548h17.25V4.854" /></g><defs><clipPath id="a">
-                                                <path fill="#fff" d="M0 0h50.021v30H0z" /></clipPath></defs>
-                                        </svg>
-                                    </span>
-                                </button>
+                                {viewChoice.is_vue_feuilletable && (
+                                    <button
+                                        className="view-format-switcher btn"
+                                        onClick={handleCatalogView}
+                                    >
+                                        <span style={{
+                                            height: "25",
+                                            width: "auto"
+                                        }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="51" height="30" fill="none"><g stroke={headerData ? headerData.client_color : "#fff"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.401" clipPath="url(#a)">
+                                                <path d="M5.356 21.495h12.382c5.8 0 7.09 5.796 7.09 5.796V6.496S23.538.701 17.738.701H5.356v20.794ZM44.724 21.495H31.956c-5.8 0-7.09 5.796-7.09 5.796V6.496s1.29-5.795 7.09-5.795h12.768v20.794Z" />
+                                                <path d="M24.866 28.096h-.038s-1.29-4.569-7.09-4.569H2.94V2.694" />
+                                                <path d="M24.866 29.3h-.038s-1.29-3.548-7.09-3.548H.701V4.854M24.942 28.096h.038s1.289-4.569 7.09-4.569h15.013V2.694" />
+                                                <path d="M24.942 29.3h.038s1.289-3.548 7.09-3.548h17.25V4.854" /></g><defs><clipPath id="a">
+                                                    <path fill="#fff" d="M0 0h50.021v30H0z" /></clipPath></defs>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                )}
                                 <button
                                     className="view-format-dialog-close btn"
                                     onClick={handleClose}
