@@ -12,8 +12,8 @@ function Catalog() {
   const [headerData, setHeaderData] = useState(null);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
   const [viewChoice, setViewChoice] = useState({
-    is_vue_produit : true,
-    is_vue_feuilletable : true
+    isVueProduit : true,
+    isVueFeuilletable : true
   });
   const navigate = useNavigate();
   const handleClose = () => {
@@ -74,7 +74,7 @@ function Catalog() {
               </div>
             </div>
             <div className="view-format-dialog-right-part">
-              {viewChoice.is_vue_produit && (
+              {viewChoice.isVueProduit && (
                 <button
                   className="view-format-switcher btn"
                   onClick={handleProductView}

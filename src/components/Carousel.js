@@ -122,15 +122,15 @@ function Carousel() {
                         const handleClick = async () => {
                             const viewChoice = await fetchViewChoice(slide.catalogue_id);
                             // vue produit ET vue feuilletable
-                            if(viewChoice.is_vue_produit && viewChoice.is_vue_feuilletable) {
+                            if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
                                 navigate(`/view/${slide.catalogue_id}`);
                             } 
                             // vue feuilletable
-                            else if (viewChoice.is_vue_produit === false && viewChoice.is_vue_feuilletable === true) {
+                            else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {
                                 navigate(`/catalog/${slide.catalogue_id}`);
                             } 
                             // vue produit
-                            else if (viewChoice.is_vue_produit === true && viewChoice.is_vue_feuilletable === false) {
+                            else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {
                                 const { firstCategorieId } = CategoryPerCatalogue(slide.catalogue_id);
                                 navigate(`/product-list/${slide.catalogue_id}/${firstCategorieId}`);
                             } else {

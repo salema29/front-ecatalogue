@@ -12,7 +12,11 @@ export const fetchViewChoice = async (catalogueId) => {
         const fetchedData = await response.json();
 
         if (fetchedData.status === 'success') {
-            return fetchedData.data;
+            const result = fetchedData.data;
+            return {
+                isVueProduit : result.is_vue_produit,
+                isVueFeuilletable : result.is_vue_feuilletable
+            }
         } else {
             console.error('Erreur API:', fetchedData.message);
             return null;

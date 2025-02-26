@@ -22,8 +22,8 @@ function Product() {
     const navigate = useNavigate();
     const { categoryList } = CategoryPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
-        is_vue_produit : true,
-        is_vue_feuilletable : true
+        isVueProduit : true,
+        isVueFeuilletable : true
     });
 
     const handleClose = () => {
@@ -164,7 +164,7 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
-                                {viewChoice.is_vue_feuilletable && (
+                                {viewChoice.isVueFeuilletable && (
                                     <button
                                         className="view-format-switcher btn"
                                         onClick={handleCatalogView}
