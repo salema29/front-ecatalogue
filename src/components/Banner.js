@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/styles/Banner.css'
+import { useContext } from 'react';
+import { ShoppingListContext } from '../store-shopping-list';
 
 function Banner() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -7,6 +9,21 @@ function Banner() {
     const [bannerMedia, setBannerMedia] = useState('');
     const [titleFont, setTitleFont] = useState('');
     const client = document.getElementById('catalogue-client');
+    const {shoppingList, setShoppingList} = useContext(ShoppingListContext) 
+
+    useEffect(() => {
+        shoppingList.forEach((value) => {
+            console.log(`shopping List: ${value.id}`);
+        });
+    }, [shoppingList]);
+      
+    const handleShoppingListClick = () => {
+        localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
+        setShoppingList([
+            { id: Math.random(), count: Math.random() },
+            { id: Math.random(), count: Math.random() },
+        ]);
+    };
 
     useEffect(() => {
         const fetchedValue = client ? client.value : null;
@@ -15,8 +32,7 @@ function Banner() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getDataClient/${client_id}`)
-        // fetch(`${API_BASE_URL}/api/getDataClient/202`) // Static data for testing
+        fetch(`${API_BASE_URL}/api/getDataClient/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : client_id}`)
             .then((response) => response.json())
             .then((fetchedData) => {
                 setBannerMedia(fetchedData.client_global_image);
@@ -35,6 +51,7 @@ function Banner() {
                 src={bannerMedia}
             />
             <h1 className='banner-text'  style={{ fontFamily: titleFont }}>Nos catalogues</h1>
+            <button onClick={handleShoppingListClick}>test moi</button>
         </div>
     );
 };
