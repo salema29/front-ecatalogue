@@ -90,22 +90,20 @@ function Carousel() {
     ]);
 
     const fetchSlideData = () => {
-        // setClientId(202);
-        // fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
-            fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((fetchedData) => {
-                setSlidesData(fetchedData);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    };
+    fetch(`${API_BASE_URL}/api/getSlides/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : clientId}/${process.env.REACT_APP_SHOP_ID_TEST ? process.env.REACT_APP_SHOP_ID_TEST : shopId}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((fetchedData) => {
+            setSlidesData(fetchedData);
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+    }
 
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
