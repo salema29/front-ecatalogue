@@ -22,26 +22,30 @@ function Carousel() {
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
         environment_shop_id = window.dataLayer[0].cdl_environment_shop;
     }
-    const client = document.getElementById('catalogue-client');
+    const client = document.getElementById("catalogue-client");
     const navigate = useNavigate();
     const handleOpenText = () => {
         navigate(`/confidentiality`);
     };
 
-    const [flickityOptions, setFlickityOptions] = useState({
+    const flickityOptions = {
         initialIndex: 0,
-        cellAlign: isMobileView ? 'left' : slidesData.length < 3 ? 'center' : 'left',
+        cellAlign: isMobileView
+            ? "left"
+            : slidesData.length < 3
+                ? "center"
+                : "left",
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
         groupCells: isMobileView ? false : true,
         pageDots: true,
         prevNextButtons: true,
-    });
+    };
 
     useEffect(() => {
-        const hiddenInput = document.getElementById('catalogue-client');
-        const fetchedValue = hiddenInput ? hiddenInput.value : 'No value found';
+        const hiddenInput = document.getElementById("catalogue-client");
+        const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
         setClientId(fetchedValue);
     }, []);
 
@@ -61,39 +65,62 @@ function Carousel() {
 
         return () => window.removeEventListener("resize", handleResize);
 
-    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, slidesData, isMobileView]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [
+        clientId,
+        shopId,
+        client,
+        environment_shop_id,
+        API_BASE_URL,
+        slidesData,
+        isMobileView,
+    ]);
 
     useEffect(() => {
         fetchSlideData();
-    }, [clientId, shopId, client, environment_shop_id, API_BASE_URL, isMobileView]);
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [
+        clientId,
+        shopId,
+        client,
+        environment_shop_id,
+        API_BASE_URL,
+        isMobileView,
+    ]);
 
     const fetchSlideData = () => {
         // setClientId(202);
         // fetch(`${API_BASE_URL}/api/getSlides/202/0`) //Static data for testing
-        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((fetchedData) => {
-            setSlidesData(fetchedData);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
-    }
+            fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((fetchedData) => {
+                setSlidesData(fetchedData);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    };
 
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
         if (!isMobileView && sliderContainerRef.current) {
             const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
             const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
-            const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
+            const containerWidth =
+                sliderContainerRef.current.offsetWidth -
+                (paddingSlideContainer + slideMarginRight);
             const minWidth = 600;
             const maxWidth = 640;
-            const slidesPerView = Math.min(dataSlideLength, containerWidth / minWidth);
+            const slidesPerView = Math.min(
+                dataSlideLength,
+                containerWidth / minWidth
+            );
             const theoricalNewSlideWidth = containerWidth / slidesPerView;
             const newSlideWidth = Math.min(theoricalNewSlideWidth, maxWidth);
             setSlideWidth(newSlideWidth);
@@ -104,7 +131,9 @@ function Carousel() {
         const dataSlideLength = slidesData.length;
         const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
         const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
-        const containerWidth = sliderContainerRef.current.offsetWidth - (paddingSlideContainer + slideMarginRight);
+        const containerWidth =
+            sliderContainerRef.current.offsetWidth -
+            (paddingSlideContainer + slideMarginRight);
         if (sliderContainerRef.current && slidesData) {
             const totalSlidesWidth = slidesData.length * containerWidth;
             setShowPageDots(totalSlidesWidth > containerWidth);
@@ -113,10 +142,14 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            {(slidesData && slidesData.length > 0) ? (
+            {slidesData && slidesData.length > 0 ? (
                 <Flickity
                     options={flickityOptions}
-                    className={showPageDots ? "slider-container show-page-dots" : "slider-container hide-page-dots"}
+                    className={
+                        showPageDots
+                            ? "slider-container show-page-dots"
+                            : "slider-container hide-page-dots"
+                    }
                 >
                     {slidesData.map((slide, key) => {
                         const handleClick = async () => {
@@ -157,15 +190,14 @@ function Carousel() {
                                             className="slide-head-subtitle"
                                             style={{ fontFamily: slide.date_typo_name }}
                                         >
-                                            Du {slide.catalogue_date_validite_debut} au{" "}{slide.catalogue_date_validite_fin}
+                                            Du {slide.catalogue_date_validite_debut} au{" "}
+                                            {slide.catalogue_date_validite_fin}
                                         </div>
                                         <div
                                             className="slide-head-title"
                                             style={{ fontFamily: slide.nom_catalogue_typo_name }}
                                         >
-                                            <div className="slide-headline">
-                                                E-CATALOGUE
-                                            </div>
+                                            <div className="slide-headline">E-CATALOGUE</div>
                                             <div className="slide-headline">
                                                 {slide.catalogue_name_ln_un}
                                             </div>

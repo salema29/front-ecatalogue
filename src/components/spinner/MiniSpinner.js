@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override = {
@@ -8,8 +7,8 @@ const override = {
 };
 
 function MiniSpinner() {
-    let [loading, setLoading] = useState(true);
-    let [color, setColor] = useState("#ffffff");
+    let loading = true;
+    let color = "#ffffff";
 
     return (
         <ClipLoader

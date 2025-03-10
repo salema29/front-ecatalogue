@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import '../assets/styles/Home.css'
 import Banner from '../components/Banner'
 import Carousel from '../components/Carousel';
