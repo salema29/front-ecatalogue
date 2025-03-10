@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryPerCatalogue from "./CategoryPerCatalogue"
 import '../../assets/styles/CategoryMenu.css';
 
 const CategoryMenu = ({ categoryIdSelected, categoryList }) => {

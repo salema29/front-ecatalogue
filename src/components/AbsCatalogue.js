@@ -11,6 +11,7 @@ function AbsCatalogue() {
     useEffect(() => {
         const fetchedValue = client ? client.value : null;
         setClientId(fetchedValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, []);
 
     useEffect(() => {
@@ -36,7 +37,7 @@ function AbsCatalogue() {
         };
 
         fetchClientData();
-    }, [client_id]);
+    }, [client_id, API_BASE_URL]);
 
     return (
         <>

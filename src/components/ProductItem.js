@@ -6,7 +6,6 @@ import addListIConOk from '../assets/icons/add-list-ok.svg';
 
 function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [isNotFound, setIsNotFound] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const [isAddedInList, setIsAddedInList] = useState(false);
 
@@ -23,14 +22,6 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [API_BASE_URL]);
-
-    if (isNotFound) {
-        return (
-            <div className="product-item not-found">
-                <p>Produit non trouvé</p>
-            </div>
-        );
-    }
 
     const addInList = () => {
         console.log('Add button clicked');
@@ -52,7 +43,7 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                 order: product.view_order,
             }}
         >
-            {product.type == 0 ? (
+            {product.type === "0" ? (
                 // Type 0: Produit avec clic pour détail
                 <div className="item-wrapper">
                     <div

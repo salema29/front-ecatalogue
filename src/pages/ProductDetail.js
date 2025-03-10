@@ -13,16 +13,12 @@ function MainProduct() {
     const { catalogId, product_id, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = window.innerWidth <= 767;
     const navigate = useNavigate();
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
     const [isLoading, setIsLoading] = useState(true);
-
-    const handleCatalogView = () => {
-        navigate(`/catalog/${catalogId}`);
-    };
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -44,7 +40,7 @@ function MainProduct() {
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
-    }, [product_id, API_BASE_URL]);
+    }, [product_id, API_BASE_URL, categoryId]);
 
     useEffect(() => {
         if (headerData) {
