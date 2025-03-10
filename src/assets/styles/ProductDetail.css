@@ -47,7 +47,7 @@
     align-items: center;
     padding: 0;
     border: 4px solid transparent;
-    border-radius: 10px;
+    border-radius: 25px;
     color: black !important;
     right: 20px;
     top: 20px;
@@ -64,12 +64,12 @@
 }
 
 .add-bouton-detail-text {
-    font-size: 24px;
+    font-size: 15px;
     background: white;
     border: 4px solid white;
-    border-radius: 6px;
+    border-radius: 25px;
     font-weight: bold;
-    padding: 0 0.5rem;
+    padding: 4px 0.5rem;
 }
 
 .add-bouton-detail-icon {

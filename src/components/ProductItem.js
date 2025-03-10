@@ -64,12 +64,12 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                             <div className="add-bouton">
                             {isAddedInList ? (
                                 <img src={addListIConOk} alt="added-to-basket" onClick={(event) => {
-                                    event.stopPropagation(); // Empêche handleDetailedView de s'exécuter
+                                    event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
                                     removeInList();
                                 }}></img>
                             ) : (
                                 <img src={addListICon} alt="add-to-basket" onClick={(event) => {
-                                    event.stopPropagation(); // Empêche handleDetailedView de s'exécuter
+                                    event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
                                     addInList();
                                 }}></img>
                             )}

@@ -19,6 +19,7 @@ function MainProduct() {
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
     const [isLoading, setIsLoading] = useState(true);
+    const [isAddedInList, setIsAddedInList] = useState(false);
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -65,6 +66,16 @@ function MainProduct() {
     }, []);
 
     showOnlyEcatalogue();
+
+    const addInList = () => {
+        console.log('Add button clicked');
+        setIsAddedInList(true);
+    }
+
+    const removeInList = () => {
+        console.log('remove button clicked');
+        setIsAddedInList(false);
+    }
 
     return (
         <>
@@ -121,15 +132,23 @@ function MainProduct() {
                                     <button
                                         className="add-bouton-detail btn"
                                         style={{ backgroundColor: headerData.client_color }}
+                                        onClick={isAddedInList ? removeInList : addInList}
                                     >
                                         <span className="add-bouton-detail-text">
                                             Ajouter à ma liste
                                         </span>
                                         <span className="add-bouton-detail-icon">
-                                            <img
-                                                src={addListICon}
-                                                alt="add-to-basket"
-                                            />
+                                            {isAddedInList ? (
+                                                <img
+                                                    src={addListIConOk}
+                                                    alt="add-to-basket"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={addListICon}
+                                                    alt="add-to-basket"
+                                                />
+                                            )}
                                         </span>
                                     </button>
                                 )}

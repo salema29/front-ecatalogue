@@ -1,10 +1,12 @@
-<svg width="123" height="123" viewBox="0 0 123 123" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<circle cx="61.5" cy="61.5" r="61.5" fill="#D9D9D9"/>
-<rect x="19" y="19" width="96" height="96" fill="url(#pattern0_3_13)"/>
-<defs>
-<pattern id="pattern0_3_13" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_3_13" transform="scale(0.0104167)"/>
-</pattern>
-<image id="image0_3_13" width="96" height="96" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAE0ElEQVR4nO2dXYhWRRjHf6tuilBWKGlkaSZ+loWkF2sQeBPolbfqGlmI6MVKmgRFkQgFVnZTeZFldBUVBYGglgoqUX6QCWvi14UUiUpmBOtWJ2aZzTfbM3POez7m4zx/eO7eGc55fnNmnpn3mRlI123AcuAToBf4DUjEUD74C/gJOAK8DjxGiboFeBa4LM4mT4M7BHQVdf5YYJ84nna/9L+Bl4GOdpx/F3BWnE8Z3exb7XQ7B8X5lDnGrcoDYL04n7IDjD+Ae7I4X0U7MuBSSYT3ThYA3dL6qSq8vgaMsgFQcb7E91TmgydsAH4UAFTZADfYAMgMl0oBvGEDIN0PlfrgPQGA00YmAAgYwHngsBg2H1yrCsBTtsKiAR0QAG4lABxLADiWAHAsAeBYAsCxBIBjCQDHEgCOJQAcSwA4lgBwLAHgWF4AeBzYmGLPWMouM5R1ZXeGBuA1Qz0nC7xA4sim5Xh3AYAAkC8A6YKQLkjGAGQQpqGDsNoZciXFvrWU3Wko68oeCA1Ak3VAALiVAHAsAeBYAsCxBIBjCQDH8gKAWlL+OMW2WspuMpSt294G1gK3hgYg1OXoK8AOfTDJvbSnpcAuoE8AkPm0ky+BxUAn5WkcsA44I18AQzq+H/gAmEq1UlBXAuekC+Jf538FzKReqTM4Hm76GHAVeBKPFTOAI8AkPFesYeibwOiCvlGh6P3Ag8B0YCIwEk8BhK4RwEJgM7AfuGiIoNTBVl8APWWMK00HcB+wBfi5QFd3FFjT7hfXVAATgO3A9RLHnF/0PCDX3KJpADqA1cCvFUZePwDzsj5QkwDcDnxWoeNbrU9/DVY1BcB44FhNzm+19/UA32gAd9+0PlO3fQQMizUtZX6Gbue4Q+cP2tYYZ8J7MjzXpx44f9C6YwOwwFLvag+c3mrqWJspsQDYnSHOLxJqnjCcD3ShQL07YwGwxFLn9gpzQ58rWPei0AFc0mvtpuWF6x4D+CZ0AB9a6ttS0EFVA0ha7xoIcZPeI4a6RhRcWKsLwLayAfiihSU4pw4A6sD04TEC2BwIAGVzYwSwPyAAPTECuJjx5Q/rvxvTrNOyvJFWbm7ecSAmAGNyvLyKvKrQ2BzP8HVsACYHBuBYbABmBwbgdGwAZgQG4GRsACYGBuC72ACMAv4MCIDK0DY+8NOEp7MZX/58gfOC5hvKvZIDgLoI1Lhu8irh6fMcDnA9EVuBnpCY1ivUH9ohqScgAGrZfOAzMP3oe2AO4WhmIADUHc0DWpDxmtZej64z6bZAOBoAgBdaU/UOldRq6rJdFgBrPAfQP9j9DKpLp10ngVif3hCXptE6UdZXAGpX5v/0vAeOTXKYLe9yXcH6HwXuSLGXCjaeITcJduiboJNA7IxlybhTZyknnpn6w8godRP07x48aJLB1FZQk+albJ52ZSeybuKYoC8jvurBQycGO2dJTymjKyrLVKOeRU6N1Pfhrteb3rZ5aA9leI93HTu//+ZkrKZpuE4Rd+V8dZZE4zVMp4jX3e00uuWnJYGZLt8sy3r1/mLREJqis5SrcHyfDjWLbhJvhBbpRNmy+vodNZzEEqW6dER1uc2u5sUChz2JuCEVLanEKjV3UED26pVVNes+pVdi1d+IKvtancDynwW1dvQPguW3qx02LFIAAAAASUVORK5CYII="/>
-</defs>
+<svg width="34" height="33" viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="16" cy="16" r="16" fill="#4A4A4A"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19.2038 10.4429C19.2038 10.5883 19.3216 10.7055 19.4665 10.7055H24.9491V25.0236C24.9491 26.245 23.9589 27.2353 22.7375 27.2353H9.21164C7.99026 27.2353 7 26.245 7 25.0236V7.39742C7 6.07541 8.07541 5 9.39742 5H19.2038V10.4429ZM19.7059 10.2941H25L19.7059 5V10.2941Z" fill="white"/>
+<path d="M13 13H18" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.3334 17H22" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.3334 21H22" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 13H10.0058" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 17H10.0058" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 21H10.0058" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M33.5 25C33.5 29.1421 30.1421 32.5 26 32.5C21.8579 32.5 18.5 29.1421 18.5 25C18.5 20.8579 21.8579 17.5 26 17.5C30.1421 17.5 33.5 20.8579 33.5 25Z" fill="#4A4A4A" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M25.9677 21.0322C26.2438 21.0322 26.4677 21.2561 26.4677 21.5322L26.4677 24.4676L29.403 24.4676C29.6791 24.4676 29.903 24.6914 29.903 24.9676C29.903 25.2437 29.6791 25.4676 29.403 25.4676L26.4677 25.4676V28.4029C26.4677 28.6791 26.2438 28.9029 25.9677 28.9029C25.6915 28.9029 25.4677 28.6791 25.4677 28.4029V25.4676L22.5323 25.4676C22.2562 25.4676 22.0323 25.2437 22.0323 24.9676C22.0323 24.6914 22.2562 24.4676 22.5323 24.4676L25.4677 24.4676L25.4677 21.5322C25.4677 21.2561 25.6915 21.0322 25.9677 21.0322Z" fill="white"/>
 </svg>
