@@ -11,6 +11,7 @@
 
 .single-item-wrapper {
     height: 85vh;
+    position: relative;
 }
 
 .placeholder-content {
@@ -35,6 +36,48 @@
     border: none;
     min-height: 100%;
     width: 100%;
+}
+
+.add-bouton-detail {
+    position: absolute;
+    display: flex;
+    column-gap: 0.5rem;
+    background: none;
+    border: none;
+    align-items: center;
+    padding: 0;
+    border: 4px solid transparent;
+    border-radius: 10px;
+    color: black !important;
+    right: 20px;
+    top: 20px;
+}
+
+.add-bouton {
+    height: 32px;
+    width: 32px;
+}
+
+.add-bouton img {
+    width: 100%;
+    height: 100%;
+}
+
+.add-bouton-detail-text {
+    font-size: 24px;
+    background: white;
+    border: 4px solid white;
+    border-radius: 6px;
+    font-weight: bold;
+    padding: 0 0.5rem;
+}
+
+.add-bouton-detail-icon {
+    display: flex;
+    border: none;
+    margin-right: 6px;
+    width: 32px;
+    height: 32px;
 }
 
 @keyframes placeholderAnimate {

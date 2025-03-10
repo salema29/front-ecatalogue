@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../assets/styles/ProductList.css';
+import addListICon from '../assets/icons/add-list.svg';
+import addListIConOk from '../assets/icons/add-list-ok.svg';
 
 function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isNotFound, setIsNotFound] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const [isAddedInList, setIsAddedInList] = useState(false);
 
     const navigate = useNavigate();
 
@@ -27,6 +30,16 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                 <p>Produit non trouvé</p>
             </div>
         );
+    }
+
+    const addInList = () => {
+        console.log('Add button clicked');
+        setIsAddedInList(true);
+    }
+
+    const removeInList = () => {
+        console.log('remove button clicked');
+        setIsAddedInList(false);
     }
 
     return (
@@ -56,6 +69,21 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                             scrolling="no"
                             onLoad={() => setIsLoading(false)}
                         />
+                        {isLoading === false && (
+                            <div className="add-bouton">
+                            {isAddedInList ? (
+                                <img src={addListIConOk} alt="added-to-basket" onClick={(event) => {
+                                    event.stopPropagation(); // Empêche handleDetailedView de s'exécuter
+                                    removeInList();
+                                }}></img>
+                            ) : (
+                                <img src={addListICon} alt="add-to-basket" onClick={(event) => {
+                                    event.stopPropagation(); // Empêche handleDetailedView de s'exécuter
+                                    addInList();
+                                }}></img>
+                            )}
+                        </div>
+                        )}
                     </div>
                 </div>
             ) : (

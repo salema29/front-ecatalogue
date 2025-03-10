@@ -4,6 +4,8 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
+import addListICon from '../assets/icons/add-list.svg';
+import addListIConOk from '../assets/icons/add-list-ok.svg';
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,6 +18,7 @@ function MainProduct() {
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
@@ -109,13 +112,32 @@ function MainProduct() {
                             }}
                         >
                             {productData ? (
+                                <>
                                 <iframe
                                     src={productData.html.html_name}
                                     className="product-item-detail placeholder-content"
                                     title={productData.html.html_name}
                                     width="auto"
+                                    onLoad={() => setIsLoading(false)}
                                     // height="590px"
                                 />
+                                {isLoading === false && (
+                                    <button
+                                        className="add-bouton-detail btn"
+                                        style={{ backgroundColor: headerData.client_color }}
+                                    >
+                                        <span className="add-bouton-detail-text">
+                                            Ajouter à ma liste
+                                        </span>
+                                        <span className="add-bouton-detail-icon">
+                                            <img
+                                                src={addListICon}
+                                                alt="add-to-basket"
+                                            />
+                                        </span>
+                                    </button>
+                                )}
+                                </>
                             ) : (
                                 <LoadingSpinner />
                             )}
