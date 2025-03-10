@@ -91,14 +91,14 @@ function ViewFormatDialog() {
                     </header>
                     <div className="view-format-dialog-content">
                         <div className="view-format-dialog-desktop-content container">
-                            <div className="view-format-dialog-desktop-left-part">
+                            {/* <div className="view-format-dialog-desktop-left-part">
                                 <span className="view-format-dialog-side-image">
                                     <img
                                         src={headerData.slide_image}
                                         alt=" {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux} "
                                     />
                                 </span>
-                            </div>
+                            </div> */}
                             <div className="view-format-dialog-desktop-right-part">
                                 <div className="view-format-icon-container">
                                     <img
@@ -112,7 +112,7 @@ function ViewFormatDialog() {
                                     >
                                         <span style={{ fontWeight: 700 }}>Nouveau !</span> choisissez votre mode de lecture...
                                     </h2 >
-                                    <p style={{ color: "black" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
+                                    <p style={{ color: "black", textAlign: "center" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
                                         de courses, ou continuer en <span className="text-gras" >version feuilletable.</span>
                                     </p>
                                 </div>

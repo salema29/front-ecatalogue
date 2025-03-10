@@ -31,7 +31,6 @@ function MainProduct() {
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
-        // fetch(`${API_BASE_URL}/api/getProductDetail/${product_id}`)
         fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${product_id}`)
             .then((response) => response.json())
             .then((fetchedData) => setProductData(fetchedData))
@@ -108,7 +107,7 @@ function MainProduct() {
                             {productData ? (
                                 <iframe
                                     src={productData.html.html_name}
-                                    className="product-item placeholder-content"
+                                    className="product-item-detail placeholder-content"
                                     title={productData.html.html_name}
                                     width="auto"
                                     // height="590px"

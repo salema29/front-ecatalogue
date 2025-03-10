@@ -4,6 +4,8 @@ import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
+import { fetchViewChoice } from "./functions/Api";
+import CategoryPerCatalogue from "./navigation/CategoryPerCatalogue";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -150,8 +152,23 @@ function Carousel() {
                     }
                 >
                     {slidesData.map((slide, key) => {
-                        const handleClick = () => {
-                            navigate(`/view/${slide.catalogue_id}`);
+                        const handleClick = async () => {
+                            const viewChoice = await fetchViewChoice(slide.catalogue_id);
+                            // vue produit ET vue feuilletable
+                            if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
+                                navigate(`/view/${slide.catalogue_id}`);
+                            } 
+                            // vue feuilletable
+                            else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {
+                                navigate(`/catalog/${slide.catalogue_id}`);
+                            } 
+                            // vue produit
+                            else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {
+                                const { firstCategorieId } = CategoryPerCatalogue(slide.catalogue_id);
+                                navigate(`/product-list/${slide.catalogue_id}/${firstCategorieId}`);
+                            } else {
+                                navigate(`/view/${slide.catalogue_id}`);
+                            }
                         };
 
                         return (

@@ -9,7 +9,6 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     const navigate = useNavigate();
 
     const handleDetailedView = (product_id) => {
-        console.log('product clicked');
         navigate(`/product/${catalogId}/${product_id}/${categoryId}`);
     };
 
