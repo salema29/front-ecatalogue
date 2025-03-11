@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../assets/styles/ProductList.css';
 import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
+import { ShoppingListContext } from '../store-shopping-list';
 
 function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
-    const [isAddedInList, setIsAddedInList] = useState(false);
+    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
+    const isAddedInList = shoppingList.some(item => item.productId === product.view_order && item.categoryId === categoryId);
 
     const navigate = useNavigate();
 
-    const handleDetailedView = (product_id) => {
-        navigate(`/product/${catalogId}/${product_id}/${categoryId}`);
+    const handleDetailedView = (productId) => {
+        navigate(`/product/${catalogId}/${productId}/${categoryId}`);
     };
 
     useEffect(() => {
@@ -23,14 +25,18 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
         return () => window.removeEventListener("resize", handleResize);
     }, [API_BASE_URL]);
 
-    const addInList = () => {
-        console.log('Add button clicked');
-        setIsAddedInList(true);
+    useEffect(() => {
+        localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
+    }, [shoppingList]);
+
+    const addInList = (productId, categoryId) => {
+        // console.log('Add button clicked');
+        setShoppingList(prevList => [...prevList, { productId: productId, categoryId: categoryId, count: 1 }]);
     }
 
-    const removeInList = () => {
-        console.log('remove button clicked');
-        setIsAddedInList(false);
+    const removeInList = (productId, categoryId) => {
+        // console.log('remove button clicked');
+        setShoppingList(prevList => prevList.filter(item => !(item.productId === productId && item.categoryId === categoryId)));
     }
 
     return (
@@ -65,12 +71,12 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                             {isAddedInList ? (
                                 <img src={addListIConOk} alt="added-to-basket" onClick={(event) => {
                                     event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
-                                    removeInList();
+                                    removeInList(product.view_order, categoryId);
                                 }}></img>
                             ) : (
                                 <img src={addListICon} alt="add-to-basket" onClick={(event) => {
                                     event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
-                                    addInList();
+                                    addInList(product.view_order, categoryId);
                                 }}></img>
                             )}
                         </div>
