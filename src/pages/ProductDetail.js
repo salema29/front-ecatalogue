@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
+import addListICon from '../assets/icons/add-list.svg';
+import addListIConOk from '../assets/icons/add-list-ok.svg';
+import { ShoppingListContext } from '../store-shopping-list';
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
-    const { catalogId, product_id, categoryId } = useParams();
+    const { catalogId, productId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = window.innerWidth <= 767;
     const navigate = useNavigate();
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
-
-    const handleCatalogView = () => {
-        navigate(`/catalog/${catalogId}`);
-    };
+    const [isLoading, setIsLoading] = useState(true);
+    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
+    const isAddedInList = shoppingList.some(item => item.productId === productId && item.categoryId === categoryId);
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -35,13 +37,13 @@ function MainProduct() {
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${product_id}`)
+        fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${productId}`)
             .then((response) => response.json())
             .then((fetchedData) => setProductData(fetchedData))
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
-    }, [product_id, API_BASE_URL]);
+    }, [productId, API_BASE_URL, categoryId]);
 
     useEffect(() => {
         if (headerData) {
@@ -66,6 +68,20 @@ function MainProduct() {
     }, []);
 
     showOnlyEcatalogue();
+
+    useEffect(() => {
+        localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
+    }, [shoppingList]);
+
+    const addInList = (productId, categoryId) => {
+        // console.log('Add button clicked in detail');
+        setShoppingList(prevList => [...prevList, { productId: productId, categoryId: categoryId, count: 1 }]);
+    }
+
+    const removeInList = (productId, categoryId) => {
+        // console.log('remove button clicked in detail');
+        setShoppingList(prevList => prevList.filter(item => !(item.productId === productId && item.categoryId === categoryId)));
+    }
 
     return (
         <>
@@ -109,13 +125,40 @@ function MainProduct() {
                             }}
                         >
                             {productData ? (
+                                <>
                                 <iframe
                                     src={productData.html.html_name}
                                     className="product-item-detail placeholder-content"
                                     title={productData.html.html_name}
                                     width="auto"
+                                    onLoad={() => setIsLoading(false)}
                                     // height="590px"
                                 />
+                                {isLoading === false && (
+                                    <button
+                                        className="add-bouton-detail"
+                                        style={{ backgroundColor: headerData.client_color }}
+                                        onClick={() => isAddedInList ? removeInList(productId, categoryId) : addInList(productId, categoryId)}
+                                    >
+                                        <span className="add-bouton-detail-text">
+                                            Ajouter à ma liste
+                                        </span>
+                                        <span className="add-bouton-detail-icon">
+                                            {isAddedInList ? (
+                                                <img
+                                                    src={addListIConOk}
+                                                    alt="add-to-basket"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={addListICon}
+                                                    alt="add-to-basket"
+                                                />
+                                            )}
+                                        </span>
+                                    </button>
+                                )}
+                                </>
                             ) : (
                                 <LoadingSpinner />
                             )}
