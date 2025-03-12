@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
+import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/buttons/ListCourseIcon';
 
 function MainProduct() {
@@ -17,6 +18,7 @@ function MainProduct() {
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
+    const { shoppingList } = useContext(ShoppingListContext);
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -87,7 +89,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <ListCourse />
+                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}

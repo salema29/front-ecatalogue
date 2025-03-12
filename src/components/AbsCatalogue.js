@@ -17,7 +17,7 @@ function AbsCatalogue() {
     useEffect(() => {
         const fetchClientData = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/${client_id}`);
+                const response = await fetch(`${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : client_id}`);
 
                 if (!response.ok) {
                     console.error(`Erreur HTTP : ${response.status}`);
