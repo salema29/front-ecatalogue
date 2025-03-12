@@ -186,7 +186,7 @@ function MainProduct() {
                                         onLoad={() => setIsLoading(false)}
                                     // height="590px"
                                     />
-                                    {isLoading === false && (
+                                    {(isLoading === false && headerData.show_list_course === "t") && (
                                         <button
                                             className="add-bouton-detail"
                                             style={{ backgroundColor: headerData.client_color }}

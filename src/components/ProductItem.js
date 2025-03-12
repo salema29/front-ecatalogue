@@ -5,7 +5,7 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 
-function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
+function ProductItem({ product, index, categoryId, catalogId, showListCourse, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
@@ -117,7 +117,7 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                             scrolling="no"
                             onLoad={() => setIsLoading(false)}
                         />
-                        {isLoading === false && (
+                        {(isLoading === false && showListCourse === "t") && (
                             <div className="add-bouton">
                                 {isAddedInList ? (
                                     <img
