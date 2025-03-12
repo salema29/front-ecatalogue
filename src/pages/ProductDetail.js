@@ -4,6 +4,7 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner'
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
+import ListCourse  from '../components/buttons/ListCourseIcon';
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -86,6 +87,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
+                            <ListCourse />
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}

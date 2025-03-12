@@ -8,6 +8,7 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
+import ListCourse  from '../components/buttons/ListCourseIcon';
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -183,6 +184,7 @@ function Product() {
                                         </span>
                                     </button>
                                 )}
+                                <ListCourse />
                                 <button
                                     className="view-format-dialog-close btn"
                                     onClick={handleClose}
