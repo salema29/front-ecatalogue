@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-.view-format-dialog-close {
+.view-format-dialog-close, .view-format-dialog-open-list-course {
     color: white;
     background: none;
     border: none;

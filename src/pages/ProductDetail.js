@@ -24,6 +24,10 @@ function MainProduct() {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
 
+    const openListCourse = () => {
+        // openModal
+    };
+
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
             .then((response) => response.json())
@@ -89,10 +93,22 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                        {headerData.show_list_course === 't' ?
+                            (
+                                <button
+                                    className="view-format-dialog-open-list-course btn"
+                                    onClick={openListCourse}
+                                    title="Ouvrir ma liste de course"
+                                >
+                                    <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                </button>
+                            )
+                            :(<></>)
+                        }
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
+                                title="Fermer"
                             >
                                 <img
                                     src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}

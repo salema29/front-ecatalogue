@@ -16,7 +16,9 @@ const ListCourseIcon = ({ catalogId, shoppingList, clientColor }) => {
                     borderRadius: '4px',
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    cursor: 'pointer',
+
                 }}>
                     <BsListUl  size={24} color="white" />
                 </div>

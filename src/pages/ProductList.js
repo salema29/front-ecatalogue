@@ -38,6 +38,11 @@ function Product() {
         navigate(`/catalog/${catalogId}`);
     };
 
+    const openListCourse = () => {
+        // openModal
+    };
+
+
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
         const handleResize = () => {
@@ -171,6 +176,7 @@ function Product() {
                                     <button
                                         className="view-format-switcher btn"
                                         onClick={handleCatalogView}
+                                        title="Voir la vue feuilletable"
                                     >
                                         <span style={{
                                             height: "25",
@@ -186,12 +192,22 @@ function Product() {
                                         </span>
                                     </button>
                                 )}
-
-                                <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
-
+                                {headerData.show_list_course === 't' ?
+                                    (
+                                        <button
+                                            className="view-format-dialog-open-list-course btn"
+                                            onClick={openListCourse}
+                                            title="Ouvrir ma liste de course"
+                                        >
+                                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                        </button>
+                                    )
+                                    :(<></>)
+                                }
                                 <button
                                     className="view-format-dialog-close btn"
                                     onClick={handleClose}
+                                    title="Fermer ce catalogue"
                                 >
                                     <img
                                         src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
