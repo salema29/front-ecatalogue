@@ -61,7 +61,6 @@
     .sticky {
         position: sticky;
         top: 0;
-        z-index: 1000;
     }
 
     .view-format-dialog-content {

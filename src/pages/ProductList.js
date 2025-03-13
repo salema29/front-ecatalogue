@@ -10,6 +10,8 @@ import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import { fetchViewChoice } from "../components/functions/Api";
 import ListCourse  from '../components/buttons/ListCourseIcon';
 import { ShoppingListContext } from '../store-shopping-list';
+// import MyModal from "../components/buttons/ListCourseModal"
+import Modal from "react-modal";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -36,10 +38,6 @@ function Product() {
 
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
-    };
-
-    const openListCourse = () => {
-        // openModal
     };
 
 
@@ -147,6 +145,18 @@ function Product() {
     }, []);
 
     showOnlyEcatalogue();
+        
+        const [modalOpen, setModalOpen] = useState(false);
+        const openModal = () => {
+            console.log('Opening modal...');
+            setModalOpen(true);
+        };
+
+        const closeModal = () => {
+            console.log('Closing modal...');
+            setModalOpen(false);
+        };
+        
     
     return (
         <>
@@ -196,7 +206,7 @@ function Product() {
                                     (
                                         <button
                                             className="view-format-dialog-open-list-course btn"
-                                            onClick={openListCourse}
+                                            onClick={() => setModalOpen(true)}
                                             title="Ouvrir ma liste de course"
                                         >
                                             <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
@@ -231,21 +241,35 @@ function Product() {
                     >
                         <div className="product-list-container" >
                             {isLoading === false && productData.length > 0 ? (
-                                <div className="grid-container">
-                                    {productData.map((product, index) => (
-                                        product.view_type === '1' ? (
-                                            <ProductItem
-                                                key={index}
-                                                product={product}
-                                                index={index}
-                                                categoryId={categoryId}
-                                                catalogId={catalogId}
-                                                showListCourse={headerData.show_list_course}
-                                                API_BASE_URL={API_BASE_URL}
-                                            />
-                                        ) : null
-                                    ))}
-                                </div>
+                                <>
+                                    <div className="grid-container">
+                                        {productData.map((product, index) => (
+                                            product.view_type === '1' ? (
+                                                <ProductItem
+                                                    key={index}
+                                                    product={product}
+                                                    index={index}
+                                                    categoryId={categoryId}
+                                                    catalogId={catalogId}
+                                                    showListCourse={headerData.show_list_course}
+                                                    API_BASE_URL={API_BASE_URL} />
+                                            ) : null
+                                        ))}
+                                    </div>
+                                    <Modal
+                                        isOpen={modalOpen}
+                                        onRequestClose={() => setModalOpen(false)}
+                                        contentLabel="Exemple de Modal"
+                                        style={{
+                                            overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+                                            content: { maxWidth: "500px", margin: "auto", padding: "20px" },
+                                        }}
+                                    >
+                                            <button onClick={() => setModalOpen(false)} style={{ float: "right" }}>X</button>
+                                            <h2>Contenu du Modal</h2>
+                                            <p>Ceci est un exemple de modal.</p>
+                                        </Modal>
+                                </>
                             ) : (
                                 <LoadingSpinner />
                             )}
