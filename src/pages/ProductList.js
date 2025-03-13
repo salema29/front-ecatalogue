@@ -218,6 +218,7 @@ function Product() {
                                                 index={index}
                                                 categoryId={categoryId}
                                                 catalogId={catalogId}
+                                                showListCourse={headerData.show_list_course}
                                                 API_BASE_URL={API_BASE_URL}
                                             />
                                         ) : null

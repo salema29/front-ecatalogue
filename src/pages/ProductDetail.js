@@ -18,10 +18,16 @@ function MainProduct() {
     const navigate = useNavigate();
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight); 
+    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
     const [isLoading, setIsLoading] = useState(true);
-    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
-    const isAddedInList = shoppingList.some(item => item.productId === productId && item.categoryId === categoryId);
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+    const isAddedInList = shoppingList.some(
+        (catalog) =>
+            catalog.catalogId === catalogId &&
+            catalog.products.some(
+                (item) => item.productId === productId && item.categoryId === categoryId
+            )
+    );
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
@@ -53,10 +59,10 @@ function MainProduct() {
                 const height = window.innerHeight - stickyHeight - heightToMinus;
                 setWrapperHeight(height);
             };
-    
+
             setTimeout(updateHeight, 500); // Assurez-vous que le DOM est à jour.
             window.addEventListener('resize', updateHeight);
-    
+
             return () => {
                 window.removeEventListener('resize', updateHeight);
             };
@@ -73,15 +79,61 @@ function MainProduct() {
         localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
     }, [shoppingList]);
 
-    const addInList = (productId, categoryId) => {
-        // console.log('Add button clicked in detail');
-        setShoppingList(prevList => [...prevList, { productId: productId, categoryId: categoryId, count: 1 }]);
-    }
+    const addInList = (productId, categoryId, catalogId) => {
+        setShoppingList((prevList) => {
+            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
+            if (catalogIndex !== -1) {
+                const updatedCatalog = {
+                    ...prevList[catalogIndex],
+                    products: [
+                        ...prevList[catalogIndex].products,
+                        { productId, categoryId, count: 1 },
+                    ],
+                };
+                return [
+                    ...prevList.slice(0, catalogIndex),
+                    updatedCatalog,
+                    ...prevList.slice(catalogIndex + 1),
+                ];
+            } else {
+                return [
+                    ...prevList,
+                    {
+                        catalogId,
+                        products: [{ productId, categoryId, count: 1 }],
+                    },
+                ];
+            }
+        });
+    };
 
-    const removeInList = (productId, categoryId) => {
-        // console.log('remove button clicked in detail');
-        setShoppingList(prevList => prevList.filter(item => !(item.productId === productId && item.categoryId === categoryId)));
-    }
+    const removeInList = (productId, categoryId, catalogId) => {
+        setShoppingList((prevList) => {
+            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
+            if (catalogIndex !== -1) {
+                const updatedProducts = prevList[catalogIndex].products.filter(
+                    (item) => !(item.productId === productId && item.categoryId === categoryId)
+                );
+                if (updatedProducts.length > 0) {
+                    const updatedCatalog = {
+                        ...prevList[catalogIndex],
+                        products: updatedProducts,
+                    };
+                    return [
+                        ...prevList.slice(0, catalogIndex),
+                        updatedCatalog,
+                        ...prevList.slice(catalogIndex + 1),
+                    ];
+                } else {
+                    return [
+                        ...prevList.slice(0, catalogIndex),
+                        ...prevList.slice(catalogIndex + 1),
+                    ];
+                }
+            }
+            return prevList;
+        });
+    };
 
     return (
         <>
@@ -91,7 +143,7 @@ function MainProduct() {
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
+                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
                                 alt=""
                             />
                             <div className="header-text">
@@ -126,38 +178,38 @@ function MainProduct() {
                         >
                             {productData ? (
                                 <>
-                                <iframe
-                                    src={productData.html.html_name}
-                                    className="product-item-detail placeholder-content"
-                                    title={productData.html.html_name}
-                                    width="auto"
-                                    onLoad={() => setIsLoading(false)}
+                                    <iframe
+                                        src={productData.html.html_name}
+                                        className="product-item-detail placeholder-content"
+                                        title={productData.html.html_name}
+                                        width="auto"
+                                        onLoad={() => setIsLoading(false)}
                                     // height="590px"
-                                />
-                                {isLoading === false && (
-                                    <button
-                                        className="add-bouton-detail"
-                                        style={{ backgroundColor: headerData.client_color }}
-                                        onClick={() => isAddedInList ? removeInList(productId, categoryId) : addInList(productId, categoryId)}
-                                    >
-                                        <span className="add-bouton-detail-text">
-                                            Ajouter à ma liste
-                                        </span>
-                                        <span className="add-bouton-detail-icon">
-                                            {isAddedInList ? (
-                                                <img
-                                                    src={addListIConOk}
-                                                    alt="add-to-basket"
-                                                />
-                                            ) : (
-                                                <img
-                                                    src={addListICon}
-                                                    alt="add-to-basket"
-                                                />
-                                            )}
-                                        </span>
-                                    </button>
-                                )}
+                                    />
+                                    {(isLoading === false && headerData.show_list_course === "t") && (
+                                        <button
+                                            className="add-bouton-detail"
+                                            style={{ backgroundColor: headerData.client_color }}
+                                            onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId)}
+                                        >
+                                            <span className="add-bouton-detail-text">
+                                                Ajouter à ma liste
+                                            </span>
+                                            <span className="add-bouton-detail-icon">
+                                                {isAddedInList ? (
+                                                    <img
+                                                        src={addListIConOk}
+                                                        alt="add-to-basket"
+                                                    />
+                                                ) : (
+                                                    <img
+                                                        src={addListICon}
+                                                        alt="add-to-basket"
+                                                    />
+                                                )}
+                                            </span>
+                                        </button>
+                                    )}
                                 </>
                             ) : (
                                 <LoadingSpinner />

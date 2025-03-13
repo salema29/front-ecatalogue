@@ -5,11 +5,18 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 
-function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
+function ProductItem({ product, index, categoryId, catalogId, showListCourse, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
-    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
-    const isAddedInList = shoppingList.some(item => item.productId === product.view_order && item.categoryId === categoryId);
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+
+    const isAddedInList = shoppingList.some(
+        (catalog) =>
+            catalog.catalogId === catalogId &&
+            catalog.products.some(
+                (item) => item.productId === product.view_order && item.categoryId === categoryId
+            )
+    );
 
     const navigate = useNavigate();
 
@@ -26,23 +33,70 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
     }, [API_BASE_URL]);
 
     useEffect(() => {
-        localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
+        localStorage.setItem("shopping-list", JSON.stringify(shoppingList));
     }, [shoppingList]);
 
-    const addInList = (productId, categoryId) => {
-        // console.log('Add button clicked');
-        setShoppingList(prevList => [...prevList, { productId: productId, categoryId: categoryId, count: 1 }]);
-    }
+    const addInList = (productId, categoryId, catalogId) => {
+        setShoppingList((prevList) => {
+            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
+            if (catalogIndex !== -1) {
+                const updatedCatalog = {
+                    ...prevList[catalogIndex],
+                    products: [
+                        ...prevList[catalogIndex].products,
+                        { productId, categoryId, count: 1 },
+                    ],
+                };
+                return [
+                    ...prevList.slice(0, catalogIndex),
+                    updatedCatalog,
+                    ...prevList.slice(catalogIndex + 1),
+                ];
+            } else {
+                return [
+                    ...prevList,
+                    {
+                        catalogId,
+                        products: [{ productId, categoryId, count: 1 }],
+                    },
+                ];
+            }
+        });
+    };
 
-    const removeInList = (productId, categoryId) => {
-        // console.log('remove button clicked');
-        setShoppingList(prevList => prevList.filter(item => !(item.productId === productId && item.categoryId === categoryId)));
-    }
+    const removeInList = (productId, categoryId, catalogId) => {
+        setShoppingList((prevList) => {
+            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
+            if (catalogIndex !== -1) {
+                const updatedProducts = prevList[catalogIndex].products.filter(
+                    (item) => !(item.productId === productId && item.categoryId === categoryId)
+                );
+                if (updatedProducts.length > 0) {
+                    const updatedCatalog = {
+                        ...prevList[catalogIndex],
+                        products: updatedProducts,
+                    };
+                    return [
+                        ...prevList.slice(0, catalogIndex),
+                        updatedCatalog,
+                        ...prevList.slice(catalogIndex + 1),
+                    ];
+                } else {
+                    return [
+                        ...prevList.slice(0, catalogIndex),
+                        ...prevList.slice(catalogIndex + 1),
+                    ];
+                }
+            }
+            return prevList;
+        });
+    };
 
     return (
         <div
             key={index}
-            className={`grid-item ${isLoading ? 'placeholder-content' : ''} ${isMobileView ? 'mobile-items' : 'desktop-items'}`}
+            className={`grid-item ${isLoading ? "placeholder-content" : ""} ${isMobileView ? "mobile-items" : "desktop-items"
+                }`}
             style={{
                 gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
                 gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
@@ -50,14 +104,11 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
             }}
         >
             {product.type === "0" ? (
-                // Type 0: Produit avec clic pour détail
                 <div className="item-wrapper">
                     <div
                         onClick={() => handleDetailedView(product.view_order, product.categoryId)}
                         className="item-link"
-                        style={{
-                            cursor: 'pointer',
-                        }}
+                        style={{ cursor: "pointer" }}
                     >
                         <iframe
                             src={product.html_name}
@@ -66,25 +117,32 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
                             scrolling="no"
                             onLoad={() => setIsLoading(false)}
                         />
-                        {isLoading === false && (
+                        {(isLoading === false && showListCourse === "t") && (
                             <div className="add-bouton">
-                            {isAddedInList ? (
-                                <img src={addListIConOk} alt="added-to-basket" onClick={(event) => {
-                                    event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
-                                    removeInList(product.view_order, categoryId);
-                                }}></img>
-                            ) : (
-                                <img src={addListICon} alt="add-to-basket" onClick={(event) => {
-                                    event.stopPropagation(); // Evite d'entrer en vue detail pendant clic
-                                    addInList(product.view_order, categoryId);
-                                }}></img>
-                            )}
-                        </div>
+                                {isAddedInList ? (
+                                    <img
+                                        src={addListIConOk}
+                                        alt="added-to-basket"
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            removeInList(product.view_order, categoryId, catalogId);
+                                        }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={addListICon}
+                                        alt="add-to-basket"
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            addInList(product.view_order, categoryId, catalogId);
+                                        }}
+                                    />
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
             ) : (
-                // Autre type de produit : sans clic
                 <div className="item-wrapper">
                     <div className="item-link">
                         <iframe
@@ -99,7 +157,6 @@ function ProductItem({ product, index, categoryId, catalogId, API_BASE_URL }) {
             )}
         </div>
     );
-
 }
 
 export default ProductItem;
