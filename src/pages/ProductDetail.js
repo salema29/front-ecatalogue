@@ -8,6 +8,7 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/buttons/ListCourseIcon';
+import Modal from "react-modal";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -140,6 +141,8 @@ function MainProduct() {
         });
     };
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <>
             {headerData ? (
@@ -167,7 +170,7 @@ function MainProduct() {
                             (
                                 <button
                                     className="view-format-dialog-open-list-course btn"
-                                    onClick={openListCourse}
+                                    onClick={() => setModalOpen(true)}
                                     title="Ouvrir ma liste de course"
                                 >
                                     <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
@@ -228,6 +231,19 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
+                                    <Modal
+                                        isOpen={modalOpen}
+                                        onRequestClose={() => setModalOpen(false)}
+                                        contentLabel="Exemple de Modal"
+                                        style={{
+                                            overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+                                            content: { maxWidth: "500px", margin: "auto", padding: "20px" },
+                                        }}
+                                    >
+                                        <button onClick={() => setModalOpen(false)} style={{ float: "right" }}>X</button>
+                                        <h2>Ma liste des courses </h2>
+                                        <p>Préparez votre liste de course pour gagner du temps en magasin</p>
+                                    </Modal>
                                 </>
                             ) : (
                                 <LoadingSpinner />

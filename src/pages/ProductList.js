@@ -145,19 +145,9 @@ function Product() {
     }, []);
 
     showOnlyEcatalogue();
-        
-        const [modalOpen, setModalOpen] = useState(false);
-        const openModal = () => {
-            console.log('Opening modal...');
-            setModalOpen(true);
-        };
 
-        const closeModal = () => {
-            console.log('Closing modal...');
-            setModalOpen(false);
-        };
-        
-    
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <>
             {headerData ? (
@@ -265,10 +255,10 @@ function Product() {
                                             content: { maxWidth: "500px", margin: "auto", padding: "20px" },
                                         }}
                                     >
-                                            <button onClick={() => setModalOpen(false)} style={{ float: "right" }}>X</button>
-                                            <h2>Contenu du Modal</h2>
-                                            <p>Ceci est un exemple de modal.</p>
-                                        </Modal>
+                                        <button onClick={() => setModalOpen(false)} style={{ float: "right" }}>X</button>
+                                        <h2>Ma liste des courses </h2>
+                                        <p>Préparez votre liste de course pour gagner du temps en magasin</p>
+                                    </Modal>
                                 </>
                             ) : (
                                 <LoadingSpinner />
