@@ -3,8 +3,9 @@ import { BsListUl  } from 'react-icons/bs';
 
 const ListCourseIcon = ({ catalogId, shoppingList, clientColor }) => {
     const nbProduit = shoppingList
-    .filter(item => item.catalogId === catalogId)
-    .reduce((acc, item) => item.products.length, 0);
+        .filter(item => item.catalogId === catalogId)
+        .reduce((acc, item) => acc + item.products.length, 0);
+
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>

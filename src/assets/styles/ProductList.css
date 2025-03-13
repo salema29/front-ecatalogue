@@ -50,6 +50,7 @@ iframe>html>body {
 .item-link {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .product-item {
@@ -118,6 +119,19 @@ iframe>html>body {
   background: #f6f7f8; 
   background: linear-gradient(to right, #eee 2%, #ddd 18%, #eee 33%);
   background-size: 1300px; 
+}
+
+.add-bouton {
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  right: 20px;
+  bottom: 20px;
+}
+
+.add-bouton img {
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes placeholderAnimate {
