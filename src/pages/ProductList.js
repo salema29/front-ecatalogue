@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
@@ -8,6 +8,8 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
+import ListCourse  from '../components/buttons/ListCourseIcon';
+import { ShoppingListContext } from '../store-shopping-list';
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -25,6 +27,7 @@ function Product() {
         isVueProduit : true,
         isVueFeuilletable : true
     });
+    const { shoppingList } = useContext(ShoppingListContext);
 
     const handleClose = () => {
         navigate(`/`);
@@ -34,6 +37,11 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
+
+    const openListCourse = () => {
+        // openModal
+    };
+
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -168,6 +176,7 @@ function Product() {
                                     <button
                                         className="view-format-switcher btn"
                                         onClick={handleCatalogView}
+                                        title="Voir la vue feuilletable"
                                     >
                                         <span style={{
                                             height: "25",
@@ -183,9 +192,22 @@ function Product() {
                                         </span>
                                     </button>
                                 )}
+                                {headerData.show_list_course === 't' ?
+                                    (
+                                        <button
+                                            className="view-format-dialog-open-list-course btn"
+                                            onClick={openListCourse}
+                                            title="Ouvrir ma liste de course"
+                                        >
+                                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                        </button>
+                                    )
+                                    :(<></>)
+                                }
                                 <button
                                     className="view-format-dialog-close btn"
                                     onClick={handleClose}
+                                    title="Fermer ce catalogue"
                                 >
                                     <img
                                         src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
