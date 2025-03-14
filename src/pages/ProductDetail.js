@@ -8,6 +8,7 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/buttons/ListCourseIcon';
+import ShoppingListModal from "../components/buttons/ListCourseModal"
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -34,9 +35,6 @@ function MainProduct() {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
 
-    const openListCourse = () => {
-        // openModal
-    };
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
@@ -140,6 +138,8 @@ function MainProduct() {
         });
     };
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <>
             {headerData ? (
@@ -167,7 +167,7 @@ function MainProduct() {
                             (
                                 <button
                                     className="view-format-dialog-open-list-course btn"
-                                    onClick={openListCourse}
+                                    onClick={() => setModalOpen(true)}
                                     title="Ouvrir ma liste de course"
                                 >
                                     <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
@@ -228,6 +228,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
+                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
