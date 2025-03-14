@@ -1,49 +1,46 @@
-// import React from "react";
-// import Modal from "react-modal";
-
-// Modal.setAppElement("#ecatalogue"); // Nécessaire pour l'accessibilité
-
-// const MyModal = ({ isOpen, onClose, children }) => {
-//   return (
-//     <Modal
-//       isOpen={isOpen}
-//       onRequestClose={onClose}
-//       contentLabel="Exemple de Modal"
-//       style={{
-//         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-//         content: { maxWidth: "500px", margin: "auto", padding: "20px" },
-//       }}
-//     >
-//       <button onClick={onClose} style={{ float: "right" }}>X</button>
-//       {children}
-//     </Modal>
-//   );
-// };
-
-// export default MyModal;
-
-
 import React from 'react';
+import Modal from "react-modal";
 
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+const customStyles = {
+  overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+  content: {
+    maxWidth: "500px",
+    margin: "auto",
+    padding: "20px",
+    borderRadius: "8px",
+    position: "relative"
+  },
+};
 
+const ShoppingListModal = ({ isOpen, onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="fixed inset-0 bg-black opacity-50" onClick={onClose}></div>
-      <div className="bg-white p-6 rounded-lg shadow-lg z-10 relative max-w-md w-full">
-        <button
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-        <div className="mt-4">
-          {children}
-        </div>
-      </div>
-    </div>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      contentLabel="Exemple de Modal"
+      style={customStyles}
+      shouldCloseOnOverlayClick={true}
+      ariaHideApp={false}
+    >
+      <button
+        onClick={onClose}
+        aria-label="Fermer"
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          background: "none",
+          border: "none",
+          fontSize: "18px",
+          cursor: "pointer"
+        }}
+      >
+        ✖
+      </button>
+      <h2>Ma liste des courses</h2>
+      <p>Préparez votre liste de courses pour gagner du temps en magasin.</p>
+    </Modal>
   );
 };
 
-export default Modal;
+export default ShoppingListModal;

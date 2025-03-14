@@ -10,8 +10,7 @@ import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import { fetchViewChoice } from "../components/functions/Api";
 import ListCourse  from '../components/buttons/ListCourseIcon';
 import { ShoppingListContext } from '../store-shopping-list';
-// import MyModal from "../components/buttons/ListCourseModal"
-import Modal from "react-modal";
+import ShoppingListModal from "../components/buttons/ListCourseModal"
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -246,19 +245,7 @@ function Product() {
                                             ) : null
                                         ))}
                                     </div>
-                                    <Modal
-                                        isOpen={modalOpen}
-                                        onRequestClose={() => setModalOpen(false)}
-                                        contentLabel="Exemple de Modal"
-                                        style={{
-                                            overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-                                            content: { maxWidth: "500px", margin: "auto", padding: "20px" },
-                                        }}
-                                    >
-                                        <button onClick={() => setModalOpen(false)} style={{ float: "right" }}>X</button>
-                                        <h2>Ma liste des courses </h2>
-                                        <p>Préparez votre liste de course pour gagner du temps en magasin</p>
-                                    </Modal>
+                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
