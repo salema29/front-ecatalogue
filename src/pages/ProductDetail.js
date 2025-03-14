@@ -228,7 +228,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
-                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
