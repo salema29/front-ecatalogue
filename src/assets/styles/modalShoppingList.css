@@ -20,3 +20,8 @@
     max-height: 82%;
     overflow-y: auto;
 }
+
+/* for safari */
+button{
+    color: black;
+}

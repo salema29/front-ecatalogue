@@ -5,7 +5,7 @@ import "../../assets/styles/modalShoppingList.css";
 const customStyles = {
     overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
     content: {
-        maxWidth: "346px",
+        maxWidth: "390px",
         marginLeft: "auto",
         height: '585',
         right: '0',
@@ -28,7 +28,6 @@ const ShoppingListModal = ({ isOpen, onClose, clientColor }) => {
                 <h2 className='modal-header-title'>Ma liste des courses</h2>
                 <p className='modal-header-subtitle'>Préparez votre liste de courses <br/> pour gagner du temps en magasin</p>
             </div>
-            <div>
                 <button  className="share-btn" onClick={onClose} title='Partager ma liste de course'
                     style={{
                     background: "none",
@@ -48,8 +47,6 @@ const ShoppingListModal = ({ isOpen, onClose, clientColor }) => {
                         </defs>
                     </svg>
                 </button>
-            </div>
-            <div>
                 <button  className="close-btn" onClick={onClose} title='Fermer ma liste de course'
                     style={{
                     background: "none",
@@ -62,10 +59,9 @@ const ShoppingListModal = ({ isOpen, onClose, clientColor }) => {
                         fill={clientColor}/>
                     </svg>
                 </button>
-            </div>
         </div>
         <div className="modal-body">
-
+        
         </div>
     </Modal>
     );
