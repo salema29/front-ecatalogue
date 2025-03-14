@@ -10,7 +10,7 @@ const customStyles = {
         height: '585',
         right: '0',
         padding:'none',
-        overflowY:'hdden'
+        overflowY:'hidden'
     },
 };
 
@@ -24,21 +24,27 @@ const ShoppingListModal = ({ isOpen, onClose, clientColor }) => {
         ariaHideApp={false}
     >
         <div className="modal-header" style={{ background: clientColor }} >
-            <h2>Modal Title</h2>
-            <button  className="close-btn" onClick={onClose}
-                aria-label="Fermer"
-                style={{
-                position: "absolute",
-                // top: "10px",
-                right: "10px",
-                background: "none",
-                border: "none",
-                fontSize: "18px",
-                cursor: "pointer"
-                }}>✖</button>
+            <div>
+                <h2 className='modal-header-title'>Ma liste des courses</h2>
+                <p className='modal-header-subtitle'>Préparez votre liste de courses <br/> pour gagner du temps en magasin</p>
+            </div>
+            <div></div>
+            <div>
+                <button  className="close-btn" onClick={onClose}
+                        aria-label="Fermer"
+                        style={{
+                        position: "absolute",
+                        top: "26px",
+                        right: "10px",
+                        background: "none",
+                        border: "none",
+                        fontSize: "18px",
+                        cursor: "pointer"
+                        }}>✖</button>
+            </div>
         </div>
         <div className="modal-body">
-
+        
         </div>
     </Modal>
     );
