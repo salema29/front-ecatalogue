@@ -4,11 +4,10 @@ import Modal from "react-modal";
 const customStyles = {
   overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
   content: {
-    maxWidth: "500px",
-    margin: "auto",
-    padding: "20px",
+    maxWidth: "346px",
+    marginLeft: "auto",
     borderRadius: "8px",
-    position: "relative"
+    height: '585'
   },
 };
 
