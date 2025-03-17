@@ -19,9 +19,9 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
     );
 
     const navigate = useNavigate();
-
+    const id_produit_resume = product.id_produit;
     const handleDetailedView = (productId) => {
-        navigate(`/product/${catalogId}/${productId}/${categoryId}`);
+        navigate(`/product/${catalogId}/${productId}/${categoryId}/${id_produit_resume}`);
     };
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
         localStorage.setItem("shopping-list", JSON.stringify(shoppingList));
     }, [shoppingList]);
 
-    const addInList = (productId, categoryId, catalogId) => {
+    const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
             if (catalogIndex !== -1) {
@@ -44,7 +44,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                     ...prevList[catalogIndex],
                     products: [
                         ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1 },
+                        { productId, categoryId, count: 1, id_produit_resume },
                     ],
                 };
                 return [
@@ -57,7 +57,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                     ...prevList,
                     {
                         catalogId,
-                        products: [{ productId, categoryId, count: 1 }],
+                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
                     },
                 ];
             }
@@ -134,7 +134,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                                         alt="add-to-basket"
                                         onClick={(event) => {
                                             event.stopPropagation();
-                                            addInList(product.view_order, categoryId, catalogId);
+                                            addInList(product.view_order, categoryId, catalogId, id_produit_resume);
                                         }}
                                     />
                                 )}

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const customStyles = {
     overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
@@ -14,7 +15,32 @@ const customStyles = {
     },
 };
 
-const ShoppingListModal = ({ isOpen, onClose, clientColor }) => {
+const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingList }) => {
+    const idListProducts = shoppingList
+        .filter(item => item.catalogId === catalogId)
+        .flatMap(catalog => catalog.products.map(product => product.id_produit_resume)
+
+    );
+    const [productHtml, setproductHtml] = useState([]);
+    useEffect(() => {
+        console.log("idListProducts:", idListProducts);
+        console.log("API_BASE_URL:", API_BASE_URL);
+        fetch(`${API_BASE_URL}/api/shopping-list/`, {
+            method: 'POST',
+            body: JSON.stringify({
+                ids: idListProducts,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            setproductHtml(data);
+        })
+        .catch(error => {
+            console.error('Error fetching htmls:', error);
+        });
+    }, [idListProducts, API_BASE_URL]);
+
+
     return (
     <Modal
         isOpen={isOpen}

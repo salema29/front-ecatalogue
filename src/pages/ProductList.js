@@ -245,7 +245,7 @@ function Product() {
                                             ) : null
                                         ))}
                                     </div>
-                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} />
+                                    <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} shoppingList={shoppingList} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
