@@ -14,6 +14,13 @@ function showOnlyEcatalogue() {
     if (ecatalogueElement) {
         ecatalogueElement.style.display = 'block';
     }
+
+    const modalElements = document.querySelectorAll('.ReactModalPortal');
+    for (let modalElement of modalElements) {
+        if (modalElement) {
+            modalElement.style.display = 'block';
+        }
+    }
 }
 
 export default showOnlyEcatalogue;
