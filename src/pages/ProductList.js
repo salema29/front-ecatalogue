@@ -245,7 +245,7 @@ function Product() {
                                             ) : null
                                         ))}
                                     </div>
-                                    {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} shoppingList={shoppingList} /> )}
+                                    {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                                 </>
                             ) : (
                                 <LoadingSpinner />
