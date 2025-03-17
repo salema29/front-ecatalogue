@@ -18,11 +18,10 @@ const customStyles = {
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList } = useContext(ShoppingListContext);
-    const idListProducts = shoppingList
-        .filter(item => item.catalogId === catalogId)
-        .flatMap(catalog => catalog.products.map(product => product.id_produit_resume)
+    const idListProducts = shoppingList.reduce((acc, item) =>
+        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc
+    , []);
 
-    );
     const [productHtmls, setproductHtmls] = useState([]);
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/shopping-list/`, {
@@ -89,6 +88,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             {productHtmls.map((productHtml, index) =>
                 <iframe
                     src={productHtml.html_name}
+                    key={productHtml.html_name}
                 />
             )}
         </div>
