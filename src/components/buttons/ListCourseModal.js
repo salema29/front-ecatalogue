@@ -23,8 +23,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingLi
     );
     const [productHtml, setproductHtml] = useState([]);
     useEffect(() => {
-        console.log("idListProducts:", idListProducts);
-        console.log("API_BASE_URL:", API_BASE_URL);
         fetch(`${API_BASE_URL}/api/shopping-list/`, {
             method: 'POST',
             body: JSON.stringify({
@@ -38,7 +36,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingLi
         .catch(error => {
             console.error('Error fetching htmls:', error);
         });
-    }, [idListProducts, API_BASE_URL]);
+    }, []);
 
 
     return (
