@@ -13,7 +13,7 @@ import ShoppingListModal from "../components/buttons/ListCourseModal"
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
-    const { catalogId, productId, categoryId } = useParams();
+    const { catalogId, productId, categoryId, id_produit_resume } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
     const isMobileView = window.innerWidth <= 767;
@@ -81,8 +81,7 @@ function MainProduct() {
     useEffect(() => {
         localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
     }, [shoppingList]);
-
-    const addInList = (productId, categoryId, catalogId) => {
+    const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
             if (catalogIndex !== -1) {
@@ -90,7 +89,7 @@ function MainProduct() {
                     ...prevList[catalogIndex],
                     products: [
                         ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1 },
+                        { productId, categoryId, count: 1, id_produit_resume },
                     ],
                 };
                 return [
@@ -103,7 +102,7 @@ function MainProduct() {
                     ...prevList,
                     {
                         catalogId,
-                        products: [{ productId, categoryId, count: 1 }],
+                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
                     },
                 ];
             }
@@ -208,7 +207,7 @@ function MainProduct() {
                                         <button
                                             className="add-bouton-detail"
                                             style={{ backgroundColor: headerData.client_color }}
-                                            onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId)}
+                                            onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
                                         >
                                             <span className="add-bouton-detail-text">
                                                 Ajouter à ma liste
@@ -228,7 +227,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
-                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                                    <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} shoppingList = {shoppingList} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
