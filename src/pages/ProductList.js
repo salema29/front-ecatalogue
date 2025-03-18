@@ -8,9 +8,9 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
-import ListCourse  from '../components/shoppingList/ListCourseIcon';
+import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import { ShoppingListContext } from '../store-shopping-list';
-import ShoppingListModal from "../components/shoppingList/ListCourseModal"
+import ShoppingListModal from "../components/shoppingList/shoppingListModal"
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
