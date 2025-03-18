@@ -1,6 +1,6 @@
 <svg width="34" height="33" viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="16" cy="16" r="16" fill="#4A4A4A"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M19.2038 10.4429C19.2038 10.5883 19.3216 10.7055 19.4665 10.7055H24.9491V25.0236C24.9491 26.245 23.9589 27.2353 22.7375 27.2353H9.21164C7.99026 27.2353 7 26.245 7 25.0236V7.39742C7 6.07541 8.07541 5 9.39742 5H19.2038V10.4429ZM19.7059 10.2941H25L19.7059 5V10.2941Z" fill="white"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M19.2038 10.4429C19.2038 10.5883 19.3216 10.7055 19.4665 10.7055H24.9491V25.0236C24.9491 26.245 23.9589 27.2353 22.7375 27.2353H9.21164C7.99026 27.2353 7 26.245 7 25.0236V7.39742C7 6.07541 8.07541 5 9.39742 5H19.2038V10.4429ZM19.7059 10.2941H25L19.7059 5V10.2941Z" fill="white"/>
 <path d="M13 13H18" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M13.3334 17H22" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M13.3334 21H22" stroke="#4A4A4A" stroke-width="1.90476" stroke-linecap="round" stroke-linejoin="round"/>

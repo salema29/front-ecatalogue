@@ -9,8 +9,8 @@ import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
-import ListCourse  from '../components/buttons/ListCourseIcon';
-import ShoppingListModal from "../components/buttons/ListCourseModal"
+import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ShoppingListModal from "../components/shoppingList/shoppingListModal"
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
