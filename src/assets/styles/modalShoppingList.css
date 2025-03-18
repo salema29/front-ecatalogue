@@ -1,0 +1,28 @@
+.modal-header {
+    padding: 0px 16px 0px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: #FFFFFF;
+}
+
+.modal-header-title{
+    margin-bottom: 0px;
+}
+.modal-header-subtitle{
+    margin-top: 0px;
+}
+
+.modal-body {
+    padding: 16px;
+    max-height: 82%;
+    overflow-y: auto;
+}
+
+/* for safari */
+button{
+    color: black;
+}

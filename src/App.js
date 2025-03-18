@@ -29,7 +29,7 @@ function App() {
                 <Route path="view/:catalogId" element={<ViewFormatModal />} /> {/* Modal to view details */}
                 <Route path="product-list/:catalogId/:categoryId" element={<ProductList />} /> {/* Product resume view */}
                 <Route path="catalog/:catalogId" element={<CatalogOverview />} /> {/* Catalog overview */}
-                <Route path="product/:catalogId/:productId/:categoryId" element={<ProductDetail />} /> {/* Individual product details */}
+                <Route path="product/:catalogId/:productId/:categoryId/:id_produit_resume" element={<ProductDetail />} /> {/* Individual product details */}
                 <Route path="confidentiality" element={<Confidentiality />} /> {/* Confidentiality text */}
             </Routes>
         </Router>
