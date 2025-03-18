@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { ShoppingListContext } from '../../store-shopping-list'
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const customStyles = {
     overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
     content: {
@@ -15,13 +16,13 @@ const customStyles = {
     },
 };
 
-const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingList }) => {
-    const idListProducts = shoppingList
-        .filter(item => item.catalogId === catalogId)
-        .flatMap(catalog => catalog.products.map(product => product.id_produit_resume)
+const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
+    const { shoppingList } = useContext(ShoppingListContext);
+    const idListProducts = shoppingList.reduce((acc, item) =>
+        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc
+    , []);
 
-    );
-    const [productHtml, setproductHtml] = useState([]);
+    const [productHtmls, setproductHtmls] = useState([]);
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/shopping-list/`, {
             method: 'POST',
@@ -31,13 +32,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingLi
         })
         .then(response => response.json())
         .then(data => {
-            setproductHtml(data);
+            setproductHtmls(data);
         })
         .catch(error => {
             console.error('Error fetching htmls:', error);
         });
     }, []);
-
 
     return (
     <Modal
@@ -72,11 +72,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingLi
                     </svg>
                 </button>
                 <button  className="close-btn" onClick={onClose} title='Fermer ma liste de course'
-                    style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer"
-                }}>
+                        style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer"
+                    }}>
                     <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white"/>
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
@@ -85,7 +85,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor, shoppingLi
                 </button>
         </div>
         <div className="modal-body">
-        
+            {productHtmls.map((productHtml, index) =>
+                <iframe
+                    src={productHtml.html_name}
+                    key={productHtml.html_name}
+                />
+            )}
         </div>
     </Modal>
     );
