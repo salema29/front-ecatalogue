@@ -7,8 +7,8 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
-import ListCourse  from '../components/buttons/ListCourseIcon';
-import ShoppingListModal from "../components/buttons/ListCourseModal"
+import ListCourse  from '../components/shoppingList/ListCourseIcon';
+import ShoppingListModal from "../components/shoppingList/ListCourseModal"
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
