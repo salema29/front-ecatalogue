@@ -84,12 +84,14 @@ function MainProduct() {
     const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
+            const now = new Date();
+            const date_add = now.toISOString().replace('T', ' ').replace('Z', '');
             if (catalogIndex !== -1) {
                 const updatedCatalog = {
                     ...prevList[catalogIndex],
                     products: [
                         ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1, id_produit_resume },
+                        { productId, categoryId, count: 1, id_produit_resume, date_add },
                     ],
                 };
                 return [
@@ -102,7 +104,7 @@ function MainProduct() {
                     ...prevList,
                     {
                         catalogId,
-                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
+                        products: [{ productId, categoryId, count: 1, id_produit_resume, date_add }],
                     },
                 ];
             }
@@ -227,7 +229,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
-                                    {modalOpen && (<ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} shoppingList = {shoppingList} /> )}
+                                    {modalOpen && (<ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} /> )}
                                 </>
                             ) : (
                                 <LoadingSpinner />
