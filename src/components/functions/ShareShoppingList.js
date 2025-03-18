@@ -20,7 +20,6 @@ export const handleShoppingListToImage = (shoppingList, catalogId = null) => {
         tempDiv.innerHTML = html;
         tempDiv.style.position = "absolute";  // Le rendre invisible
         tempDiv.style.left = "-9999px";
-        console.log(tempDiv);
         document.body.appendChild(tempDiv);
 
         // Convertir en image
