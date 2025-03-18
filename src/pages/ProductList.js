@@ -8,8 +8,8 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
-import ListCourse  from '../components/buttons/ListCourseIcon';
 import { ShoppingListContext } from '../store-shopping-list';
+import ListCourse  from '../components/buttons/ListCourseIcon';
 import ShoppingListModal from "../components/buttons/ListCourseModal"
 
 function Product() {
@@ -38,7 +38,6 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
-
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {

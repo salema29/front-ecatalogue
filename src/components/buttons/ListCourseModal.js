@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback  } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
-import { ShoppingListContext } from '../../store-shopping-list'
+import { ShoppingListContext } from '../../store-shopping-list';
+import { handleShoppingListToImage } from '../functions/ShareShoppingList'; 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const customStyles = {
@@ -37,6 +38,16 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         .catch(error => {
             console.error('Error fetching htmls:', error);
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, []);
+
+    const handleShareBtnClick = useCallback(() => {
+        if (window.innerWidth <= 768) {
+            handleShoppingListToImage(shoppingList, catalogId);
+        } else {
+            onClose();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, []);
 
     return (
@@ -52,7 +63,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 <h2 className='modal-header-title'>Ma liste des courses</h2>
                 <p className='modal-header-subtitle'>Préparez votre liste de courses <br/> pour gagner du temps en magasin</p>
             </div>
-                <button  className="share-btn" onClick={onClose} title='Partager ma liste de course'
+                <button  className="share-btn" onClick={handleShareBtnClick} title='Partager ma liste de course'
                     style={{
                     background: "none",
                     border: "none",
@@ -85,7 +96,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </button>
         </div>
         <div className="modal-body">
-            {productHtmls.map((productHtml, index) =>
+            {productHtmls.length > 0 && productHtmls.map((productHtml, index) =>
                 <iframe
                     src={productHtml.html_name}
                     key={productHtml.html_name}
