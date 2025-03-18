@@ -7,10 +7,8 @@ import "../assets/styles/ProductList.css";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
-import { fetchViewChoice, postShoppingListImage } from "../components/functions/Api";
-import panierIcon from '../assets/icons/panier.svg';
+import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
-import html2canvas from 'html2canvas';
 import ListCourse  from '../components/buttons/ListCourseIcon';
 import ShoppingListModal from "../components/buttons/ListCourseModal"
 
@@ -40,35 +38,6 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
-
-    const handleShoppingListToImage = () => {
-        postShoppingListImage(shoppingList).then(html => {
-            // Créer un élément temporaire pour afficher l'HTML
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";  // Le rendre invisible
-            tempDiv.style.left = "-9999px";
-            console.log(tempDiv);
-            document.body.appendChild(tempDiv);
-    
-            // Convertir en image
-            html2canvas(tempDiv, { allowTaint: true, useCORS: true }).then(canvas => {
-                const image = canvas.toDataURL("image/png");
-    
-                // Télécharger l'image
-                const link = document.createElement("a");
-                link.href = image;
-                link.download = "shopping-list.png";
-                link.click();
-    
-                // Nettoyage du DOM
-                document.body.removeChild(tempDiv);
-            }).catch(error => {
-                console.error('Erreur lors de la génération de l’image', error);
-            });
-        });
-    };
-
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -201,16 +170,6 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
-                                <button 
-                                    className="panier"
-                                    onClick={handleShoppingListToImage}
-                                >
-                                    <img
-                                        src={panierIcon}
-                                        width="25"
-                                        alt="Fermer"
-                                    />
-                                </button>
                                 {viewChoice.isVueFeuilletable && (
                                     <button
                                         className="view-format-switcher btn"
