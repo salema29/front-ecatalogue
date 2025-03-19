@@ -74,7 +74,7 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
         >
             <button
                 disabled={currentCount <= 1 }
-                title={currentCount <= 1 ? "Vous ne pouvez plus diminuer la quantité " : "Augmneter la quantité"}
+                title={currentCount <= 1 ? "Vous ne pouvez plus diminuer la quantité " : "Diminuer la quantité"}
                 onClick={decrement}
                 style={{
                     width: '29px',
