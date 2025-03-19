@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
+import { ShoppingListContext } from '../store-shopping-list';
+import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ShoppingListModal from "../components/shoppingList/shoppingListModal"
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -26,6 +29,9 @@ function Catalog() {
   const handleProductView = () => {
     navigate(`/product-list/${catalogId}/${firstCategorieId}`);
   };
+
+  const { shoppingList } = useContext(ShoppingListContext);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
@@ -90,6 +96,18 @@ function Catalog() {
                   </span>
                 </button>
               )}
+              {headerData.show_list_course === 't' ?
+                  (
+                      <button
+                          className="view-format-dialog-open-list-course btn"
+                          onClick={() => setModalOpen(true)}
+                          title="Ouvrir ma liste de course"
+                      >
+                          <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                      </button>
+                  )
+                  :(<></>)
+              }
               <button
                 className="view-format-dialog-close btn"
                 onClick={handleClose}
@@ -111,6 +129,7 @@ function Catalog() {
             padding-left="0"
             title={headerData.catalogue_name_ln_un}
           ></iframe>
+          {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
         </>
       ) : (
         <p>Loading...</p>
