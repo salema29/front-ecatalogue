@@ -41,7 +41,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         .catch(error => {
             console.error('Error fetching htmls:', error);
         });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [shoppingList]);
 
     return (
@@ -58,7 +58,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     <p className='modal-header-subtitle'>Préparez votre liste de courses <br/> pour gagner du temps en magasin</p>
                 </div>
                     <button  className="share-btn" onClick={onClose} title='Partager ma liste de course'>
-                        <img  src={ShareShoppingList}/>
+                        <img alt="partager-course" src={ShareShoppingList}/>
                     </button>
                     <button  className="close-btn" onClick={onClose} title='Fermer ma liste de course'>
                         <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,6 +76,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <iframe className="product-shopping-list"
                                 src={productHtml.html_name}
                                 key={productHtml.id_produit}
+                                title={productHtml.id_produit}
                             />
                             <div className="update-count-btn">
                                 <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />

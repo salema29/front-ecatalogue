@@ -80,7 +80,6 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                     justifyContent: 'center',
                     background: 'transparent',
                     border: 'none',
-                    cursor: 'pointer',
                     outline: 'none',
                     padding: 0,
                     cursor: currentCount <= 1 ? "not-allowed" : "pointer",
