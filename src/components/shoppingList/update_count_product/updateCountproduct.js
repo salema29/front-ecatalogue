@@ -73,6 +73,8 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
             }}
         >
             <button
+                disabled={currentCount <= 1 }
+                title={currentCount <= 1 ? "Vous ne pouvez plus diminuer la quantité " : "Augmneter la quantité"}
                 onClick={decrement}
                 style={{
                     width: '29px',
@@ -84,7 +86,8 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                     border: 'none',
                     cursor: 'pointer',
                     outline: 'none',
-                    padding: 0
+                    padding: 0,
+                    cursor: currentCount <= 1 ? "not-allowed" : "pointer",
                 }}
                 aria-label="Diminuer la quantité"
             >
@@ -110,6 +113,7 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
             </div>
 
         <button
+            title='Augmenter la quantité'
             onClick={increment}
             style={{
                 width: '29px',
