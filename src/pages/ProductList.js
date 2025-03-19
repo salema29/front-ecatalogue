@@ -10,11 +10,11 @@ import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
-import ShoppingListModal from "../components/shoppingList/shoppingListModal"
+import ShoppingListModal from "../components/shoppingList/shoppingListModal";
+import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
@@ -208,7 +208,7 @@ function Product() {
                                     title="Fermer ce catalogue"
                                 >
                                     <img
-                                        src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
+                                        src={crossIconDark}
                                         width="25"
                                         alt="Fermer"
                                     />

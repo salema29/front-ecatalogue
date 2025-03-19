@@ -1,10 +1,9 @@
 import html2canvas from 'html2canvas';
 import { postShoppingListImage } from "../functions/Api";
 
-export const handleShoppingListToImage = (shoppingList, catalogId = null) => {
-    
+export const handleShoppingListShare = async (shoppingList, catalogId = null) => {
     let filteredList = shoppingList;
-    
+
     if (catalogId) {
         filteredList = shoppingList.filter(catalog => catalog.catalogId === catalogId);
     }
@@ -13,29 +12,46 @@ export const handleShoppingListToImage = (shoppingList, catalogId = null) => {
         console.warn("Aucun produit trouvé pour ce catalogId.");
         return;
     }
-    
-    postShoppingListImage(filteredList).then(html => {
-        // Créer un élément temporaire pour afficher l'HTML
+
+    try {
+        const html = await postShoppingListImage(filteredList); // Attendre la réponse
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
-        tempDiv.style.position = "absolute";  // Le rendre invisible
+        tempDiv.style.position = "absolute";
         tempDiv.style.left = "-9999px";
         document.body.appendChild(tempDiv);
 
-        // Convertir en image
-        html2canvas(tempDiv, { allowTaint: true, useCORS: true }).then(canvas => {
-            const image = canvas.toDataURL("image/png");
+        const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true }); // Attendre la génération de l'image
+        const image = canvas.toDataURL("image/png");
+        document.body.removeChild(tempDiv);
 
-            // Télécharger l'image
-            const link = document.createElement("a");
-            link.href = image;
-            link.download = "shopping-list.png";
-            link.click();
+        if (navigator.share) {
+            try {
+                const res = await fetch(image);
+                const blob = await res.blob();
+                const file = new File([blob], "shopping-list.png", { type: "image/png" });
 
-            // Nettoyage du DOM
-            document.body.removeChild(tempDiv);
-        }).catch(error => {
-            console.error('Erreur lors de la génération de l\'image', error);
-        });
-    });
+                await navigator.share({
+                    title: "Ma liste de courses",
+                    text: "Voici ma liste de courses. Partage-la avec tes amis !",
+                    files: [file],
+                });
+
+            } catch (err) {
+                console.error("Partage annulé ou erreur lors de la conversion en blob", err);
+            }
+        } else {
+            downloadImage(image);
+        }
+
+    } catch (error) {
+        console.error("Erreur lors du partage de la liste", error);
+    }
+};
+
+const downloadImage = (image) => {
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "shopping-list.png";
+    link.click();
 };
