@@ -41,7 +41,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             console.error('Error fetching htmls:', error);
         });
 
-    }, []);
+    }, [idListProducts]);
 
     return (
         <Modal
@@ -75,7 +75,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             key={productHtml.id_produit}
                         />
                         <div className="update-count-btn">
-                            <UpdateCountProduct />
+                            <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
                         </div>
                         <div className="remove-product">
                             <img  src={RemoveProductFromList}/>

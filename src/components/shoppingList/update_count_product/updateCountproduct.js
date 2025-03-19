@@ -1,6 +1,62 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { ShoppingListContext } from '../../../store-shopping-list';
 
-const updateCountProduct = () => {
+function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+
+    const updateProductCount = (increment) => {
+        const updatedList = JSON.parse(JSON.stringify(shoppingList));
+        const catalogIndex = updatedList.findIndex(catalog => catalog.catalogId === catalogue_id);
+
+        if (catalogIndex !== -1) {
+            const productIndex = updatedList[catalogIndex].products.findIndex(product => product.id_produit_resume === id_produit_resume );
+            if (productIndex !== -1) {
+                const product = updatedList[catalogIndex].products[productIndex];
+                if (increment) {
+                    product.count = (product.count || 0) + 1;
+                    // Update the date_add to current time
+                    product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
+                } else {
+                    const newCount = Math.max(0, (product.count || 0) - 1);
+                    if (newCount === 0) {
+                        // Remove the product from the array if count becomes 0
+                        updatedList[catalogIndex].products.splice(productIndex, 1);
+
+                        // If the catalog has no more products, remove the catalog too
+                        if (updatedList[catalogIndex].products.length === 0) {
+                            updatedList.splice(catalogIndex, 1);
+                        }
+                    } else {
+                        product.count = newCount;
+                        // Update the date_add to current time
+                        product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
+                    }
+                }
+                setShoppingList(updatedList);
+            }
+        }
+    };
+
+    const getCurrentCount = () => {
+        for (const catalog of shoppingList) {
+            if (catalog.catalogId === catalogue_id) {
+                const product = catalog.products.find(p => p.id_produit_resume === id_produit_resume);
+                return product ? (product.count || 0) : 0;
+            }
+        }
+        return 0;
+    };
+
+    const currentCount = getCurrentCount();
+
+    const decrement = () => {
+        updateProductCount(false);
+    };
+
+    const increment = () => {
+        updateProductCount(true);
+    };
+
     return (
         <div
             style={{
@@ -17,7 +73,7 @@ const updateCountProduct = () => {
             }}
         >
             <button
-                // onClick={handleDecrement}
+                onClick={decrement}
                 style={{
                     width: '29px',
                     height: '29px',
@@ -50,11 +106,11 @@ const updateCountProduct = () => {
                 userSelect: 'none'
                 }}
             >
-                12
+                {currentCount}
             </div>
 
         <button
-            // onClick={handleIncrement}
+            onClick={increment}
             style={{
                 width: '29px',
                 height: '29px',
@@ -90,4 +146,4 @@ const updateCountProduct = () => {
     );
 };
 
-export default updateCountProduct;
+export default UpdateCountProduct;
