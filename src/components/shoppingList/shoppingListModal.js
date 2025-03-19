@@ -3,8 +3,9 @@ import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
 import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from  './update_count_product/updateCountproduct';
-import RemoveProductFromList from '../../assets/icons/remove-product-from-shopping-list.svg'
+import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg'
+
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const customStyles = {
@@ -41,7 +42,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             console.error('Error fetching htmls:', error);
         });
 
-    }, [idListProducts]);
+    }, [shoppingList]);
 
     return (
         <Modal
@@ -68,21 +69,26 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </button>
             </div>
             <div className="modal-body">
-                {productHtmls.map((productHtml, index) =>
-                    <div className="product-wrapper">
-                        <iframe className="product-shopping-list"
-                            src={productHtml.html_name}
-                            key={productHtml.id_produit}
-                        />
-                        <div className="update-count-btn">
-                            <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
+            {productHtmls.length > 0 ?
+                (
+                    productHtmls.map((productHtml, index) =>
+                        <div className="product-wrapper">
+                            <iframe className="product-shopping-list"
+                                src={productHtml.html_name}
+                                key={productHtml.id_produit}
+                            />
+                            <div className="update-count-btn">
+                                <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
+                            </div>
+                            <div className="remove-product">
+                                <RemoveProductFromList id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
+                            </div>
+                            <hr style= {{ border: "1px solid black", width: "50%" }}/>
                         </div>
-                        <div className="remove-product">
-                            <img  src={RemoveProductFromList}/>
-                        </div>
-                        <hr style= {{ border: "1px solid black", width: "50%" }}/>
-                    </div>
-                )}
+                    )
+                )
+                : (<span> Vous n'avez pas encore ajouter de produits</span>)
+            }
             </div>
         </Modal>
     );

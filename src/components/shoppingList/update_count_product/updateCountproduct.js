@@ -14,8 +14,6 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                 const product = updatedList[catalogIndex].products[productIndex];
                 if (increment) {
                     product.count = (product.count || 0) + 1;
-                    // Update the date_add to current time
-                    product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
                 } else {
                     const newCount = Math.max(0, (product.count || 0) - 1);
                     if (newCount === 0) {
@@ -28,8 +26,6 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                         }
                     } else {
                         product.count = newCount;
-                        // Update the date_add to current time
-                        product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
                     }
                 }
                 setShoppingList(updatedList);
@@ -73,6 +69,8 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
             }}
         >
             <button
+                disabled={currentCount <= 1 }
+                title={currentCount <= 1 ? "Vous ne pouvez plus diminuer la quantité " : "Diminuer la quantité"}
                 onClick={decrement}
                 style={{
                     width: '29px',
@@ -84,7 +82,8 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                     border: 'none',
                     cursor: 'pointer',
                     outline: 'none',
-                    padding: 0
+                    padding: 0,
+                    cursor: currentCount <= 1 ? "not-allowed" : "pointer",
                 }}
                 aria-label="Diminuer la quantité"
             >
@@ -110,6 +109,7 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
             </div>
 
         <button
+            title='Augmenter la quantité'
             onClick={increment}
             style={{
                 width: '29px',

@@ -49,6 +49,7 @@ button{
     width: 14px;
     right: 39px;
     top: 12px;
+    cursor: pointer
 }
 
 .share-btn, .close-btn{

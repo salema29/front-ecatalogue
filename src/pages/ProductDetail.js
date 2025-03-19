@@ -84,14 +84,12 @@ function MainProduct() {
     const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
-            const now = new Date();
-            const date_add = now.toISOString().replace('T', ' ').replace('Z', '');
             if (catalogIndex !== -1) {
                 const updatedCatalog = {
                     ...prevList[catalogIndex],
                     products: [
                         ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1, id_produit_resume, date_add },
+                        { productId, categoryId, count: 1, id_produit_resume },
                     ],
                 };
                 return [
@@ -104,7 +102,7 @@ function MainProduct() {
                     ...prevList,
                     {
                         catalogId,
-                        products: [{ productId, categoryId, count: 1, id_produit_resume, date_add }],
+                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
                     },
                 ];
             }

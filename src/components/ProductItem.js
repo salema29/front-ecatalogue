@@ -37,8 +37,6 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
     }, [shoppingList]);
 
     const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
-        const now = new Date();
-        const date_add = now.toISOString().replace('T', ' ').replace('Z', '');
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
             if (catalogIndex !== -1) {
@@ -46,7 +44,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                     ...prevList[catalogIndex],
                     products: [
                         ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1, id_produit_resume, date_add },
+                        { productId, categoryId, count: 1, id_produit_resume },
                     ],
                 };
                 return [
@@ -59,7 +57,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                     ...prevList,
                     {
                         catalogId,
-                        products: [{ productId, categoryId, count: 1, id_produit_resume, date_add }],
+                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
                     },
                 ];
             }
