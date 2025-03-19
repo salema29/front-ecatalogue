@@ -4,10 +4,10 @@ import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue"
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
+import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const isMobileView  = window.innerWidth <= 767;
@@ -95,7 +95,7 @@ function Catalog() {
                 onClick={handleClose}
               >
                 <img
-                  src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
+                  src={crossIconDark}
                   width="25"
                   alt="Fermer"
                 />

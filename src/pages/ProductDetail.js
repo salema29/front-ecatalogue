@@ -8,11 +8,11 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
-import ShoppingListModal from "../components/shoppingList/shoppingListModal"
+import ShoppingListModal from "../components/shoppingList/shoppingListModal";
+import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId, productId, categoryId, id_produit_resume } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState(null);
@@ -182,7 +182,7 @@ function MainProduct() {
                                 title="Fermer"
                             >
                                 <img
-                                    src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
+                                    src={crossIconDark}
                                     alt="Fermer"
                                     width="25"
                                 />
