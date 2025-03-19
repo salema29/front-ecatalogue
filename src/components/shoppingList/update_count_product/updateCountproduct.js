@@ -14,8 +14,6 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                 const product = updatedList[catalogIndex].products[productIndex];
                 if (increment) {
                     product.count = (product.count || 0) + 1;
-                    // Update the date_add to current time
-                    product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
                 } else {
                     const newCount = Math.max(0, (product.count || 0) - 1);
                     if (newCount === 0) {
@@ -28,8 +26,6 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                         }
                     } else {
                         product.count = newCount;
-                        // Update the date_add to current time
-                        product.date_add = new Date().toISOString().replace('T', ' ').substring(0, 23);
                     }
                 }
                 setShoppingList(updatedList);
