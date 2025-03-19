@@ -18,8 +18,10 @@
 
 .modal-body {
     padding-top: 16px;
-    max-height: 82%;
+    max-height: 100%;
+    flex-grow: 1;
     overflow-y: auto;
+    margin-bottom: auto;
 }
 
 /* for safari */
@@ -31,6 +33,7 @@ button{
     border: none;
     height: 235px;
     width: 97%;
+    margin-bottom: auto;
 }
 .product-wrapper{
     position: relative;
@@ -56,4 +59,9 @@ button{
     background: none;
     border: none;
     cursor: pointer
+}
+
+.ReactModal__Content {
+    display: flex;
+    flex-direction: column;
 }
