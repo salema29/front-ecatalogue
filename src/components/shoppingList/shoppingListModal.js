@@ -7,7 +7,7 @@ import RemoveProductFromList from '../shoppingList/update_count_product/removePr
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
-import ProductSkeleton from "../shoppingList/update_count_product/skelleton"
+import ProductSkeleton from "../shoppingList/update_count_product/skelleton";
 import EmptyCart from "../shoppingList/emptyList"
 
 
@@ -48,16 +48,19 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const observerRef = useRef(null);
 
     useEffect(() => {
-        if (!idListProducts.length) return;
-        fetch(`${API_BASE_URL}/api/shopping-list/`, {
-            method: "POST",
-            body: JSON.stringify({ ids: idListProducts }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            setProductHtmls(data);
-        })
-        .catch(error => console.error("Error fetching htmls:", error));
+        if (idListProducts.length > 0){
+            fetch(`${API_BASE_URL}/api/shopping-list/`, {
+                method: "POST",
+                body: JSON.stringify({ ids: idListProducts }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                setProductHtmls(data);
+            })
+            .catch(error => console.error("Error fetching htmls:", error));
+        }else{
+            setProductHtmls([]);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shoppingList]);
 
