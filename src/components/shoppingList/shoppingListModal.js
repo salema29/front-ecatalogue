@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
 import { ShoppingListContext } from '../../store-shopping-list';
@@ -7,6 +7,7 @@ import RemoveProductFromList from '../shoppingList/update_count_product/removePr
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
+import ProductSkeleton from "../shoppingList/update_count_product/skelleton"
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -15,10 +16,10 @@ const customStyles = {
     content: {
         maxWidth: "390px",
         marginLeft: "auto",
-        height: '585',
-        right: '0',
-        padding: 'none',
-        overflowY: 'hidden'
+        height: "585px",
+        right: "0",
+        padding: "none",
+        overflowY: "auto"
     },
 };
 
@@ -39,26 +40,54 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     };
 
     const idListProducts = shoppingList.reduce((acc, item) =>
-        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc
-        , []);
+        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
 
-    const [productHtmls, setproductHtmls] = useState([]);
+    const [productHtmls, setProductHtmls] = useState([]);
+    const [visibleProducts, setVisibleProducts] = useState(new Set());
+    const [loadingStates, setLoadingStates] = useState({}); // Track loading state for each iframe
+    const observerRef = useRef(null);
+
     useEffect(() => {
+        if (!idListProducts.length) return;
         fetch(`${API_BASE_URL}/api/shopping-list/`, {
-            method: 'POST',
-            body: JSON.stringify({
-                ids: idListProducts,
-            }),
+            method: "POST",
+            body: JSON.stringify({ ids: idListProducts }),
         })
         .then(response => response.json())
         .then(data => {
-            setproductHtmls(data);
+            setProductHtmls(data);
+            // Initialize all products as loading
+            const initialLoadingStates = {};
+            data.forEach(product => {
+                initialLoadingStates[product.id_produit] = true;
+            });
+            setLoadingStates(initialLoadingStates);
         })
-        .catch(error => {
-            console.error('Error fetching htmls:', error);
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps 
+        .catch(error => console.error("Error fetching htmls:", error));
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [shoppingList]);
+
+    useEffect(() => {
+        if (!observerRef.current) {
+            observerRef.current = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setVisibleProducts(prev => new Set([...prev, entry.target.dataset.idProduit]));
+                    }
+                });
+            });
+        }
+
+        return () => observerRef.current && observerRef.current.disconnect();
+    }, []);
+
+    // Handle iframe load completion
+    const handleIframeLoad = (productId) => {
+        setLoadingStates(prev => ({
+            ...prev,
+            [productId]: false
+        }));
+    };
 
     return (
         <Modal
@@ -68,10 +97,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             shouldCloseOnOverlayClick={true}
             ariaHideApp={false}
         >
-            <div className="modal-header" style={{ background: clientColor }} >
+            <div className="modal-header" style={{ background: clientColor }}>
                 <div>
-                    <h2 className='modal-header-title'>Ma liste des courses</h2>
-                    <p className='modal-header-subtitle'>Préparez votre liste de courses <br /> pour gagner du temps en magasin</p>
+                    <h2 className="modal-header-title">Ma liste des courses</h2>
+                    <p className="modal-header-subtitle">
+                        Préparez votre liste de courses <br /> pour gagner du temps en magasin
+                    </p>
                 </div>
                 {isSharing ? (
                     <MiniSpinner /> // Loader ici
@@ -88,28 +119,48 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </svg>
                 </button>
             </div>
+
             <div className="modal-body">
-            {productHtmls.length > 0 ?
-                (
-                    productHtmls.map((productHtml, index) =>
-                        <div className="product-wrapper">
-                            <iframe className="product-shopping-list"
-                                src={productHtml.html_name}
-                                key={productHtml.id_produit}
-                                title={productHtml.id_produit}
+                {productHtmls.length > 0 ? (
+                    productHtmls.map((productHtml) => (
+                        <div
+                            className="product-wrapper"
+                            ref={(el) => el && observerRef.current.observe(el)}
+                            key={productHtml.id_produit}
+                            data-id-produit={productHtml.id_produit}
+                        >
+                            {visibleProducts.has(productHtml.id_produit) ? (
+                                <>
+                                    {loadingStates[productHtml.id_produit] &&  <ProductSkeleton /> }
+                                    <div style={{ display: loadingStates[productHtml.id_produit] ? 'none' : 'block' }}>
+                                        <iframe
+                                            className="product-shopping-list"
+                                            src={productHtml.html_name}
+                                            key={productHtml.id_produit}
+                                            scrolling="no"
+                                            style={{
+                                                display: loadingStates[productHtml.id_produit] ? 'none' : 'block'
+                                            }}
+                                            onLoad={() => handleIframeLoad(productHtml.id_produit)}
+                                            title={productHtml.id_produit}
                             />
-                            <div className="update-count-btn">
-                                <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
-                            </div>
-                            <div className="remove-product">
-                                <RemoveProductFromList id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
-                            </div>
-                            <hr style= {{ border: "1px solid black", width: "50%" }}/>
+                                        <div className="update-count-btn">
+                                            <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                        </div>
+                                        <div className="remove-product">
+                                            <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                        </div>
+                                        <hr style={{ border: "1px solid black", width: "50%" }} />
+                                    </div>
+                                </>
+                            ) : (
+                                <><ProductSkeleton height={200} width="100%" /></>
+                            )}
                         </div>
-                    )
-                )
-                : (<span> Vous n'avez pas encore ajouter de produits</span>)
-            }
+                    ))
+                ) : (
+                    <span>Vous n'avez pas encore ajouté de produits</span>
+                )}
             </div>
         </Modal>
     );
