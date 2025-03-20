@@ -25,11 +25,12 @@ export const handleShoppingListShare = async (shoppingList, catalogId = null) =>
         const image = canvas.toDataURL("image/png");
         document.body.removeChild(tempDiv);
 
+        const res = await fetch(image);
+        const blob = await res.blob();
+        const file = new File([blob], "shopping-list.png", { type: "image/png" });
+
         if (navigator.share) {
             try {
-                const res = await fetch(image);
-                const blob = await res.blob();
-                const file = new File([blob], "shopping-list.png", { type: "image/png" });
 
                 await navigator.share({
                     title: "Ma liste de courses",
@@ -41,17 +42,10 @@ export const handleShoppingListShare = async (shoppingList, catalogId = null) =>
                 console.error("Partage annulé ou erreur lors de la conversion en blob", err);
             }
         } else {
-            downloadImage(image);
+            // downloadImage(image);
         }
 
     } catch (error) {
         console.error("Erreur lors du partage de la liste", error);
     }
-};
-
-const downloadImage = (image) => {
-    const link = document.createElement("a");
-    link.href = image;
-    link.download = "shopping-list.png";
-    link.click();
 };

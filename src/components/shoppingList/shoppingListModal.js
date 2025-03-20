@@ -5,9 +5,8 @@ import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from './update_count_product/updateCountproduct';
 import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
-import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
-
+import ShareModal from "./ShareModal";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const customStyles = {
@@ -24,6 +23,7 @@ const customStyles = {
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList } = useContext(ShoppingListContext);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [isSharing, setIsSharing] = useState(false);
@@ -31,7 +31,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsSharing(true); // Activer le loader
-            await handleShoppingListShare(shoppingList, catalogId);
+            // await handleShoppingListShare(shoppingList, catalogId);
+            setIsShareModalOpen(true);
             setIsSharing(false); // Désactiver le loader après partage
         } else {
             onClose();
@@ -50,14 +51,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 ids: idListProducts,
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            setproductHtmls(data);
-        })
-        .catch(error => {
-            console.error('Error fetching htmls:', error);
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps 
+            .then(response => response.json())
+            .then(data => {
+                setproductHtmls(data);
+            })
+            .catch(error => {
+                console.error('Error fetching htmls:', error);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [shoppingList]);
 
     return (
@@ -89,28 +90,37 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </button>
             </div>
             <div className="modal-body">
-            {productHtmls.length > 0 ?
-                (
-                    productHtmls.map((productHtml, index) =>
-                        <div className="product-wrapper">
-                            <iframe className="product-shopping-list"
-                                src={productHtml.html_name}
-                                key={productHtml.id_produit}
-                                title={productHtml.id_produit}
-                            />
-                            <div className="update-count-btn">
-                                <UpdateCountProduct  id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
+                {productHtmls.length > 0 ?
+                    (
+                        productHtmls.map((productHtml, index) =>
+                            <div className="product-wrapper">
+                                <iframe className="product-shopping-list"
+                                    src={productHtml.html_name}
+                                    key={productHtml.id_produit}
+                                    title={productHtml.id_produit}
+                                />
+                                <div className="update-count-btn">
+                                    <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                </div>
+                                <div className="remove-product">
+                                    <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                </div>
+                                <hr style={{ border: "1px solid black", width: "50%" }} />
                             </div>
-                            <div className="remove-product">
-                                <RemoveProductFromList id_produit_resume = {productHtml.id_produit} catalogue_id={catalogId} />
-                            </div>
-                            <hr style= {{ border: "1px solid black", width: "50%" }}/>
-                        </div>
+                        )
                     )
-                )
-                : (<span> Vous n'avez pas encore ajouter de produits</span>)
-            }
+                    : (<span> Vous n'avez pas encore ajouter de produits</span>)
+                }
             </div>
+            {isShareModalOpen && (
+                <ShareModal 
+                    isOpen={isShareModalOpen} 
+                    onClose={() => setIsShareModalOpen(false)}
+                    shoppingList={shoppingList} 
+                    catalogId={catalogId}
+                    clientColor = {clientColor} 
+                />
+            )}
         </Modal>
     );
 };
