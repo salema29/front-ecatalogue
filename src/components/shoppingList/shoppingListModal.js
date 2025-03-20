@@ -8,6 +8,7 @@ import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/update_count_product/skelleton"
+import EmptyCart from "../shoppingList/emptyList"
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,7 +17,7 @@ const customStyles = {
     content: {
         maxWidth: "390px",
         marginLeft: "auto",
-        height: "585px",
+        height: "92%",
         right: "0",
         padding: "none",
         overflowY: "auto"
@@ -44,7 +45,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
     const [productHtmls, setProductHtmls] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
-    const [loadingStates, setLoadingStates] = useState({}); // Track loading state for each iframe
     const observerRef = useRef(null);
 
     useEffect(() => {
@@ -56,15 +56,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         .then(response => response.json())
         .then(data => {
             setProductHtmls(data);
-            // Initialize all products as loading
-            const initialLoadingStates = {};
-            data.forEach(product => {
-                initialLoadingStates[product.id_produit] = true;
-            });
-            setLoadingStates(initialLoadingStates);
         })
         .catch(error => console.error("Error fetching htmls:", error));
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shoppingList]);
 
     useEffect(() => {
@@ -80,14 +74,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
         return () => observerRef.current && observerRef.current.disconnect();
     }, []);
-
-    // Handle iframe load completion
-    const handleIframeLoad = (productId) => {
-        setLoadingStates(prev => ({
-            ...prev,
-            [productId]: false
-        }));
-    };
 
     return (
         <Modal
@@ -121,7 +107,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             </div>
 
             <div className="modal-body">
-                {productHtmls.length > 0 ? (
+                {productHtmls.length > 0 ?
+                (
                     productHtmls.map((productHtml) => (
                         <div
                             className="product-wrapper"
@@ -131,19 +118,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         >
                             {visibleProducts.has(productHtml.id_produit) ? (
                                 <>
-                                    {loadingStates[productHtml.id_produit] &&  <ProductSkeleton /> }
-                                    <div style={{ display: loadingStates[productHtml.id_produit] ? 'none' : 'block' }}>
+                                    <div style={{ display: 'block' }}>
                                         <iframe
                                             className="product-shopping-list"
                                             src={productHtml.html_name}
                                             key={productHtml.id_produit}
                                             scrolling="no"
-                                            style={{
-                                                display: loadingStates[productHtml.id_produit] ? 'none' : 'block'
-                                            }}
-                                            onLoad={() => handleIframeLoad(productHtml.id_produit)}
                                             title={productHtml.id_produit}
-                            />
+                                        />
                                         <div className="update-count-btn">
                                             <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
                                         </div>
@@ -158,9 +140,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             )}
                         </div>
                     ))
-                ) : (
-                    <span>Vous n'avez pas encore ajouté de produits</span>
-                )}
+                )
+                : (
+                    <EmptyCart clientColor = {clientColor} />
+                )
+                }
             </div>
         </Modal>
     );
