@@ -12,16 +12,26 @@ import EmptyCart from "../shoppingList/emptyList"
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const customStyles = {
-    overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
-    content: {
-        maxWidth: "400px",
-        marginLeft: "auto",
-        height: "92%",
-        right: "0",
-        padding: "none",
-        overflowY: "auto"
-    },
+const getModalStyles = () => {
+    const isMobile = window.innerWidth <= 768;
+
+    return {
+        overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        content: {
+            width: isMobile ? "100%" : "600px",
+            marginLeft: isMobile ? "0" : "auto",
+            height: isMobile ? "100%" : "92%",
+            right: "0",
+            left: isMobile ? "0" : "auto",
+            padding: "none",
+            overflowY: "auto",
+            borderRadius: isMobile ? "0" : "10px",
+            ...(isMobile
+                ? { top: "0", bottom: "0" } // Pour mobile, occupe tout l'écran
+                : { top: "4%", bottom: "auto" } // Pour desktop, un léger espacement en haut
+            ),
+        },
+    };
 };
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
@@ -82,7 +92,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         <Modal
             isOpen={isOpen}
             onRequestClose={onClose}
-            style={customStyles}
+            style={getModalStyles()}
             shouldCloseOnOverlayClick={true}
             ariaHideApp={false}
         >
@@ -93,6 +103,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         Préparez votre liste de courses <br /> pour gagner du temps en magasin
                     </p>
                 </div>
+                <div>
                 {isSharing ? (
                     <MiniSpinner /> // Loader ici
                 ) : (
@@ -107,6 +118,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             fill={clientColor} />
                     </svg>
                 </button>
+                </div>
             </div>
 
             <div className="modal-body">
