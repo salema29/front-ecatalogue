@@ -15,7 +15,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const customStyles = {
     overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
     content: {
-        maxWidth: "390px",
+        maxWidth: "400px",
         marginLeft: "auto",
         height: "92%",
         right: "0",
@@ -121,7 +121,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         >
                             {visibleProducts.has(productHtml.id_produit) ? (
                                 <>
-                                    <div style={{ display: 'block' }}>
+                                    <div className="product">
+                                        <div className="product-item">
                                         <iframe
                                             className="product-shopping-list"
                                             src={productHtml.html_name}
@@ -129,14 +130,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                             scrolling="no"
                                             title={productHtml.id_produit}
                                         />
-                                        <div className="update-count-btn">
-                                            <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
                                         </div>
-                                        <div className="remove-product">
-                                            <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                        <div className="side-btn">
+                                            <div className="remove-product">
+                                                <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                            </div>
+                                            <div className="update-count-btn">
+                                                <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
+                                            </div>
                                         </div>
-                                        <hr style={{ border: "1px solid black", width: "50%" }} />
                                     </div>
+                                    <hr style={{ border: "1px solid black", width: "50%" }} />
                                 </>
                             ) : (
                                 <><ProductSkeleton height={200} width="100%" /></>

@@ -39,21 +39,23 @@ button{
     position: relative;
 }
 
-.update-count-btn {
-    position: absolute;
-    height: 36px;
-    width: 47px;
-    right: 50px;
-    bottom: 21px;
+.product {
+    display: flex;
 }
 
-.remove-product {
-    position: absolute;
-    width: 14px;
-    right: 39px;
-    top: 12px;
-    cursor: pointer
+.side-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 10px; 
 }
+
+
+.remove-product {
+    cursor: pointer;
+    display: flex;
+    justify-content: end;
+} 
 
 .share-btn, .close-btn{
     background: none;
