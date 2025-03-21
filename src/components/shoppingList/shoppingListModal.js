@@ -5,11 +5,10 @@ import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from './update_count_product/updateCountproduct';
 import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
-import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/update_count_product/skelleton";
 import EmptyCart from "../shoppingList/emptyList"
-
+import ShareModal from "./ShareModal";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
@@ -36,6 +35,7 @@ const getModalStyles = () => {
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList } = useContext(ShoppingListContext);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [isSharing, setIsSharing] = useState(false);
@@ -43,7 +43,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsSharing(true); // Activer le loader
-            await handleShoppingListShare(shoppingList, catalogId);
+            // await handleShoppingListShare(shoppingList, catalogId);
+            setIsShareModalOpen(true);
             setIsSharing(false); // Désactiver le loader après partage
         } else {
             onClose();
@@ -165,6 +166,15 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 )
                 }
             </div>
+            {isShareModalOpen && (
+                <ShareModal 
+                    isOpen={isShareModalOpen} 
+                    onClose={() => setIsShareModalOpen(false)}
+                    shoppingList={shoppingList} 
+                    catalogId={catalogId}
+                    clientColor = {clientColor} 
+                />
+            )}
         </Modal>
     );
 };
