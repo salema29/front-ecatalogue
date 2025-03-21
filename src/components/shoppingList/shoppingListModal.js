@@ -7,8 +7,8 @@ import RemoveProductFromList from '../shoppingList/update_count_product/removePr
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import { handleShoppingListShare } from "../functions/ShareShoppingList";
 import MiniSpinner from "../spinner/MiniSpinner";
-import ProductSkeleton from "../shoppingList/update_count_product/skelleton";
-import EmptyCart from "../shoppingList/emptyList"
+import ProductSkeleton from "../shoppingList/skelleton";
+import EmptyCart from "../shoppingList/emptyListContent"
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
