@@ -27,12 +27,19 @@ export const fetchViewChoice = async (catalogueId) => {
     }
 };
 
-export const postShoppingListImage = async (shoppingList) => {
+export const postShoppingListImage = async (shoppingList, catalogId) => {
     try {
+        // Filtrer la liste des achats par catalogId
+        const filteredShoppingList = shoppingList.filter(item => item.catalogId === catalogId);
+
+        if (filteredShoppingList.length === 0) {
+            console.warn("Aucun élément correspondant au catalogId fourni.");
+            return null;
+        }
 
         const response = await fetch(`${API_BASE_URL}/api/post-shopping-list-html`, {
             method: "POST",
-            body: JSON.stringify({ shoppingList })
+            body: JSON.stringify({ shoppingList: filteredShoppingList })
         });
 
         if (!response.ok) {
@@ -43,7 +50,7 @@ export const postShoppingListImage = async (shoppingList) => {
         const data = await response.json();
 
         if (data.status === "success") {
-            return data.data; // Contient le HTML de la shopping liste
+            return data.data; // Contient le HTML de la shopping list
         } else {
             console.error("Erreur :", data.message);
             return null;
