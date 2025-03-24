@@ -61,6 +61,12 @@ button{
     justify-content: end;
 } 
 
+.update-count-btn-mobile {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 15px 0; 
+}
+
 .share-btn, .close-btn{
     background: none;
     border: none;
