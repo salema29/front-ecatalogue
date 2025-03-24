@@ -1,55 +1,97 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { handleShoppingListShare } from "../functions/ShareShoppinListImage";
+import html2canvas from 'html2canvas';
+import { postShoppingListImage } from "../functions/Api";
 
 export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
     const [email, setEmail] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
 
-    // Custom styles that position this modal over the existing one
     const customStyles = {
         overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1050 // Higher z-index than the parent modal
+            zIndex: 1050
         },
         content: {
             position: "absolute",
-            maxWidth: "350px",
-            width: "90%",
+            maxWidth: "100%",
             margin: "auto",
-            height: "50%",
-            left: "50%",
-            top: "15%",
-            transform: "translate(-50%, -50%)",
+            height: "80%",
             padding: "0",
             borderRadius: "8px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            zIndex: 1051
+            zIndex: 1,
+            top: "0%",
+            overflowY: "auto"
         },
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email) return;
-    
         setIsSending(true);
         setSendStatus(null);
-    
+
+        let filteredList = shoppingList;
+
+        if (catalogId) {
+            filteredList = shoppingList.filter(catalog => catalog.catalogId === catalogId);
+        }
+
+        if (filteredList.length === 0) {
+            console.warn("Aucun produit trouvé pour ce catalogId.");
+            return;
+        }
+
         try {
-            const base64Image = await handleShoppingListShare(shoppingList, catalogId);
+            const html = await postShoppingListImage(filteredList); // Wait for the response
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            tempDiv.style.position = "absolute";
+            tempDiv.style.left = "-9999px";
+            document.body.appendChild(tempDiv);
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true }); // Wait for the image generation
+            const image = canvas.toDataURL("image/png");
+            document.body.removeChild(tempDiv);
+            sendEmail(image);
         } catch (error) {
-            console.error("Error sharing list:", error);
+            console.error("Erreur lors du partage de la liste. Veuillez recommencer", error);
             setSendStatus('error');
         } finally {
             setIsSending(false);
         }
     };
+    const sendEmail = async (image) => {
+        try {
+            // Convert base64 image to Blob
+            const res = await fetch(image);
+            const blob = await res.blob();
+            const formData = new FormData();
+            formData.append('image', blob);
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/post-shopping-list-email`, {
+                method: 'POST',
+                body: formData,
+            });
 
+            const result =  response;
+            if (result.status) {
+                setSendStatus('success');
+                setEmail('');
+                setTimeout(() => {
+                    onClose();
+                }, 2000);
+            } else {
+                setSendStatus('error');
+            }
+            return result.status;
+        } catch (err) {
+            console.error("Error while sending email:", err);
+        }
+    };
     return (
         <Modal
             isOpen={isOpen}
-            onRequestClose={onClose}
             style={customStyles}
             shouldCloseOnOverlayClick={true}
             ariaHideApp={false}
@@ -57,7 +99,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             <div className="share-email-modal">
                 <div className="modal-header" style={{ background: clientColor, padding: "15px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }}>
                     <h2 className="modal-header-title">Partager ma liste</h2>
-                    <button className="close-btn" onClick={onClose} style={{ position: "absolute", top: "10px", right: "10px" }} title='Fermer'>
+                    <button className="close-btn" onClick={onClose} style={{ position: "absolute", top: "10px", right: "10px" }} title='Fermer la boite email'>
                         <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
                             <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z" fill={clientColor} />
@@ -77,7 +119,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 placeholder="exemple@email.com"
                                 required
                                 style={{
-                                    width: "100%",
+                                    width: "90%",
                                     padding: "10px",
                                     marginTop: "5px",
                                     border: "1px solid #ddd",
@@ -107,9 +149,9 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 border: "none",
                                 padding: "10px 15px",
                                 borderRadius: "4px",
-                                cursor: "pointer",
                                 marginTop: "15px",
-                                width: "100%"
+                                width: "100%",
+                                cursor: isSending ? "not-allowed" : "pointer"
                             }}
                         >
                             {isSending ? "Envoi en cours..." : "Envoyer la liste"}
