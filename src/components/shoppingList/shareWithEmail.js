@@ -5,9 +5,13 @@ import { postShoppingListImage } from "../functions/Api";
 
 export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
     const [email, setEmail] = useState("");
+    let object =  " Liste des des courses ";
+    const [objet, setObjet] = useState(object);
+    let corps = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins0\n\nCordialement,';
+    const [message, setMessage] = useState(corps);
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
-
+    //  {message} = 'test';
     const customStyles = {
         overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -15,7 +19,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
         },
         content: {
             position: "absolute",
-            maxWidth: "100%",
+            maxWidth: "50%",
             margin: "auto",
             height: "80%",
             padding: "0",
@@ -40,7 +44,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
         }
 
         if (filteredList.length === 0) {
-            console.warn("Aucun produit trouvé pour ce catalogId.");
+            console.warn("Aucun produit trouvé pour ce catalogue.");
             return;
         }
 
@@ -68,6 +72,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             const res = await fetch(image);
             const blob = await res.blob();
             const formData = new FormData();
+            formData.append('image', blob);
             formData.append('image', blob);
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/post-shopping-list-email`, {
                 method: 'POST',
@@ -109,25 +114,100 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
 
                 <div style={{ padding: "20px" }}>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="email">Adresse e-mail du destinataire</label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="exemple@email.com"
-                                required
+                        <div className="form-container">
+                            <div
+                                className="form-group"
                                 style={{
-                                    width: "90%",
-                                    padding: "10px",
-                                    marginTop: "5px",
-                                    border: "1px solid #ddd",
-                                    borderRadius: "4px"
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: "10px",
                                 }}
-                            />
-                        </div>
+                            >
+                                <label
+                                    htmlFor="email"
+                                    style={{
+                                        marginRight: "10px",
+                                        minWidth: "150px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Pour :
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="exemple@email.com"
+                                    required
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                    }}
+                                />
+                            </div>
 
+                            <div
+                                className="form-group"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: "10px",
+                                }}
+                            >
+                                <label
+                                    htmlFor="name"
+                                    style={{
+                                        marginRight: "10px",
+                                        minWidth: "150px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Objet :
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={objet}
+                                    onChange={(e) => setObjet(e.target.value)}
+                                    placeholder="Email du destinataire"
+                                    required
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                    }}
+                                />
+                            </div>
+                            <div
+                                className="form-group"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: "10px",
+                                }}
+                            >
+                                <textarea
+                                    id="message"
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    placeholder="Écrivez votre message ici..."
+                                    rows="4"
+                                    style={{
+                                        width: "100%",
+                                        padding: "10px",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                        minHeight: "270px",
+                                        resize: "vertical", // Permet à l'utilisateur de redimensionner verticalement
+                                    }}
+                                >
+                                </textarea>
+                            </div>
+                        </div>
                         {sendStatus === 'success' && (
                             <div style={{ color: 'green', margin: '10px 0' }}>
                                 Liste envoyée avec succès !
@@ -150,7 +230,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 padding: "10px 15px",
                                 borderRadius: "4px",
                                 marginTop: "15px",
-                                width: "100%",
+                                width: "30%",
                                 cursor: isSending ? "not-allowed" : "pointer"
                             }}
                         >
