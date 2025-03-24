@@ -16,6 +16,10 @@
     margin-top: 0px;
 }
 
+.modal-header-icons {
+    min-width: 90px;
+}
+
 .modal-body {
     padding-top: 16px;
     max-height: 100%;
