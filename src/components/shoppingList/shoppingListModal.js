@@ -43,7 +43,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsSharing(true); // Activer le loader
-            // await handleShoppingListShare(shoppingList, catalogId);
             setIsShareModalOpen(true);
             setIsSharing(false); // Désactiver le loader après partage
         } else {
