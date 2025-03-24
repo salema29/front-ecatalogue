@@ -28,7 +28,7 @@
 
     aspect-ratio: 1/1;
 
-    stroke: rgb(44, 85, 87);
+    stroke: #669999;
     stroke-width: var(--_stroke-width);
 
     animation: loader_1 var(--_animation_duration) infinite,
