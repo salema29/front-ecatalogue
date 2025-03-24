@@ -5,9 +5,9 @@ import { postShoppingListImage } from "../functions/Api";
 
 export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
     const [email, setEmail] = useState("");
-    let object =  " Liste des des courses ";
+    let object =  " Liste des courses ";
     const [objet, setObjet] = useState(object);
-    let corps = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins0\n\nCordialement,';
+    let corps = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins\n\nCordialement,';
     const [message, setMessage] = useState(corps);
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
@@ -73,7 +73,9 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             const blob = await res.blob();
             const formData = new FormData();
             formData.append('image', blob);
-            formData.append('image', blob);
+            formData.append('objet', objet);
+            formData.append('destinataire', email);
+            formData.append('message', message);
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/post-shopping-list-email`, {
                 method: 'POST',
                 body: formData,
