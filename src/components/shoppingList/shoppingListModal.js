@@ -104,7 +104,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         Préparez votre liste de courses <br /> pour gagner du temps en magasin
                     </p>
                 </div>
-                <div>
+                <div className="modal-header-icons">
                 {isSharing ? (
                     <MiniSpinner /> // Loader ici
                 ) : (
