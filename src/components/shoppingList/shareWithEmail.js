@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 import { postShoppingListImage } from "../functions/Api";
 
 export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
     const [email, setEmail] = useState("");
-    let object =  " Liste des courses ";
-    const [objet, setObjet] = useState(object);
+    const [emailError, setEmailError] = useState("");
+    const [objet, setObjet] = useState("Liste des courses");
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
@@ -26,66 +26,84 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             borderRadius: "8px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             zIndex: 1,
-            top: "0%",
-            overflowY: "auto"
+            top: "10%",
+            overflowY: "auto",
         },
+    };
+
+    const validateEmail = () => {
+        if (!email) {
+            setEmailError("Veuillez entrer une adresse email.");
+            return false;
+        }
+        const emailRegex = /.+@.+\..+/;
+        if (!emailRegex.test(email)) {
+            setEmailError("Adresse email invalide.");
+            return false;
+        }
+        setEmailError("");
+        return true;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email) return;
+        if (!validateEmail()) return;
+
         setIsSending(true);
         setSendStatus(null);
 
         try {
-            const html = await postShoppingListImage(shoppingList, catalogId); // Wait for the response
-            const tempDiv = document.createElement('div');
+            const html = await postShoppingListImage(shoppingList, catalogId); // API call to get HTML
+            const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
             tempDiv.style.position = "absolute";
             tempDiv.style.left = "-9999px";
             document.body.appendChild(tempDiv);
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true }); // Wait for the image generation
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
             const image = canvas.toDataURL("image/png");
             document.body.removeChild(tempDiv);
-            sendEmail(image);
+            await sendEmail(image);
         } catch (error) {
             console.error("Erreur lors du partage de la liste. Veuillez recommencer", error);
-            setSendStatus('error');
+            setSendStatus("error");
         } finally {
             setIsSending(false);
         }
     };
+
     const sendEmail = async (image) => {
         try {
-            // Convert base64 image to Blob
             const res = await fetch(image);
             const blob = await res.blob();
             const formData = new FormData();
-            formData.append('image', blob);
-            formData.append('objet', objet);
-            formData.append('destinataire', email);
-            formData.append('message', message);
-            formData.append('catalogue_id', catalogId);
+            formData.append("image", blob);
+            formData.append("objet", objet);
+            formData.append("destinataire", email);
+            formData.append("message", message);
+            formData.append("catalogue_id", catalogId);
+
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/post-shopping-list-email`, {
-                method: 'POST',
+                method: "POST",
                 body: formData,
             });
 
             const result =  response;
             if (result.status) {
-                setSendStatus('success');
-                setEmail('');
+                setSendStatus("success");
+                setEmail("");
                 setTimeout(() => {
                     onClose();
                 }, 2000);
             } else {
-                setSendStatus('error');
+                setSendStatus("error");
             }
             return result.status;
         } catch (err) {
             console.error("Error while sending email:", err);
+            setSendStatus("error");
         }
     };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -130,13 +148,14 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                     id="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    onBlur={validateEmail}
                                     placeholder="exemple@email.com"
                                     required
                                     style={{
                                         flex: 1,
                                         padding: "10px",
                                         border: "1px solid #ddd",
-                                        borderRadius: "4px",
+                                        borderRadius: "4px"
                                     }}
                                 />
                             </div>
@@ -161,7 +180,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 </label>
                                 <input
                                     type="text"
-                                    id="name"
+                                    id="objet"
                                     value={objet}
                                     onChange={(e) => setObjet(e.target.value)}
                                     placeholder="Email du destinataire"
@@ -194,47 +213,39 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                         border: "1px solid #ddd",
                                         borderRadius: "4px",
                                         minHeight: "170px",
-                                        resize: "vertical",
+                                        resize: "vertical"
+                                    }}
+                                ></textarea>
+                            </div>
+
+                            <div className="form-group" style={{ textAlign: "right" }}>
+                                <button
+                                    type="submit"
+                                    disabled={isSending}
+                                    style={{
+                                        background: clientColor,
+                                        color: "white",
+                                        border: "none",
+                                        padding: "10px 20px",
+                                        borderRadius: "4px",
+                                        cursor: isSending ? "not-allowed" : "pointer"
                                     }}
                                 >
-                                </textarea>
+                                    {isSending ? "Envoi en cours..." : "Envoyer la liste"}
+                                </button>
                             </div>
+
+                            {sendStatus === "success" && (
+                                <p style={{ color: "green", textAlign: "center" }}>Email envoyé avec succès !</p>
+                            )}
+
+                            {sendStatus === "error" && (
+                                <p style={{ color: "red", textAlign: "center" }}>Échec de l'envoi de l'email.</p>
+                            )}
                         </div>
-                        {sendStatus === 'success' && (
-                            <div style={{ color: 'green', margin: '10px 0' }}>
-                                Liste envoyée avec succès !
-                            </div>
-                        )}
-
-                        {sendStatus === 'error' && (
-                            <div style={{ color: 'red', margin: '10px 0' }}>
-                                Erreur lors de l'envoi de la liste. Veuillez réessayer.
-                            </div>
-                        )}
-
-                        <button
-                            type="submit"
-                            disabled={isSending || !email}
-                            style={{
-                                background: clientColor,
-                                color: "white",
-                                border: "none",
-                                padding: "10px 15px",
-                                borderRadius: "4px",
-                                marginTop: "15px",
-                                width: "30%",
-                                cursor: isSending ? "not-allowed" : "pointer",
-                                position: "relative",
-                                left: "70%"
-                            }}
-                        >
-                            {isSending ? "Envoi en cours..." : "Envoyer la liste"}
-                        </button>
                     </form>
                 </div>
             </div>
         </Modal>
     );
 };
-
-export default ShareWithEmail;

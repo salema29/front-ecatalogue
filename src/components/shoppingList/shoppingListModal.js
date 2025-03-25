@@ -109,7 +109,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         ) : (
                             <button className="share-btn"
                                 disabled={productHtmls.length <= 0 } style={{ cursor : productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
-                                title={ productHtmls.length <= 0 ? 'Ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
                                 onClick={handleShareClick}
                             >
                                 <img src={ShareShoppingList} alt="partager-course" />
