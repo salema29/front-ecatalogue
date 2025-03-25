@@ -38,19 +38,8 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
         setIsSending(true);
         setSendStatus(null);
 
-        let filteredList = shoppingList;
-
-        if (catalogId) {
-            filteredList = shoppingList.filter(catalog => catalog.catalogId === catalogId);
-        }
-
-        if (filteredList.length === 0) {
-            console.warn("Aucun produit trouvé pour ce catalogue.");
-            return;
-        }
-
         try {
-            const html = await postShoppingListImage(filteredList); // Wait for the response
+            const html = await postShoppingListImage(shoppingList, catalogId); // Wait for the response
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
             tempDiv.style.position = "absolute";
