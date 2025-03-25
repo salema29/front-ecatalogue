@@ -7,8 +7,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
     const [email, setEmail] = useState("");
     let object =  " Liste des courses ";
     const [objet, setObjet] = useState(object);
-    let body = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins\n\nCordialement,';
-    const [message, setMessage] = useState(body);
+    const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
 
@@ -66,6 +65,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             formData.append('objet', objet);
             formData.append('destinataire', email);
             formData.append('message', message);
+            formData.append('catalogue_id', catalogId);
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/post-shopping-list-email`, {
                 method: 'POST',
                 body: formData,
@@ -157,7 +157,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    Objet :
+                                    Objet (*) :
                                 </label>
                                 <input
                                     type="text"
