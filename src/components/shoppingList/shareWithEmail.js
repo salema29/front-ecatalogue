@@ -7,21 +7,22 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
     const [email, setEmail] = useState("");
     let object =  " Liste des courses ";
     const [objet, setObjet] = useState(object);
-    let corps = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins\n\nCordialement,';
-    const [message, setMessage] = useState(corps);
+    let body = 'Bonjour \n\nVeuillez trouvez ci-joint votre liste de course.\n\n\n\n\n\nA bientôt dans nos magasins\n\nCordialement,';
+    const [message, setMessage] = useState(body);
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
     //  {message} = 'test';
     const customStyles = {
         overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1050
+            zIndex: 1,
+            position: "fixed",
         },
         content: {
             position: "absolute",
-            maxWidth: "50%",
+            width: "50%",
             margin: "auto",
-            height: "80%",
+            height: "fit-content",
             padding: "0",
             borderRadius: "8px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
@@ -107,7 +108,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                 <div className="modal-header" style={{ background: clientColor, padding: "15px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }}>
                     <h2 className="modal-header-title">Partager ma liste</h2>
                     <button className="close-btn" onClick={onClose} style={{ position: "absolute", top: "10px", right: "10px" }} title='Fermer la boite email'>
-                        <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="20" height="20" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
                             <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z" fill={clientColor} />
                         </svg>
@@ -133,7 +134,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                         fontWeight: "bold",
                                     }}
                                 >
-                                    Pour :
+                                    Pour (*) :
                                 </label>
                                 <input
                                     type="email"
@@ -203,8 +204,8 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                         padding: "10px",
                                         border: "1px solid #ddd",
                                         borderRadius: "4px",
-                                        minHeight: "270px",
-                                        resize: "vertical", // Permet à l'utilisateur de redimensionner verticalement
+                                        minHeight: "170px",
+                                        resize: "vertical",
                                     }}
                                 >
                                 </textarea>
@@ -233,7 +234,9 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 borderRadius: "4px",
                                 marginTop: "15px",
                                 width: "30%",
-                                cursor: isSending ? "not-allowed" : "pointer"
+                                cursor: isSending ? "not-allowed" : "pointer",
+                                position: "relative",
+                                left: "70%"
                             }}
                         >
                             {isSending ? "Envoi en cours..." : "Envoyer la liste"}
