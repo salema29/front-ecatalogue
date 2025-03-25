@@ -107,11 +107,15 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         {isSharing ? (
                             <MiniSpinner /> // Loader ici
                         ) : (
-                            <button className="share-btn" onClick={handleShareClick} title='Partager ma liste de courses'>
+                            <button className="share-btn"
+                                disabled={productHtmls.length <= 0 } style={{ cursor : productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
+                                title={ productHtmls.length <= 0 ? 'Ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                onClick={handleShareClick}
+                            >
                                 <img src={ShareShoppingList} alt="partager-course" />
                             </button>
                         )}
-                        <button className="close-btn" onClick={onClose} title='Fermer ma liste de course'>
+                        <button className="close-btn" onClick={onClose} title='Fermer la liste de course'>
                             <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
                                 <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
