@@ -73,8 +73,8 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
 
     const sendEmail = async (image) => {
         try {
-            const res = await fetch(image);
-            const blob = await res.blob();
+            const image_g = await fetch(image);
+            const blob = await image_g.blob();
             const formData = new FormData();
             formData.append("image", blob);
             formData.append("objet", objet);
