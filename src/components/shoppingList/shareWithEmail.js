@@ -169,7 +169,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 }}
                             >
                                 <label
-                                    htmlFor="name"
+                                    htmlFor="objet"
                                     style={{
                                         marginRight: "10px",
                                         minWidth: "150px",
@@ -190,6 +190,39 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                         padding: "10px",
                                         border: "1px solid #ddd",
                                         borderRadius: "4px",
+                                    }}
+                                />
+                            </div>
+
+                            <div
+                                className="form-group"
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: "10px",
+                                }}
+                            >
+                                <label
+                                    htmlFor="pj"
+                                    style={{
+                                        marginRight: "10px",
+                                        minWidth: "150px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    Pièce jointe :
+                                </label>
+                                <input
+                                    type="text"
+                                    id="pj"
+                                    value="liste-des-courses.png"
+                                    disabled
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px",
+                                        border: "1px solid #ddd",
+                                        borderRadius: "4px",
+                                        cursor: "not-allowed"
                                     }}
                                 />
                             </div>
