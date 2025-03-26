@@ -34,29 +34,19 @@ const ShareModal = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) =
         try {
             // Simule la récupération de l'HTML généré (postShoppingListImage)
             const html = await postShoppingListImage(shoppingList, catalogId);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            tempDiv.style.position = "absolute";
+            tempDiv.style.left = "-9999px";
+            document.body.appendChild(tempDiv);
 
-            // Création d'un iframe invisible
-            const iframe = document.createElement('iframe');
-            iframe.style.position = "absolute";
-            iframe.style.left = "-9999px";
-            iframe.style.width = "1000px"; // Ajuste selon la taille du contenu
-            iframe.style.height = "1000px";
-            document.body.appendChild(iframe);
-
-            // Attendre que l'iframe soit bien chargée
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write(html);
-            iframe.contentWindow.document.close();
-
-            // Générer une image avec html2canvas depuis l'iframe
-            const canvas = await html2canvas(iframe.contentWindow.document.body, { allowTaint: true, useCORS: true });
+            // Générer une image avec html2canvas
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
             const image = canvas.toDataURL("image/png");
 
             setImageData(image);
             setIsLoading(false);
-
-            // Nettoyage
-            document.body.removeChild(iframe);
+            document.body.removeChild(tempDiv);
         } catch (error) {
             console.error("Erreur lors de la génération de l'image", error);
             setIsLoading(false);
