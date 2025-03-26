@@ -8,6 +8,7 @@ import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
+import ShareModal from "./ShareModal";
 import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -174,13 +175,24 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <EmptyCart clientColor={clientColor} />
                         )}
                 </div>
+                {isShareModalOpen && (
+                <ShareModal
+                    isOpen={isShareModalOpen}
+                    onClose={() => setIsShareModalOpen(false)}
+                    shoppingList={shoppingList}
+                    catalogId={catalogId}
+                    clientColor={clientColor}
+                />
+            )}
             </Modal>
-            <ShareWithEmail
+            {showEmailShare && (
+                <ShareWithEmail
                 isOpen={showEmailShare}
                 onClose={() => setShowEmailShare(false)}
                 shoppingList={shoppingList}
                 catalogId={catalogId}
                 clientColor={clientColor} />
+            )}
         </>
     );
 };
