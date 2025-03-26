@@ -1,22 +1,20 @@
 import React from "react";
+import "../../assets/styles/ProductSkeleton.css";
 
-const ProductSkeleton = () => {
+const ProductSkeleton = ({ height, width }) => {
     return (
-        <div className="product-skeleton" style={{ width: "100%", height: "200px", position: "relative" }}>
-            <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 390 200"
-            style={{ width: "100%", height: "100%" }}
-            >
-                {/* Background */}
-                <rect width="390" height="200" fill="#ffffff" stroke="#e0e0e0" strokeWidth="1"/>
-                <rect x="20" y="20" width="250" height="160" fill="#f0f0f0"/>
-                <rect x="290" y="20" width="250" height="40" fill="#f0f0f0"/>
-                <rect x="290" y="135" width="250" height="40" fill="#f0f0f0"/>
-
-            </svg>
-        </div>
-    ) ;
+        <div
+            className="skeleton"
+            style={{
+                height: height || "200px",
+                width: width || "90%",
+                backgroundColor: "#f0f0f0",
+                borderRadius: "10px",
+                animation: "pulse 1.5s infinite ease-in-out",
+                margin: "5px auto"
+            }}
+        ></div>
+    );
 };
 
 export default ProductSkeleton;

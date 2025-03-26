@@ -136,7 +136,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                     key={productHtml.id_produit}
                                     data-id-produit={productHtml.id_produit}
                                 >
-                                    {visibleProducts.has(productHtml.id_produit) ? (
+                                    {(!isShareModalOpen && !showEmailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                         <>
                                             <div className="product">
                                                 <div className="product-item">
@@ -166,7 +166,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                             <hr style={{ border: "1px solid black", width: "50%" }} />
                                         </>
                                     ) : (
-                                        <ProductSkeleton height={200} width="100%" />
+                                        <ProductSkeleton height={200} width={"95%"} />
                                     )}
                                 </div>
                             ))
