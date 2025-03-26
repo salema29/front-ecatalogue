@@ -62,7 +62,10 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
             const image = canvas.toDataURL("image/png");
             document.body.removeChild(tempDiv);
-            await sendEmail(image);
+            const response = await fetch(image);
+            const blob = await response.blob();
+
+            await sendEmail(blob);
         } catch (error) {
             console.error("Erreur lors du partage de la liste. Veuillez recommencer", error);
             setSendStatus("error");
@@ -71,10 +74,8 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
         }
     };
 
-    const sendEmail = async (image) => {
+    const sendEmail = async (blob) => {
         try {
-            const image_g = await fetch(image);
-            const blob = await image_g.blob();
             const formData = new FormData();
             formData.append("image", blob);
             formData.append("objet", objet);
