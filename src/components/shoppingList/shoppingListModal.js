@@ -9,7 +9,7 @@ import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
-import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
+import { ShareWithEmail } from "../shoppingList/shareWithEmail";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
@@ -109,8 +109,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <MiniSpinner /> // Loader ici
                         ) : (
                             <button className="share-btn"
-                                disabled={productHtmls.length <= 0 } style={{ cursor : productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
-                                title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
+                                title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
                                 onClick={handleShareClick}
                             >
                                 <img src={ShareShoppingList} alt="partager-course" />
@@ -175,7 +175,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <EmptyCart clientColor={clientColor} />
                         )}
                 </div>
-                {isShareModalOpen && (
                 <ShareModal
                     isOpen={isShareModalOpen}
                     onClose={() => setIsShareModalOpen(false)}
@@ -183,15 +182,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     catalogId={catalogId}
                     clientColor={clientColor}
                 />
-            )}
             </Modal>
             {showEmailShare && (
                 <ShareWithEmail
-                isOpen={showEmailShare}
-                onClose={() => setShowEmailShare(false)}
-                shoppingList={shoppingList}
-                catalogId={catalogId}
-                clientColor={clientColor} />
+                    isOpen={showEmailShare}
+                    onClose={() => setShowEmailShare(false)}
+                    shoppingList={shoppingList}
+                    catalogId={catalogId}
+                    clientColor={clientColor} />
             )}
         </>
     );
