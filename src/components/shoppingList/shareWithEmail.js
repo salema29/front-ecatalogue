@@ -178,32 +178,17 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                 >
                                     Pièce jointe :
                                 </label>
-                                <input
-                                    type="text"
-                                    id="pj"
-                                    value="liste-des-courses.png"
-                                    disabled
-                                    style={{
-                                        flex: 1,
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        cursor: "not-allowed"
-                                    }}
-                                />
+                                <div>
+                                {image && (
+                                    <img
+                                        src={image}
+                                        alt="liste des courses"
+                                        style={{ maxWidth: "100%", maxHeight: "50px", marginBottom: "10px" }} />
+                                    )}
+                                </div>
                             </div>
 
-                            <section>
-                                <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
-                                        {image && (
-                                            <img
-                                            src={image}
-                                            alt="liste-des-courses.png"
-                                            style={{ maxWidth: "100%",alignItems: "center", display: "block", maxHeight: "200px" }}
-                                            />
-                                        )}
-                                    </div>
-                                <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
+                            <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
                                     <textarea
                                         id="message"
                                         value={message}
@@ -220,9 +205,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                         }}
                                     >
                                     </textarea>
-                                    
                                 </div>
-                            </section>
 
                             <div className="form-group" style={{ textAlign: "right" }}>
                                 <button

@@ -44,12 +44,15 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [isSharing, setIsSharing] = useState(false);
+    const [generatinglist, setGeneratinglist] = useState(false);
+
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsSharing(true); // Activer le loader
             setIsShareModalOpen(true);
             setIsSharing(false); // Désactiver le loader après partage
         } else {
+            setGeneratinglist(true);
             const html = await  postShoppingListImage(shoppingList, catalogId);
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
@@ -69,6 +72,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             } catch (error) {
                 console.error("Error generating image:", error);
             }
+            setGeneratinglist(false);
         }
     };
 
@@ -131,11 +135,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <MiniSpinner /> // Loader ici
                         ) : (
                             <button className="share-btn"
-                                disabled={productHtmls.length <= 0 } style={{ cursor : productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
-                                title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                disabled={productHtmls.length <= 0 } style={{  cursor: productHtmls.length <= 0 || generatinglist ? 'not-allowed' : 'pointer' }}
+                                title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit' : generatinglist ? 'Veuillez attendre l\'image de la liste des courses': 'Partager la liste de courses' }
                                 onClick={handleShareClick}
                             >
-                                <img src={ShareShoppingList} alt="partager-course" />
+                                { generatinglist ? ( <MiniSpinner /> ) : ( <img id="share-btn-icon" src={ShareShoppingList} alt="partager-course" /> )  }
                             </button>
                         )}
                         <button className="close-btn" onClick={onClose} title='Fermer la liste de course'>
