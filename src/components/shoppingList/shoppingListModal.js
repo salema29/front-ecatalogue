@@ -5,7 +5,7 @@ import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from './update_count_product/updateCountproduct';
 import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
-import MiniSpinner from "../spinner/MiniSpinner";
+// import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
@@ -46,11 +46,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [isSharing, setIsSharing] = useState(false);
 
     const handleShareClick = async () => {
-        setIsSharing(true);
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
-            setIsSharing(true);
             const html = await  postShoppingListImage(shoppingList, catalogId);
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
@@ -64,14 +62,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 canvas.toBlob((blob) => {
                     if (blob) {
                         setBlob(blob);
-                        setShowEmailShare(true);
                     }
                 }, "image/png");
             } catch (error) {
                 console.error("Error generating image:", error);
             }
         }
-        setIsSharing(false);
     };
 
     const idListProducts = shoppingList.reduce((acc, item) =>
@@ -134,7 +130,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit' : isSharing ? 'Veuillez attendre l\'image de la liste des courses': 'Partager la liste de courses' }
                             onClick={handleShareClick}
                         >
-                            { isSharing ? ( <MiniSpinner /> ) : ( <img id="share-btn-icon" src={ShareShoppingList} alt="partager-course" /> )  }
+                            <img id="share-btn-icon" src={ShareShoppingList} alt="partager-course" />
                         </button>
                         <button className="close-btn" onClick={onClose} title='Fermer la liste de course'>
                             <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">

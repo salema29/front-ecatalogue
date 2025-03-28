@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
+import ProductSkeleton from "../shoppingList/skelleton";
 
 export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
@@ -179,12 +180,12 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                     Pièce jointe :
                                 </label>
                                 <div>
-                                {image && (
+                                {image ? (
                                     <img
                                         src={image}
                                         alt="liste des courses"
                                         style={{ maxWidth: "100%", maxHeight: "50px", marginBottom: "10px" }} />
-                                    )}
+                                    ) : (<ProductSkeleton style={{ maxWidth: "100%", maxHeight: "15px", marginBottom: "10px" }} />)}
                                 </div>
                             </div>
 
@@ -210,14 +211,14 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                             <div className="form-group" style={{ textAlign: "right" }}>
                                 <button
                                     type="submit"
-                                    disabled={isSending}
+                                    disabled={isSending || !image }
                                     style={{
                                         background: clientColor,
                                         color: "white",
                                         border: "none",
                                         padding: "10px 20px",
                                         borderRadius: "4px",
-                                        cursor: isSending ? "not-allowed" : "pointer"
+                                        cursor: isSending || !image ? "not-allowed" : "pointer"
                                     }}
                                 >
                                     {isSending ? "Envoi en cours..." : "Envoyer la liste"}
