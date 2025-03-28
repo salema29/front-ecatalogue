@@ -5,7 +5,6 @@ import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from './update_count_product/updateCountproduct';
 import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
-// import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
@@ -43,12 +42,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [blob, setBlob] = useState("");
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
-    const [isSharing, setIsSharing] = useState(false);
 
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
+            setShowEmailShare(true);
             const html = await  postShoppingListImage(shoppingList, catalogId);
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
