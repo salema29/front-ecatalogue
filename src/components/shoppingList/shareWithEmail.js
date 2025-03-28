@@ -4,7 +4,6 @@ import ProductSkeleton from "../shoppingList/skelleton";
 
 export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
-    const [emailError, setEmailError] = useState("");
     const [objet, setObjet] = useState("Liste des courses");
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
@@ -32,15 +31,12 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
 
     const validateEmail = () => {
         if (!email) {
-            setEmailError("Veuillez entrer une adresse email.");
             return false;
         }
         const emailRegex = /.+@.+\..+/;
         if (!emailRegex.test(email)) {
-            setEmailError("Adresse email invalide.");
             return false;
         }
-        setEmailError("");
         return true;
     };
 
