@@ -186,7 +186,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                     )
                                     :
                                     (
-                                        <ProductSkeleton height={"50px"} width={"7%"} style={{height: "50px", width: "7%" }} /> 
+                                        <ProductSkeleton height={"50px"} width={"7%"} style={{height: "50px", width: "7%" }} />
                                     )
                                 }
                             </div>

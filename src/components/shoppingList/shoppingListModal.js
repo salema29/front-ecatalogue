@@ -38,24 +38,73 @@ const getModalStyles = () => {
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList } = useContext(ShoppingListContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const currentAbortController = useRef(null);
+    const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
+
+    useEffect(() => {
+        isMounted.current = true;
+        if (emailShare) {
+            generateImage();
+        }
+
+        // Clean up function to handle component unmount and modal close
+        return () => {
+            isMounted.current = false;
+
+            // Abort any ongoing image generation
+            if (currentAbortController.current) {
+                currentAbortController.current.abort();
+                currentAbortController.current = null;
+            }
+        };
+    }, [emailShare]);
+
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
             setEmailShare(true);
-            const html = await  postShoppingListImage(shoppingList, catalogId);
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
-            try {
+            generateImage();
+        }
+    };
+
+    const closeEmailModal = () => {
+        setEmailShare(false);
+        isMounted.current = false;
+        if (currentAbortController.current) {
+            currentAbortController.current.abort();
+            currentAbortController.current = null;
+        }
+    };
+
+    const generateImage = async () => {
+        try {
+                if (currentAbortController.current) {
+                    currentAbortController.current.abort();
+                }
+
+                const controller = new AbortController();
+                currentAbortController.current = controller;
+                const { signal } = controller;
+
+                const html = await postShoppingListImage(shoppingList, catalogId, { signal });
+
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+                tempDiv.style.position = "absolute";
+                tempDiv.style.left = "-9999px";
+                document.body.appendChild(tempDiv);
+
                 const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+                if (!isMounted.current) {
+                    document.body.removeChild(tempDiv);
+                    return;
+                }
                 const dataUrl = canvas.toDataURL("image/png");
                 setImageurl(dataUrl);
                 canvas.toBlob((blob) => {
@@ -63,12 +112,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         setBlob(blob);
                     }
                 }, "image/png");
+                document.body.removeChild(tempDiv);
+                if (currentAbortController.current === controller) {
+                    currentAbortController.current = null;
+                }
             } catch (error) {
                 console.error("Error generating image:", error);
             }
-        }
-    };
-
+    }
     const idListProducts = shoppingList.reduce((acc, item) =>
         item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
 
@@ -201,7 +252,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             { emailShare && (
                 <ShareWithEmail
                     isOpen={emailShare}
-                    onClose={() => setEmailShare(false)}
+                    onClose={closeEmailModal}
                     image={imageurl}
                     blob={blob}
                     clientColor={clientColor}
