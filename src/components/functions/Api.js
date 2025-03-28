@@ -27,7 +27,7 @@ export const fetchViewChoice = async (catalogueId) => {
     }
 };
 
-export const postShoppingListImage = async (shoppingList, catalogId) => {
+export const postShoppingListImage = async (shoppingList, catalogId, options = {}) => {
     try {
         // Filtrer la liste des achats par catalogId
         const filteredShoppingList = shoppingList.filter(item => item.catalogId === catalogId);
@@ -39,7 +39,8 @@ export const postShoppingListImage = async (shoppingList, catalogId) => {
 
         const response = await fetch(`${API_BASE_URL}/api/post-shopping-list-html`, {
             method: "POST",
-            body: JSON.stringify({ shoppingList: filteredShoppingList })
+            body: JSON.stringify({ shoppingList: filteredShoppingList }),
+            signal: options.signal, // Ajout du signal pour annuler le fetch si nécessaire 
         });
 
         if (!response.ok) {
@@ -56,6 +57,10 @@ export const postShoppingListImage = async (shoppingList, catalogId) => {
             return null;
         }
     } catch (error) {
+        if (error.name === "AbortError") {
+            console.warn("Requête annulée par l'utilisateur.");
+            return null; 
+        }
         console.error("Erreur lors de la requête :", error);
         return null;
     }

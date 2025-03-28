@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Modal from 'react-modal';
 import html2canvas from 'html2canvas';
 import { postShoppingListImage } from '../functions/Api';
@@ -9,6 +9,8 @@ import sendIcon from '../../assets/icons/send-icon.svg';
 const ShareModal = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [imageData, setImageData] = useState(null);
+    const currentAbortController = useRef(null);
+    const isMounted = useRef(false);
 
     const customStyles = {
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
@@ -22,33 +24,55 @@ const ShareModal = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) =
     };
 
     useEffect(() => {
+        isMounted.current = true;
+
         if (isOpen) {
             generateImage();
         }
+
+        return () => {
+            isMounted.current = false;
+
+            if (currentAbortController.current) {
+                currentAbortController.current.abort(); // Annule le fetch si encore en cours
+            }
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [isOpen]);
 
     const generateImage = async () => {
         setIsLoading(true);
+        const controller = new AbortController();  // contrôleur d'annulation
+        const { signal } = controller;
+
+        // Enregistrer le contrôleur pour l'annuler lors de la fermeture
+        currentAbortController.current = controller;
 
         try {
-            // Simule la récupération de l'HTML généré (postShoppingListImage)
-            const html = await postShoppingListImage(shoppingList, catalogId);
-            const tempDiv = document.createElement('div');
+            const html = await postShoppingListImage(shoppingList, catalogId, { signal }); // Ajout du signal
+            if (!isMounted.current) return;
+
+            const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
             tempDiv.style.position = "absolute";
             tempDiv.style.left = "-9999px";
             document.body.appendChild(tempDiv);
 
-            // Générer une image avec html2canvas
             const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            if (!isMounted.current) {
+                document.body.removeChild(tempDiv);
+                return;
+            }
+
             const image = canvas.toDataURL("image/png");
 
             setImageData(image);
             setIsLoading(false);
             document.body.removeChild(tempDiv);
         } catch (error) {
-            console.error("Erreur lors de la génération de l'image", error);
+            if (error.name !== "AbortError") {  // Ignorer l'erreur si l'opération est annulée
+                console.error("Erreur lors de la génération de l'image", error);
+            }
             setIsLoading(false);
         }
     };

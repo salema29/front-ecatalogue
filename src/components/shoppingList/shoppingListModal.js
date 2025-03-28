@@ -125,11 +125,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </div>
                     <div className="modal-header-icons">
                         <button className="share-btn"
-                            disabled={productHtmls.length <= 0 } style={{  cursor: productHtmls.length <= 0 ? 'not-allowed' : 'pointer' }}
-                            title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit' : 'Partager la liste de courses' }
+                            disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
+                            title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
                             onClick={handleShareClick}
                         >
-                            <img id="share-btn-icon" src={ShareShoppingList} alt="partager-course" />
+                            <img src={ShareShoppingList} alt="partager-course" />
                         </button>
                         <button className="close-btn" onClick={onClose} title='Fermer la liste de course'>
                             <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -190,7 +190,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <EmptyCart clientColor={clientColor} />
                         )}
                 </div>
-                {isShareModalOpen && (
                 <ShareModal
                     isOpen={isShareModalOpen}
                     onClose={() => setIsShareModalOpen(false)}
@@ -198,7 +197,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     catalogId={catalogId}
                     clientColor={clientColor}
                 />
-            )}
             </Modal>
             { emailShare && (
                 <ShareWithEmail
