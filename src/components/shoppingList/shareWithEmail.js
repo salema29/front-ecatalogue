@@ -179,14 +179,20 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                 >
                                     Pièce jointe :
                                 </label>
-                                <div>
-                                {image ? (
-                                    <img
-                                        src={image}
-                                        alt="liste des courses"
-                                        style={{ maxWidth: "100%", maxHeight: "50px", marginBottom: "10px" }} />
-                                    ) : (<ProductSkeleton style={{ maxWidth: "100%", maxHeight: "15px", marginBottom: "10px" }} />)}
-                                </div>
+                                {image ?
+                                    (
+                                        <div>
+                                            <img
+                                                src={image}
+                                                alt="liste des courses"
+                                                style={{ maxWidth: "100%", maxHeight: "50px", marginBottom: "10px" }} />
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <ProductSkeleton height={"50px"} width={"7%"} style={{height: "50px", width: "7%" }} /> 
+                                    )
+                                }
                             </div>
 
                             <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
