@@ -42,12 +42,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [blob, setBlob] = useState("");
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
-
+    const [emailShare, setEmailShare] = useState(false);
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
-            setShowEmailShare(true);
+            setEmailShare(true);
             const html = await  postShoppingListImage(shoppingList, catalogId);
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
@@ -75,7 +75,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [productHtmls, setProductHtmls] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
     const observerRef = useRef(null);
-    const [showEmailShare, setShowEmailShare] = useState(false);
+
     useEffect(() => {
         if (idListProducts.length > 0) {
             fetch(`${API_BASE_URL}/api/shopping-list/`, {
@@ -125,8 +125,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </div>
                     <div className="modal-header-icons">
                         <button className="share-btn"
-                            disabled={productHtmls.length <= 0 } style={{  cursor: productHtmls.length <= 0 || isSharing ? 'not-allowed' : 'pointer' }}
-                            title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit' : isSharing ? 'Veuillez attendre l\'image de la liste des courses': 'Partager la liste de courses' }
+                            disabled={productHtmls.length <= 0 } style={{  cursor: productHtmls.length <= 0 ? 'not-allowed' : 'pointer' }}
+                            title={ productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit' : 'Partager la liste de courses' }
                             onClick={handleShareClick}
                         >
                             <img id="share-btn-icon" src={ShareShoppingList} alt="partager-course" />
@@ -151,7 +151,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                     key={productHtml.id_produit}
                                     data-id-produit={productHtml.id_produit}
                                 >
-                                    {(!isShareModalOpen && !showEmailShare) && visibleProducts.has(productHtml.id_produit) ? (
+                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                         <>
                                             <div className="product">
                                                 <div className="product-item">
@@ -200,10 +200,10 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 />
             )}
             </Modal>
-            { showEmailShare && (
+            { emailShare && (
                 <ShareWithEmail
-                    isOpen={showEmailShare}
-                    onClose={() => setShowEmailShare(false)}
+                    isOpen={emailShare}
+                    onClose={() => setEmailShare(false)}
                     image={imageurl}
                     blob={blob}
                     clientColor={clientColor}
