@@ -5,11 +5,12 @@ import { ShoppingListContext } from '../../store-shopping-list';
 import UpdateCountProduct from './update_count_product/updateCountproduct';
 import RemoveProductFromList from '../shoppingList/update_count_product/removeProduct'
 import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
-import MiniSpinner from "../spinner/MiniSpinner";
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
-import { ShareWithEmail } from "../shoppingList/shareWithEmail";
+import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
+import { postShoppingListImage } from "../functions/Api";
+import html2canvas from "html2canvas";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
@@ -37,26 +38,95 @@ const getModalStyles = () => {
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList } = useContext(ShoppingListContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const currentAbortController = useRef(null);
+    const isMounted = useRef(false);
+    const [imageurl, setImageurl] = useState("");
+    const [blob, setBlob] = useState("");
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
-    const [isSharing, setIsSharing] = useState(false);
+    const [emailShare, setEmailShare] = useState(false);
+
+    useEffect(() => {
+        isMounted.current = true;
+        if (emailShare) {
+            generateImage();
+        }
+
+        // Clean up function to handle component unmount and modal close
+        return () => {
+            isMounted.current = false;
+
+            // Abort any ongoing image generation
+            if (currentAbortController.current) {
+                currentAbortController.current.abort();
+                currentAbortController.current = null;
+            }
+        };
+    }, [emailShare]);
+
     const handleShareClick = async () => {
         if (isMobile()) {
-            setIsSharing(true); // Activer le loader
             setIsShareModalOpen(true);
-            setIsSharing(false); // Désactiver le loader après partage
         } else {
-            setShowEmailShare(true);
+            setEmailShare(true);
+            generateImage();
         }
     };
 
+    const closeEmailModal = () => {
+        setEmailShare(false);
+        isMounted.current = false;
+        if (currentAbortController.current) {
+            currentAbortController.current.abort();
+            currentAbortController.current = null;
+        }
+    };
+
+    const generateImage = async () => {
+        try {
+                if (currentAbortController.current) {
+                    currentAbortController.current.abort();
+                }
+
+                const controller = new AbortController();
+                currentAbortController.current = controller;
+                const { signal } = controller;
+
+                const html = await postShoppingListImage(shoppingList, catalogId, { signal });
+
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+                tempDiv.style.position = "absolute";
+                tempDiv.style.left = "-9999px";
+                document.body.appendChild(tempDiv);
+
+                const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+                if (!isMounted.current) {
+                    document.body.removeChild(tempDiv);
+                    return;
+                }
+                const dataUrl = canvas.toDataURL("image/png");
+                setImageurl(dataUrl);
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        setBlob(blob);
+                    }
+                }, "image/png");
+                document.body.removeChild(tempDiv);
+                if (currentAbortController.current === controller) {
+                    currentAbortController.current = null;
+                }
+            } catch (error) {
+                console.error("Error generating image:", error);
+            }
+    }
     const idListProducts = shoppingList.reduce((acc, item) =>
         item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
 
     const [productHtmls, setProductHtmls] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
     const observerRef = useRef(null);
-    const [showEmailShare, setShowEmailShare] = useState(false);
+
     useEffect(() => {
         if (idListProducts.length > 0) {
             fetch(`${API_BASE_URL}/api/shopping-list/`, {
@@ -105,17 +175,13 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         </p>
                     </div>
                     <div className="modal-header-icons">
-                        {isSharing ? (
-                            <MiniSpinner /> // Loader ici
-                        ) : (
-                            <button className="share-btn"
-                                disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
-                                title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
-                                onClick={handleShareClick}
-                            >
-                                <img src={ShareShoppingList} alt="partager-course" />
-                            </button>
-                        )}
+                        <button className="share-btn"
+                            disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
+                            title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                            onClick={handleShareClick}
+                        >
+                            <img src={ShareShoppingList} alt="partager-course" />
+                        </button>
                         <button className="close-btn" onClick={onClose} title='Fermer la liste de course'>
                             <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
@@ -136,7 +202,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                     key={productHtml.id_produit}
                                     data-id-produit={productHtml.id_produit}
                                 >
-                                    {(!isShareModalOpen && !showEmailShare) && visibleProducts.has(productHtml.id_produit) ? (
+                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                         <>
                                             <div className="product">
                                                 <div className="product-item">
@@ -183,13 +249,15 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     clientColor={clientColor}
                 />
             </Modal>
-            {showEmailShare && (
+            { emailShare && (
                 <ShareWithEmail
-                    isOpen={showEmailShare}
-                    onClose={() => setShowEmailShare(false)}
-                    shoppingList={shoppingList}
+                    isOpen={emailShare}
+                    onClose={closeEmailModal}
+                    image={imageurl}
+                    blob={blob}
+                    clientColor={clientColor}
                     catalogId={catalogId}
-                    clientColor={clientColor} />
+                />
             )}
         </>
     );

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import html2canvas from "html2canvas";
-import { postShoppingListImage } from "../functions/Api";
+import ProductSkeleton from "../shoppingList/skelleton";
 
-export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) => {
+export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
-    const [emailError, setEmailError] = useState("");
     const [objet, setObjet] = useState("Liste des courses");
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
@@ -26,22 +24,19 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
             borderRadius: "8px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             zIndex: 1,
-            top: "10%",
+            top: "0%",
             overflowY: "auto",
         },
     };
 
     const validateEmail = () => {
         if (!email) {
-            setEmailError("Veuillez entrer une adresse email.");
             return false;
         }
         const emailRegex = /.+@.+\..+/;
         if (!emailRegex.test(email)) {
-            setEmailError("Adresse email invalide.");
             return false;
         }
-        setEmailError("");
         return true;
     };
 
@@ -53,18 +48,6 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
         setSendStatus(null);
 
         try {
-            const html = await postShoppingListImage(shoppingList, catalogId); // API call to get HTML
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
-            const image = canvas.toDataURL("image/png");
-            document.body.removeChild(tempDiv);
-            const response = await fetch(image);
-            const blob = await response.blob();
-
             await sendEmail(blob);
         } catch (error) {
             console.error("Erreur lors du partage de la liste. Veuillez recommencer", error);
@@ -126,49 +109,35 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                 <div style={{ padding: "20px" }}>
                     <form onSubmit={handleSubmit}>
                         <div className="form-container">
-                            <div
-                                className="form-group"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                }}
-                            >
-                                <label
-                                    htmlFor="email"
-                                    style={{
-                                        marginRight: "10px",
-                                        minWidth: "150px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    Pour (*) :
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    onBlur={validateEmail}
-                                    placeholder="exemple@email.com"
-                                    required
-                                    style={{
-                                        flex: 1,
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px"
-                                    }}
-                                />
+                            <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
+                                    <label
+                                        htmlFor="email"
+                                        style={{
+                                            marginRight: "10px",
+                                            minWidth: "150px",
+                                            fontWeight: "bold",
+                                        }}
+                                    >
+                                        Pour (*) :
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        onBlur={validateEmail}
+                                        placeholder="exemple@email.com"
+                                        required
+                                        style={{
+                                            flex: 1,
+                                            padding: "10px",
+                                            border: "1px solid #ddd",
+                                            borderRadius: "4px"
+                                        }}
+                                    />
                             </div>
 
-                            <div
-                                className="form-group"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                }}
-                            >
+                            <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
                                 <label
                                     htmlFor="objet"
                                     style={{
@@ -195,14 +164,7 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 />
                             </div>
 
-                            <div
-                                className="form-group"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                }}
-                            >
+                            <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
                                 <label
                                     htmlFor="pj"
                                     style={{
@@ -213,56 +175,52 @@ export const ShareWithEmail = ({ isOpen, onClose, shoppingList, catalogId, clien
                                 >
                                     Pièce jointe :
                                 </label>
-                                <input
-                                    type="text"
-                                    id="pj"
-                                    value="liste-des-courses.png"
-                                    disabled
-                                    style={{
-                                        flex: 1,
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        cursor: "not-allowed"
-                                    }}
-                                />
+                                {image ?
+                                    (
+                                        <div>
+                                            <img
+                                                src={image}
+                                                alt="liste des courses"
+                                                style={{ maxWidth: "100%", maxHeight: "50px", marginBottom: "10px" }} />
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <ProductSkeleton height={"50px"} width={"7%"} style={{height: "50px", width: "7%" }} />
+                                    )
+                                }
                             </div>
-                            <div
-                                className="form-group"
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                }}
-                            >
-                                <textarea
-                                    id="message"
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    placeholder="Écrivez votre message ici..."
-                                    rows="4"
-                                    style={{
-                                        width: "100%",
-                                        padding: "10px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        minHeight: "170px",
-                                        resize: "vertical"
-                                    }}
-                                ></textarea>
-                            </div>
+
+                            <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
+                                    <textarea
+                                        id="message"
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        placeholder="Écrivez votre message ici..."
+                                        rows="4"
+                                        style={{
+                                            width: "100%",
+                                            padding: "10px",
+                                            border: "1px solid #ddd",
+                                            borderRadius: "4px",
+                                            minHeight: "50px",
+                                            resize: "vertical"
+                                        }}
+                                    >
+                                    </textarea>
+                                </div>
 
                             <div className="form-group" style={{ textAlign: "right" }}>
                                 <button
                                     type="submit"
-                                    disabled={isSending}
+                                    disabled={isSending || !image }
                                     style={{
                                         background: clientColor,
                                         color: "white",
                                         border: "none",
                                         padding: "10px 20px",
                                         borderRadius: "4px",
-                                        cursor: isSending ? "not-allowed" : "pointer"
+                                        cursor: isSending || !image ? "not-allowed" : "pointer"
                                     }}
                                 >
                                     {isSending ? "Envoi en cours..." : "Envoyer la liste"}
