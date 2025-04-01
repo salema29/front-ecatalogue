@@ -8,13 +8,13 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
-import ListCourse  from '../components/buttons/ListCourseIcon';
 import { ShoppingListContext } from '../store-shopping-list';
-import ShoppingListModal from "../components/buttons/ListCourseModal"
+import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ShoppingListModal from "../components/shoppingList/shoppingListModal";
+import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId, categoryId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
@@ -38,7 +38,6 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
-
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -209,7 +208,7 @@ function Product() {
                                     title="Fermer ce catalogue"
                                 >
                                     <img
-                                        src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
+                                        src={crossIconDark}
                                         width="25"
                                         alt="Fermer"
                                     />
@@ -245,7 +244,7 @@ function Product() {
                                             ) : null
                                         ))}
                                     </div>
-                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                                    {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                                 </>
                             ) : (
                                 <LoadingSpinner />

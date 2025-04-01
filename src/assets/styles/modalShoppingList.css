@@ -1,0 +1,69 @@
+.modal-header {
+    padding: 0px 16px 0px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    color: #FFFFFF;
+}
+
+.modal-header-title{
+    margin-bottom: 0px;
+}
+.modal-header-subtitle{
+    margin-top: 0px;
+}
+
+.modal-body {
+    padding-top: 16px;
+    max-height: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: auto;
+}
+
+/* for safari */
+button{
+    color: black;
+}
+
+.product-shopping-list{
+    border: none;
+    height: 235px;
+    width: 97%;
+    margin-bottom: auto;
+}
+.product-wrapper{
+    position: relative;
+}
+
+.product {
+    display: flex;
+}
+
+.side-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 10px; 
+}
+
+
+.remove-product {
+    cursor: pointer;
+    display: flex;
+    justify-content: end;
+} 
+
+.share-btn, .close-btn{
+    background: none;
+    border: none;
+    cursor: pointer
+}
+
+.ReactModal__Content {
+    display: flex;
+    flex-direction: column;
+}

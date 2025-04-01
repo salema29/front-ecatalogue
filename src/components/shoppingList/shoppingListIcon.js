@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsListUl  } from 'react-icons/bs';
 
-const ListCourseIcon = ({ catalogId, shoppingList, clientColor }) => {
+const shoppingListIcon = ({ catalogId, shoppingList, clientColor }) => {
     const nbProduit = shoppingList
         .filter(item => item.catalogId === catalogId)
         .reduce((acc, item) => acc + item.products.length, 0);
@@ -70,4 +70,4 @@ const ListCourseIcon = ({ catalogId, shoppingList, clientColor }) => {
     );
 };
 
-export default ListCourseIcon;
+export default shoppingListIcon;

@@ -6,11 +6,15 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import handleOrientationChange from "./functions/Orientation";
 import showOnlyEcatalogue from "./functions/ShowOnlyEcatalogue";
 import MiniSpinner from "./spinner/MiniSpinner";
+import crossIconDark from "../assets/icons/cross-icon-dark.svg";
+import desktopFormatIconDark from "../assets/icons/desktop-view-format-icon-dark.svg";
+import byProductIcon from "../assets/icons/by-product-icon.svg";
+import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
+import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const isMobileView = window.innerWidth <= 767;
-    const ASSET_BASE_URL = process.env.REACT_APP_API_ASSET_URL;
     const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const navigate = useNavigate();
@@ -82,7 +86,7 @@ function ViewFormatDialog() {
                                 onClick={handleClose}
                             >
                                 <img
-                                    src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
+                                    src={crossIconDark}
                                     alt="Fermer"
                                     width="25"
                                 />
@@ -103,7 +107,7 @@ function ViewFormatDialog() {
                                 <div className="view-format-icon-container">
                                     <img
                                         className="view-format-icon"
-                                        src={`${ASSET_BASE_URL}/icons/desktop-view-format-icon-dark.svg`}
+                                        src={desktopFormatIconDark}
                                         alt=""
                                     />
                                     <h2
@@ -129,7 +133,7 @@ function ViewFormatDialog() {
                                                 </span>
                                                 <span className="view-format-dialog-button-icon">
                                                     <img
-                                                        src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
+                                                        src={byProductIcon}
                                                         alt=""
                                                     />
                                                 </span>
@@ -155,7 +159,7 @@ function ViewFormatDialog() {
                                         </span>
                                         <span className="view-format-dialog-button-icon">
                                             <img
-                                                src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
+                                                src={byCatalogIcon}
                                                 alt=""
                                             />
                                         </span>
@@ -167,7 +171,7 @@ function ViewFormatDialog() {
                             <div className="view-format-icon-container">
                                 <img
                                     className="view-format-icon"
-                                    src={`${ASSET_BASE_URL}/icons/view-format-icon-dark.svg`}
+                                    src={viewFormatIconDark}
                                     alt=""
                                 />
                                 <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
@@ -187,7 +191,7 @@ function ViewFormatDialog() {
                                                 </span>
                                                 <span className="view-format-dialog-button-icon">
                                                     <img
-                                                        src={`${ASSET_BASE_URL}/icons/by-product-icon.svg`}
+                                                        src={byProductIcon}
                                                         alt=""
                                                     />
                                                 </span>
@@ -216,7 +220,7 @@ function ViewFormatDialog() {
                                     </span>
                                     <span className="view-format-dialog-button-icon">
                                         <img
-                                            src={`${ASSET_BASE_URL}/icons/by-catalog-icon.svg`}
+                                            src={byCatalogIcon}
                                             alt=""
                                         />
                                     </span>
