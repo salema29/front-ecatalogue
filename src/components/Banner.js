@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../assets/styles/Banner.css'
+import '../assets/styles/Banner.css';
 
 function Banner() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -15,8 +15,7 @@ function Banner() {
     }, []);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getDataClient/${client_id}`)
-        // fetch(`${API_BASE_URL}/api/getDataClient/202`) // Static data for testing
+        fetch(`${API_BASE_URL}/api/getDataClient/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : client_id}`)
             .then((response) => response.json())
             .then((fetchedData) => {
                 setBannerMedia(fetchedData.client_global_image);
