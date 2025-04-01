@@ -7,7 +7,7 @@ import { fetchViewChoice } from "../components/functions/Api";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
-import ShoppingListModal from "../components/shoppingList/shoppingListModal"
+import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;

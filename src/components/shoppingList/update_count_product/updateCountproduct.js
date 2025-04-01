@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import { ShoppingListContext } from '../../../store-shopping-list';
+import { BsPlusLg, BsDashLg } from 'react-icons/bs';
 
 function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
@@ -86,13 +87,9 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                 }}
                 aria-label="Diminuer la quantité"
             >
-                <div
-                    style={{
-                        width: '10px',
-                        height: '1.5px',
-                        backgroundColor: "black"
-                    }}
-                />
+                <div>
+                    <BsDashLg style={{ height: '10px' }} />
+                </div>
             </button>
 
             <div
@@ -125,13 +122,9 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
             }}
             aria-label="Augmenter la quantité"
         >
-        <div
-            style={{
-            width: '10px',
-            height: '1.5px',
-            backgroundColor: "black"
-            }}
-        />
+        <div>
+            <BsPlusLg style={{ height: '10px' }}  />
+        </div>
         <div
             style={{
             width: '1.5px',

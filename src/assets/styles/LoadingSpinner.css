@@ -2,11 +2,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5rem;
-    width: 500px;
-    aspect-ratio: 1/1;
-    height: inherit;
-    margin: auto;
+    gap: 5rem; /* Espace entre les loaders */
+    
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 100vw;
+    height: 100vh;
+    
+    background: rgba(255, 255, 255, 0.8); /* Optionnel : effet overlay */
+    z-index: 9999; /* S'assurer que le loader est bien visible */
 }
 
 /* left loader */
@@ -21,7 +28,7 @@
 
     aspect-ratio: 1/1;
 
-    stroke: white;
+    stroke: #669999;
     stroke-width: var(--_stroke-width);
 
     animation: loader_1 var(--_animation_duration) infinite,

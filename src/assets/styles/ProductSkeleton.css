@@ -1,0 +1,19 @@
+@keyframes pulse {
+    0% {
+        background-color: #f0f0f0;
+    }
+
+    50% {
+        background-color: #e0e0e0;
+    }
+
+    100% {
+        background-color: #f0f0f0;
+    }
+}
+
+.skeleton {
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+}

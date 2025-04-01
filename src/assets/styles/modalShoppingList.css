@@ -16,6 +16,10 @@
     margin-top: 0px;
 }
 
+.modal-header-icons {
+    min-width: 90px;
+}
+
 .modal-body {
     padding-top: 16px;
     max-height: 100%;
@@ -56,6 +60,12 @@ button{
     display: flex;
     justify-content: end;
 } 
+
+.update-count-btn-mobile {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 15px 0; 
+}
 
 .share-btn, .close-btn{
     background: none;

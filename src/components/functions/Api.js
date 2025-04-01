@@ -27,12 +27,20 @@ export const fetchViewChoice = async (catalogueId) => {
     }
 };
 
-export const postShoppingListImage = async (shoppingList) => {
+export const postShoppingListImage = async (shoppingList, catalogId, options = {}) => {
     try {
+        // Filtrer la liste des achats par catalogId
+        const filteredShoppingList = shoppingList.filter(item => item.catalogId === catalogId);
+
+        if (filteredShoppingList.length === 0) {
+            console.warn("Aucun élément correspondant au catalogId fourni.");
+            return null;
+        }
 
         const response = await fetch(`${API_BASE_URL}/api/post-shopping-list-html`, {
             method: "POST",
-            body: JSON.stringify({ shoppingList })
+            body: JSON.stringify({ shoppingList: filteredShoppingList }),
+            signal: options.signal, // Ajout du signal pour annuler le fetch si nécessaire 
         });
 
         if (!response.ok) {
@@ -43,12 +51,16 @@ export const postShoppingListImage = async (shoppingList) => {
         const data = await response.json();
 
         if (data.status === "success") {
-            return data.data; // Contient le HTML de la shopping liste
+            return data.data; // Contient le HTML de la shopping list
         } else {
             console.error("Erreur :", data.message);
             return null;
         }
     } catch (error) {
+        if (error.name === "AbortError") {
+            console.warn("Requête annulée par l'utilisateur.");
+            return null; 
+        }
         console.error("Erreur lors de la requête :", error);
         return null;
     }
