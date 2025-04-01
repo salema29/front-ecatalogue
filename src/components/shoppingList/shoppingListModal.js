@@ -68,8 +68,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
-            setEmailShare(true);
             generateImage();
+            setEmailShare(true);
         }
     };
 
@@ -105,14 +105,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     document.body.removeChild(tempDiv);
                     return;
                 }
-                const dataUrl = canvas.toDataURL("image/png");
-                setImageurl(dataUrl);
+                const dataUrl =  canvas.toDataURL("image/png");
                 canvas.toBlob((blob) => {
                     if (blob) {
                         setBlob(blob);
                     }
                 }, "image/png");
                 document.body.removeChild(tempDiv);
+                setImageurl(dataUrl);
                 if (currentAbortController.current === controller) {
                     currentAbortController.current = null;
                 }

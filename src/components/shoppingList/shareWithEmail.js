@@ -175,7 +175,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                 >
                                     Pièce jointe :
                                 </label>
-                                {image ?
+                                {blob ?
                                     (
                                         <div>
                                             <img
