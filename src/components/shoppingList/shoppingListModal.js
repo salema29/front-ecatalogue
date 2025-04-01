@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
 import { ShoppingListContext } from '../../store-shopping-list';
@@ -46,29 +46,10 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
 
-    useEffect(() => {
-        isMounted.current = true;
-        if (emailShare) {
-            generateImage();
-        }
-
-        // Clean up function to handle component unmount and modal close
-        return () => {
-            isMounted.current = false;
-
-            // Abort any ongoing image generation
-            if (currentAbortController.current) {
-                currentAbortController.current.abort();
-                currentAbortController.current = null;
-            }
-        };
-    }, [emailShare]);
-
     const handleShareClick = async () => {
         if (isMobile()) {
             setIsShareModalOpen(true);
         } else {
-            generateImage();
             setEmailShare(true);
         }
     };
@@ -82,44 +63,60 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     };
 
-    const generateImage = async () => {
+    const generateImage = useCallback( async () => {
         try {
-                if (currentAbortController.current) {
-                    currentAbortController.current.abort();
-                }
+            const controller = new AbortController();
+            currentAbortController.current = controller;
+            const { signal } = controller;
 
-                const controller = new AbortController();
-                currentAbortController.current = controller;
-                const { signal } = controller;
+            const html = await postShoppingListImage(shoppingList, catalogId, { signal });
 
-                const html = await postShoppingListImage(shoppingList, catalogId, { signal });
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            tempDiv.style.position = "absolute";
+            tempDiv.style.left = "-9999px";
+            document.body.appendChild(tempDiv);
 
-                const tempDiv = document.createElement("div");
-                tempDiv.innerHTML = html;
-                tempDiv.style.position = "absolute";
-                tempDiv.style.left = "-9999px";
-                document.body.appendChild(tempDiv);
-
-                const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
-                if (!isMounted.current) {
-                    document.body.removeChild(tempDiv);
-                    return;
-                }
-                const dataUrl =  canvas.toDataURL("image/png");
-                canvas.toBlob((blob) => {
-                    if (blob) {
-                        setBlob(blob);
-                    }
-                }, "image/png");
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            if (!isMounted.current) {
                 document.body.removeChild(tempDiv);
-                setImageurl(dataUrl);
-                if (currentAbortController.current === controller) {
-                    currentAbortController.current = null;
-                }
-            } catch (error) {
-                console.error("Error generating image:", error);
+                return;
             }
-    }
+            const dataUrl =  canvas.toDataURL("image/png");
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    setBlob(blob);
+                }
+            }, "image/png");
+            document.body.removeChild(tempDiv);
+            if (dataUrl.startsWith("data:image/png;base64,")) {
+                setImageurl(dataUrl);
+            }
+            if (currentAbortController.current === controller) {
+                currentAbortController.current = null;
+            }
+        } catch (error) {
+            console.error("Error generating image:", error);
+        }
+    }, [shoppingList, catalogId]);
+
+    useEffect(() => {
+        isMounted.current = true;
+        if (emailShare) {
+            setImageurl('')
+            generateImage();
+        }
+
+        return () => {
+            // Abort any ongoing image generation
+            if (currentAbortController.current) {
+                currentAbortController.current.abort();
+                currentAbortController.current = null;
+            }
+        };
+    }, [emailShare,generateImage]);
+
+
     const idListProducts = shoppingList.reduce((acc, item) =>
         item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
 
