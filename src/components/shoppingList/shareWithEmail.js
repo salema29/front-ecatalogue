@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import ProductSkeleton from "../shoppingList/skelleton";
+import "../../assets/styles/ProductSkeleton.css"
 
 export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
@@ -108,7 +108,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
 
                 <div style={{ padding: "20px" }}>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-container">
+                        <div className="form-container" >
                             <div className="form-group" style={{display: "flex",alignItems: "center", marginBottom: "10px"}} >
                                     <label
                                         htmlFor="email"
@@ -132,8 +132,10 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                             flex: 1,
                                             padding: "10px",
                                             border: "1px solid #ddd",
-                                            borderRadius: "4px"
+                                            borderRadius: "4px",
+                                            cursor: isSending ? "not-allowed" : "text"
                                         }}
+                                        disabled={isSending}
                                     />
                             </div>
 
@@ -160,7 +162,9 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                         padding: "10px",
                                         border: "1px solid #ddd",
                                         borderRadius: "4px",
+                                        cursor: isSending ? "not-allowed" : "text"
                                     }}
+                                    disabled={isSending}
                                 />
                             </div>
 
@@ -186,7 +190,16 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                     )
                                     :
                                     (
-                                        <ProductSkeleton height={"50px"} width={"7%"} style={{height: "50px", width: "7%" }} />
+                                        <div
+                                            className="skeleton"
+                                            style={{
+                                                height: "50px",
+                                                width: "7%",
+                                                backgroundColor: "#f0f0f0",
+                                                borderRadius: "10px",
+                                                animation: "pulse 1.9s infinite ease-in-out",
+                                            }}
+                                        ></div>
                                     )
                                 }
                             </div>
@@ -204,8 +217,10 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                             border: "1px solid #ddd",
                                             borderRadius: "4px",
                                             minHeight: "50px",
-                                            resize: "vertical"
+                                            resize: "vertical",
+                                            cursor: isSending ? "not-allowed" : "text"
                                         }}
+                                        disabled={isSending}
                                     >
                                     </textarea>
                                 </div>
