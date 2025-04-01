@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
@@ -8,6 +8,9 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
+import ListCourse  from '../components/buttons/ListCourseIcon';
+import { ShoppingListContext } from '../store-shopping-list';
+import ShoppingListModal from "../components/buttons/ListCourseModal"
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -25,6 +28,7 @@ function Product() {
         isVueProduit : true,
         isVueFeuilletable : true
     });
+    const { shoppingList } = useContext(ShoppingListContext);
 
     const handleClose = () => {
         navigate(`/`);
@@ -34,6 +38,7 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalog/${catalogId}`);
     };
+
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -139,7 +144,9 @@ function Product() {
     }, []);
 
     showOnlyEcatalogue();
-    
+
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <>
             {headerData ? (
@@ -168,6 +175,7 @@ function Product() {
                                     <button
                                         className="view-format-switcher btn"
                                         onClick={handleCatalogView}
+                                        title="Voir la vue feuilletable"
                                     >
                                         <span style={{
                                             height: "25",
@@ -183,9 +191,22 @@ function Product() {
                                         </span>
                                     </button>
                                 )}
+                                {headerData.show_list_course === 't' ?
+                                    (
+                                        <button
+                                            className="view-format-dialog-open-list-course btn"
+                                            onClick={() => setModalOpen(true)}
+                                            title="Ouvrir ma liste de course"
+                                        >
+                                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                        </button>
+                                    )
+                                    :(<></>)
+                                }
                                 <button
                                     className="view-format-dialog-close btn"
                                     onClick={handleClose}
+                                    title="Fermer ce catalogue"
                                 >
                                     <img
                                         src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
@@ -209,21 +230,23 @@ function Product() {
                     >
                         <div className="product-list-container" >
                             {isLoading === false && productData.length > 0 ? (
-                                <div className="grid-container">
-                                    {productData.map((product, index) => (
-                                        product.view_type === '1' ? (
-                                            <ProductItem
-                                                key={index}
-                                                product={product}
-                                                index={index}
-                                                categoryId={categoryId}
-                                                catalogId={catalogId}
-                                                showListCourse={headerData.show_list_course}
-                                                API_BASE_URL={API_BASE_URL}
-                                            />
-                                        ) : null
-                                    ))}
-                                </div>
+                                <>
+                                    <div className="grid-container">
+                                        {productData.map((product, index) => (
+                                            product.view_type === '1' ? (
+                                                <ProductItem
+                                                    key={index}
+                                                    product={product}
+                                                    index={index}
+                                                    categoryId={categoryId}
+                                                    catalogId={catalogId}
+                                                    showListCourse={headerData.show_list_course}
+                                                    API_BASE_URL={API_BASE_URL} />
+                                            ) : null
+                                        ))}
+                                    </div>
+                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+                                </>
                             ) : (
                                 <LoadingSpinner />
                             )}

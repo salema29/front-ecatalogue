@@ -7,7 +7,7 @@
     width: 100%;
 }
 
-.view-format-dialog-close {
+.view-format-dialog-close, .view-format-dialog-open-list-course {
     color: white;
     background: none;
     border: none;
@@ -61,7 +61,6 @@
     .sticky {
         position: sticky;
         top: 0;
-        z-index: 1000;
     }
 
     .view-format-dialog-content {

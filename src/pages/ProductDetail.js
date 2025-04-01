@@ -7,6 +7,8 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
+import ListCourse  from '../components/buttons/ListCourseIcon';
+import ShoppingListModal from "../components/buttons/ListCourseModal"
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -32,6 +34,7 @@ function MainProduct() {
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
+
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
@@ -135,6 +138,8 @@ function MainProduct() {
         });
     };
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     return (
         <>
             {headerData ? (
@@ -158,9 +163,22 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
+                        {headerData.show_list_course === 't' ?
+                            (
+                                <button
+                                    className="view-format-dialog-open-list-course btn"
+                                    onClick={() => setModalOpen(true)}
+                                    title="Ouvrir ma liste de course"
+                                >
+                                    <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                </button>
+                            )
+                            :(<></>)
+                        }
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
+                                title="Fermer"
                             >
                                 <img
                                     src={`${ASSET_BASE_URL}/icons/cross-icon-dark.svg`}
@@ -210,6 +228,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
+                                    <ShoppingListModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
                                 </>
                             ) : (
                                 <LoadingSpinner />
