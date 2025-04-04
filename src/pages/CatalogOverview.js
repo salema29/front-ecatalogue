@@ -11,6 +11,7 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const URL_ORIGIN = new URL(API_BASE_URL).origin
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const isMobileView  = window.innerWidth <= 767;
@@ -54,6 +55,36 @@ function Catalog() {
     fetchChoiceForView();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const handlePostMessage = (event) => {
+      if (event.origin === `${URL_ORIGIN}`) {
+        const { action, page } = event.data;
+        if (action === "updatePage") {
+            // Get the current URL's query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            // Update or add the 'page' query parameter with the new value
+            urlParams.set('page', page);
+            // Update the URL (keeping the hash part intact)
+            window.history.pushState(
+              {},
+              '',
+              window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
+          );
+        }
+      }
+    };
+
+    window.addEventListener("message", handlePostMessage);
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener("message", handlePostMessage);
+    };
+  }, []);
+  // Get the part of the URL after the hash
+  const hash = window.location.hash;
+  const urlParams = new URLSearchParams(hash.split('?')[1]);
+  const page = urlParams.get('page') || 1; // Default to page 1 if no page param is found
 
   showOnlyEcatalogue();
 
@@ -121,7 +152,7 @@ function Catalog() {
             </div>
           </header>
           <iframe
-            src={headerData.catalogue_link}
+            src={`${headerData.catalogue_link}?page=${page}`}
             width="100%"
             height="90%"
             border="none"
