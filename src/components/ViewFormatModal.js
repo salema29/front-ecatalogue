@@ -52,7 +52,7 @@ function ViewFormatDialog() {
     };
 
     const handleCatalogView = () => {
-        navigate(`/catalog/${catalogId}`);
+        navigate(`/catalogue/${catalogId}`);
     };
 
     showOnlyEcatalogue();

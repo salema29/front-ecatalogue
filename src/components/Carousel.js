@@ -158,7 +158,7 @@ function Carousel() {
                             } 
                             // vue feuilletable
                             else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {
-                                navigate(`/catalog/${slide.catalogue_id}`);
+                                navigate(`/catalogue/${slide.catalogue_id}`);
                             } 
                             // vue produit
                             else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {

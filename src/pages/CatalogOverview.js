@@ -61,15 +61,15 @@ function Catalog() {
       if (event.origin === `${URL_ORIGIN}`) {
         const { action, page } = event.data;
         if (action === "updatePage") {
-            // Get the current URL's query parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            // Update or add the 'page' query parameter with the new value
-            urlParams.set('page', page);
-            // Update the URL (keeping the hash part intact)
-            window.history.pushState(
-              {},
-              '',
-              window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
+          // Get the current URL's query parameters
+          const urlParams = new URLSearchParams(window.location.search);
+          // Update or add the 'page' query parameter with the new value
+          urlParams.set('page', page);
+          // Update the URL (keeping the hash part intact)
+          window.history.pushState(
+            {},
+            '',
+            window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
           );
         }
       }
@@ -80,7 +80,7 @@ function Catalog() {
     return () => {
       window.removeEventListener("message", handlePostMessage);
     };
-  }, []);
+  }, [URL_ORIGIN]);
   // Get the part of the URL after the hash
   const hash = window.location.hash;
   const urlParams = new URLSearchParams(hash.split('?')[1]);
