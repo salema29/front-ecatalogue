@@ -9,15 +9,28 @@
     color: #FFFFFF;
 }
 
-.modal-header-title{
+.modal-header-title {
     margin-bottom: 0px;
 }
-.modal-header-subtitle{
+
+.modal-header-subtitle {
     margin-top: 0px;
 }
 
+@media screen and (max-width: 767px) {
+    .modal-header-title {
+        font-size: smaller;
+    }
+    
+    .modal-header-subtitle {
+        font-size: smaller;
+    }
+}
+
 .modal-header-icons {
-    min-width: 90px;
+    min-width: 100px;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .modal-body {
@@ -29,17 +42,18 @@
 }
 
 /* for safari */
-button{
+button {
     color: black;
 }
 
-.product-shopping-list{
+.product-shopping-list {
     border: none;
     height: 235px;
     width: 97%;
     margin-bottom: auto;
 }
-.product-wrapper{
+
+.product-wrapper {
     position: relative;
 }
 
@@ -51,7 +65,7 @@ button{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px 10px; 
+    padding: 10px 10px;
 }
 
 
@@ -59,15 +73,16 @@ button{
     cursor: pointer;
     display: flex;
     justify-content: end;
-} 
+}
 
 .update-count-btn-mobile {
     display: flex;
     justify-content: center;
-    margin: 0 0 15px 0; 
+    margin: 0 0 15px 0;
 }
 
-.share-btn, .close-btn{
+.share-btn,
+.close-btn {
     background: none;
     border: none;
     cursor: pointer
