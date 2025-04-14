@@ -58,7 +58,7 @@ const ShareModal = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) =
             tempDiv.style.left = "-9999px";
             document.body.appendChild(tempDiv);
 
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true, windowWidth: 1440 });
             if (!isMounted.current) {
                 document.body.removeChild(tempDiv);
                 return;
