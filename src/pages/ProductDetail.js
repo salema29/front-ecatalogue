@@ -210,7 +210,7 @@ function MainProduct() {
                                             onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
                                         >
                                             <span className="add-bouton-detail-text">
-                                                Ajouter à ma liste
+                                                {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
                                             </span>
                                             <span className="add-bouton-detail-icon">
                                                 {isAddedInList ? (
