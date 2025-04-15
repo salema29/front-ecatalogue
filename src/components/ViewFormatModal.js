@@ -95,14 +95,6 @@ function ViewFormatDialog() {
                     </header>
                     <div className="view-format-dialog-content">
                         <div className="view-format-dialog-desktop-content container">
-                            {/* <div className="view-format-dialog-desktop-left-part">
-                                <span className="view-format-dialog-side-image">
-                                    <img
-                                        src={headerData.slide_image}
-                                        alt=" {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux} "
-                                    />
-                                </span>
-                            </div> */}
                             <div className="view-format-dialog-desktop-right-part">
                                 <div className="view-format-icon-container">
                                     <img

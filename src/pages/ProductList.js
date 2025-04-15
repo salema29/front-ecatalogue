@@ -42,7 +42,7 @@ function Product() {
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
         const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
+            setIsMobileView(window.innerWidth <= 1024);
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
