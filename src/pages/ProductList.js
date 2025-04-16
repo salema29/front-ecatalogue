@@ -36,7 +36,7 @@ function Product() {
     };
 
     const handleCatalogView = () => {
-        navigate(`/catalog/${catalogId}`);
+        navigate(`/catalogue/${catalogId}`);
     };
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble

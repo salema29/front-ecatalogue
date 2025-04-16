@@ -12,8 +12,8 @@
     width: 100vw;
     height: 100vh;
     
-    background: rgba(255, 255, 255, 0.8); /* Optionnel : effet overlay */
-    z-index: 9999; /* S'assurer que le loader est bien visible */
+    /* background: rgba(255, 255, 255, 0.8); Optionnel : effet overlay */
+    z-index: 1; /* S'assurer que le loader est bien visible */
 }
 
 /* left loader */
@@ -28,7 +28,7 @@
 
     aspect-ratio: 1/1;
 
-    stroke: #669999;
+    stroke: grey;
     stroke-width: var(--_stroke-width);
 
     animation: loader_1 var(--_animation_duration) infinite,
