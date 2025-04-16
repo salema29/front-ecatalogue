@@ -5,6 +5,7 @@
     height: 100vh;
     overflow: hidden;
     width: 100%;
+    padding-top: 10vh;
 }
 
 .view-format-dialog-close, .view-format-dialog-open-list-course {
