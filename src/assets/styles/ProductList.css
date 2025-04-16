@@ -33,6 +33,14 @@
     height: 60vh;
   }
 }
+@media screen and (max-width: 350px) {
+  .catalogue-name{
+    font-size: 12px;
+  }
+  .catalogue-date{
+    display: none;
+  }
+}
 
 iframe>html>body {
   margin: 0 !important;
@@ -67,6 +75,9 @@ iframe>html>body {
 .sticky {
   position: sticky;
   top: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .wrapper {
@@ -81,8 +92,13 @@ iframe>html>body {
 }
 
 .header {
-  position: relative;
-  background: white!important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: white;
+  box-sizing: border-box;
 }
 
 .empty_products {
