@@ -156,6 +156,7 @@
 @media screen and (min-width : 768px) {
     .view-format-text {
         width: 80%;
+        text-wrap: pretty;
         /* text-align: left; */
         text-align: center;
     }
@@ -170,6 +171,7 @@
     .header-text {
         /* display: flex; */
         column-gap: 0.5rem;
+        text-wrap: pretty;
     }
 
     .view-format-dialog-mobile-content {

@@ -33,6 +33,14 @@
     height: 60vh;
   }
 }
+@media screen and (max-width: 350px) {
+  .catalogue-name{
+    font-size: 12px;
+  }
+  .catalogue-date{
+    display: none;
+  }
+}
 
 iframe>html>body {
   margin: 0 !important;
