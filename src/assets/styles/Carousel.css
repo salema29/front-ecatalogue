@@ -42,15 +42,6 @@
   user-select: none;
 }
 
-.slide-headline {
-  color: #fff;
-  font-size: 2.25rem;
-  line-height: 2.25rem;
-  text-transform: uppercase;
-  word-wrap: break-word;
-  word-break: break-all;
-}
-
 .slide-head-title {
   font-size: 2.25rem;
   line-height: 1;
@@ -89,10 +80,10 @@
 
   .slide-headline {
     color: #fff;
-    font-size: 1.85rem;
+    font-size: 1.50rem;
     line-height: 2.25rem;
     text-transform: uppercase;
-    word-wrap: break-word;
+    text-wrap: pretty;
     word-break: break-all;
   }
 }
