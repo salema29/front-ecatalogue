@@ -58,20 +58,19 @@ function Catalog() {
 
   useEffect(() => {
     const handlePostMessage = (event) => {
-      if (event.origin === `${ALLOW_ORIGIN_ACCESS_URL}`) {
-        const { action, page } = event.data;
-        if (action === "updatePage") {
-          // Get the current URL's query parameters
-          const urlParams = new URLSearchParams(window.location.search);
-          // Update or add the 'page' query parameter with the new value
-          urlParams.set('page', page);
-          // Update the URL (keeping the hash part intact)
-          window.history.pushState(
-            {},
-            '',
-            window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
-          );
-        }
+      console.log(event.origin, ALLOW_ORIGIN_ACCESS_URL)
+      const { action, page } = event.data;
+      if (action === "updatePage") {
+        // Get the current URL's query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        // Update or add the 'page' query parameter with the new value
+        urlParams.set('page', page);
+        // Update the URL (keeping the hash part intact)
+        window.history.pushState(
+          {},
+          '',
+          window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
+        );
       }
     };
 
