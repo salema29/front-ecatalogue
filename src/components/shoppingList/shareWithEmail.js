@@ -4,7 +4,7 @@ import "../../assets/styles/ProductSkeleton.css"
 
 export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
-    const [objet, setObjet] = useState("Liste des courses");
+    const [objet, setObjet] = useState("Liste de courses");
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
