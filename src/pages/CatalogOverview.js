@@ -11,7 +11,7 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const URL_ORIGIN = new URL(API_BASE_URL).origin
+  const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_IFRAME_ALLOW_ORIGIN_ACCESS_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const isMobileView  = window.innerWidth <= 767;
@@ -58,20 +58,19 @@ function Catalog() {
 
   useEffect(() => {
     const handlePostMessage = (event) => {
-      if (event.origin === `${URL_ORIGIN}`) {
-        const { action, page } = event.data;
-        if (action === "updatePage") {
-          // Get the current URL's query parameters
-          const urlParams = new URLSearchParams(window.location.search);
-          // Update or add the 'page' query parameter with the new value
-          urlParams.set('page', page);
-          // Update the URL (keeping the hash part intact)
-          window.history.pushState(
-            {},
-            '',
-            window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
-          );
-        }
+      console.log(event.origin, ALLOW_ORIGIN_ACCESS_URL)
+      const { action, page } = event.data;
+      if (action === "updatePage") {
+        // Get the current URL's query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        // Update or add the 'page' query parameter with the new value
+        urlParams.set('page', page);
+        // Update the URL (keeping the hash part intact)
+        window.history.pushState(
+          {},
+          '',
+          window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
+        );
       }
     };
 
@@ -80,7 +79,7 @@ function Catalog() {
     return () => {
       window.removeEventListener("message", handlePostMessage);
     };
-  }, [URL_ORIGIN]);
+  }, [ALLOW_ORIGIN_ACCESS_URL]);
   // Get the part of the URL after the hash
   const hash = window.location.hash;
   const urlParams = new URLSearchParams(hash.split('?')[1]);
