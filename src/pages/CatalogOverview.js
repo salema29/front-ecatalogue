@@ -11,7 +11,7 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const ALLOW_ORIGIN_ACCESS_URL = (process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL) ;
+  const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL ;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const isMobileView  = window.innerWidth <= 767;
