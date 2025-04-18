@@ -11,7 +11,7 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_IFRAME_ALLOW_ORIGIN_ACCESS_URL;
+  const ALLOW_ORIGIN_ACCESS_URL = (process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL) ;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
   const isMobileView  = window.innerWidth <= 767;
@@ -59,18 +59,19 @@ function Catalog() {
   useEffect(() => {
     const handlePostMessage = (event) => {
       console.log(event.origin, ALLOW_ORIGIN_ACCESS_URL)
-      const { action, page } = event.data;
-      if (action === "updatePage") {
-        // Get the current URL's query parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        // Update or add the 'page' query parameter with the new value
-        urlParams.set('page', page);
-        // Update the URL (keeping the hash part intact)
-        window.history.pushState(
-          {},
-          '',
-          window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
-        );
+      if (event.origin === `${ALLOW_ORIGIN_ACCESS_URL}`) {
+        const { action, page } = event.data;
+        if (action === "updatePage") {
+          const urlParams = new URLSearchParams(window.location.search);
+          // Update or add the 'page' query parameter with the new value
+          urlParams.set('page', page);
+          // Update the URL (keeping the hash part intact)
+          window.history.pushState(
+            {},
+            '',
+            window.location.pathname + window.location.hash.split('?')[0] + '?' + urlParams.toString()
+          );
+        }
       }
     };
 
