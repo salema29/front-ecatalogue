@@ -5,6 +5,7 @@
     height: 100vh;
     overflow: hidden;
     width: 100%;
+    padding-top: 10vh;
 }
 
 .view-format-dialog-close, .view-format-dialog-open-list-course {
@@ -14,11 +15,17 @@
 }
 
 .view-format-dialog-left-part {
-    column-gap: 1rem;
+    display: flex;
+    align-items: center;
+    /* flex-wrap: nowrap; */
+    max-width: 70%;
 }
 
 .view-format-dialog-right-part {
-    column-gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
 }
 
 .view-format-dialog-right-part,
@@ -28,8 +35,8 @@
 }
 
 .header {
-    width: -webkit-fill-available;
-    width: -moz-available;
+    /* width: 100%; */
+    /* max-width: 100vw; */
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
     border: none;
     background: #1c1a1f;
@@ -42,7 +49,53 @@
     justify-content: space-between;
 }
 
-@media screen and (min-width: 768px) {
+/* Styles spécifiques pour Safari */
+@media not all and (min-resolution:.001dpcm) {
+        @supports (-webkit-appearance:none) {
+        .header {
+            width: 100% !important;
+            -webkit-box-sizing: border-box;
+        }
+        }
+    }
+
+  /* Adaptation pour les écrans plus petits */
+    @media screen and (max-width: 768px) {
+        .header-text p {
+        font-size: 0.9rem;
+        }
+        .view-format-dialog-right-part {
+        gap: 2px;
+        }
+        .header {
+        padding: 0.3rem 0.5rem;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .header-text p {
+        font-size: 0.8rem;
+        }
+
+        .header-logo {
+        max-height: 30px;
+        }
+    }
+
+    .header-logo {
+        max-height: 40px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .header-text {
+        margin-left: 10px;
+        /* white-space: ; */
+        overflow: hidden;
+        text-overflow: auto;
+    }
+
+/* @media screen and (min-width: 768px) {
     .header-logo {
         max-height: 60%;
     }
@@ -66,7 +119,7 @@
     .view-format-dialog-content {
         padding: 50px 0;
     }
-}
+} */
 
 .header-text {
     color: white;
@@ -104,6 +157,7 @@
 @media screen and (min-width : 768px) {
     .view-format-text {
         width: 80%;
+        text-wrap: pretty;
         /* text-align: left; */
         text-align: center;
     }
@@ -116,8 +170,9 @@
     }
 
     .header-text {
-        display: flex;
+        /* display: flex; */
         column-gap: 0.5rem;
+        text-wrap: pretty;
     }
 
     .view-format-dialog-mobile-content {
@@ -233,7 +288,8 @@
 }
 
 .view-format-dialog-header {
-    position: absolute;
+    position: relative;
+    z-index: 2;
 }
 .text-gras{
     font-weight: 700;

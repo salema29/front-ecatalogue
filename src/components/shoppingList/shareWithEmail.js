@@ -135,6 +135,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                                             borderRadius: "4px",
                                             cursor: isSending ? "not-allowed" : "text"
                                         }}
+                                        autoComplete="on"
                                         disabled={isSending}
                                     />
                             </div>

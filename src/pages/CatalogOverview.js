@@ -8,13 +8,14 @@ import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
+import  "../assets/styles/CatalogueOverview.css"
 
 function Catalog() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_IFRAME_ALLOW_ORIGIN_ACCESS_URL;
   const { catalogId } = useParams();
   const [headerData, setHeaderData] = useState(null);
-  const isMobileView  = window.innerWidth <= 767;
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
   const [viewChoice, setViewChoice] = useState({
     isVueProduit : true,
     isVueFeuilletable : true
@@ -45,6 +46,14 @@ function Catalog() {
 
   useEffect(() => {
     disableEcatalogueAutoScroll();
+  }, []);
+
+  useEffect(() => {
+      const handleResize = () => {
+          setIsMobileView(window.innerWidth <= 1024);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -99,11 +108,11 @@ function Catalog() {
                 alt=""
               />
               <div className="header-text">
-                <p style={{ color: headerData ? headerData.client_color : "#fff" }} >
+                <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
                   {headerData.catalogue_name_ln_un}{" "}
                   {headerData.catalogue_name_ln_deux}
                 </p>
-                <p style={{ color: "black" }}>
+                <p className="catalogue-date" style={{ color: "black" }}>
                   du {headerData.catalogue_date_validite_debut} au {" "}
                   {headerData.catalogue_date_validite_fin}
                 </p>

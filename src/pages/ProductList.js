@@ -42,7 +42,7 @@ function Product() {
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
         const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
+            setIsMobileView(window.innerWidth <= 1024);
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -159,11 +159,11 @@ function Product() {
                                     alt=""
                                 />
                                 <div className="header-text">
-                                    <p style={{ color: headerData ? headerData.client_color : "#fff" }} >
+                                    <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
                                         {headerData.catalogue_name_ln_un}{" "}
                                         {headerData.catalogue_name_ln_deux}
                                     </p>
-                                    <p style={{ color: "black" }}>
+                                    <p className="catalogue-date"style={{ color: "black" }}>
                                         du {headerData.catalogue_date_validite_debut} au{" "}
                                         {headerData.catalogue_date_validite_fin}
                                     </p>
