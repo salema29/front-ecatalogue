@@ -166,7 +166,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             >
                 <div className="modal-header" style={{ background: clientColor }}>
                     <div>
-                        <h2 className="modal-header-title">Ma liste des courses</h2>
+                        <h2 className="modal-header-title">Ma liste de courses</h2>
                         <p className="modal-header-subtitle">
                             Préparez votre liste de courses <br /> pour gagner du temps en magasin
                         </p>

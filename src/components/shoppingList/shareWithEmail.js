@@ -4,7 +4,7 @@ import "../../assets/styles/ProductSkeleton.css"
 
 export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, catalogId }) => {
     const [email, setEmail] = useState("");
-    const [objet, setObjet] = useState("Liste des courses");
+    const [objet, setObjet] = useState("Liste de courses");
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
@@ -97,7 +97,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
         >
             <div className="share-email-modal">
                 <div className="modal-header" style={{ background: clientColor, padding: "15px", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }}>
-                    <h2 className="modal-header-title">Partager ma liste des courses</h2>
+                    <h2 className="modal-header-title">Partager ma liste de courses</h2>
                     <button className="close-btn" onClick={onClose} style={{ position: "absolute", top: "10px", right: "10px" }} title='Fermer la boite email'>
                         <svg width="20" height="20" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
