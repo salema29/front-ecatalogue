@@ -96,6 +96,7 @@ iframe>html>body {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  max-width: 100vw;
   padding: 0.5rem 1rem;
   background-color: white;
   box-sizing: border-box;
