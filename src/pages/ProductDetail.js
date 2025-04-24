@@ -10,6 +10,7 @@ import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
+import VueDetailArrow from "../components/arrow/VueDetailArrow";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -195,6 +196,8 @@ function MainProduct() {
                         >
                             {productData ? (
                                 <>
+                                    <VueDetailArrow direction="previous" />
+                                    <VueDetailArrow direction="next" />
                                     <iframe
                                         src={productData.html.html_name}
                                         className="product-item-detail placeholder-content"
