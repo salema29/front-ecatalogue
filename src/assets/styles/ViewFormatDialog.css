@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     /* flex-wrap: nowrap; */
-    max-width: 70%;
+    max-width: 155px;
 }
 
 .view-format-dialog-right-part {
@@ -65,7 +65,7 @@
         font-size: 0.9rem;
         }
         .view-format-dialog-right-part {
-        gap: 2px;
+        gap: 0px;
         }
         .header {
         padding: 0.3rem 0.5rem;
@@ -293,4 +293,15 @@
 }
 .text-gras{
     font-weight: 700;
+}
+
+.catalogue-name {
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;       /* Limite à 2 lignes */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2em;          /* Tu peux ajuster selon ta typo */
+    max-height: 2.4em;           /* 2 lignes * line-height */
 }

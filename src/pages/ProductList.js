@@ -9,7 +9,7 @@ import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
-import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ListCourse from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 
@@ -25,8 +25,8 @@ function Product() {
     const navigate = useNavigate();
     const { categoryList } = CategoryPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
-        isVueProduit : true,
-        isVueFeuilletable : true
+        isVueProduit: true,
+        isVueFeuilletable: true
     });
     const { shoppingList } = useContext(ShoppingListContext);
 
@@ -125,7 +125,7 @@ function Product() {
     useEffect(() => {
         const wrapper = document.querySelector('.wrapper');
         if (wrapper) {
-          wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
+            wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
         }
     }, [categoryId]);
 
@@ -155,15 +155,14 @@ function Product() {
                             <div className="view-format-dialog-left-part">
                                 <img
                                     className="header-logo"
-                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
+                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
                                     alt=""
                                 />
                                 <div className="header-text">
-                                    <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
-                                        {headerData.catalogue_name_ln_un}{" "}
-                                        {headerData.catalogue_name_ln_deux}
+                                    <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }}>
+                                        {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux}
                                     </p>
-                                    <p className="catalogue-date"style={{ color: "black" }}>
+                                    <p className="catalogue-date" style={{ color: "black" }}>
                                         du {headerData.catalogue_date_validite_debut} au{" "}
                                         {headerData.catalogue_date_validite_fin}
                                     </p>
@@ -197,10 +196,10 @@ function Product() {
                                             onClick={() => setModalOpen(true)}
                                             title="Ouvrir ma liste de course"
                                         >
-                                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                            <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
                                         </button>
                                     )
-                                    :(<></>)
+                                    : (<></>)
                                 }
                                 <button
                                     className="view-format-dialog-close btn"
@@ -244,7 +243,7 @@ function Product() {
                                             ) : null
                                         ))}
                                     </div>
-                                    {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
+                                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData.client_color} />)}
                                 </>
                             ) : (
                                 <LoadingSpinner />
