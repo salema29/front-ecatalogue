@@ -152,6 +152,10 @@
     .view-format-dialog-button-container {
         flex-direction: column;
     }
+
+    .view-format-dialog-left-part {
+        max-width: 155px;
+    }
 }
 
 @media screen and (min-width : 768px) {
