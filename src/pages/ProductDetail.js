@@ -7,10 +7,11 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
-import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ListCourse from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import VueDetailArrow from "../components/arrow/VueDetailArrow";
+import { fetchPrevNextVueDetail } from "../components/functions/Api";
 
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -31,11 +32,11 @@ function MainProduct() {
                 (item) => item.productId === productId && item.categoryId === categoryId
             )
     );
+    const [prevNextVueDetail, setPrevNextVueDetail] = useState(null);
 
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
-
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
@@ -47,12 +48,24 @@ function MainProduct() {
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${productId}`)
-            .then((response) => response.json())
-            .then((fetchedData) => setProductData(fetchedData))
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
+        if (!API_BASE_URL || !categoryId || !productId) return;
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${productId}`);
+                const fetchedData = await response.json();
+                setProductData(fetchedData);
+
+                if (fetchedData?.html.product_id) {
+                    const prevNextData = await fetchPrevNextVueDetail(fetchedData.html.product_id);
+                    setPrevNextVueDetail(prevNextData);
+                }
+            } catch (error) {
+                console.error("Error fetching product detail:", error);
+            }
+        };
+
+        fetchData();
     }, [productId, API_BASE_URL, categoryId]);
 
     useEffect(() => {
@@ -82,6 +95,7 @@ function MainProduct() {
     useEffect(() => {
         localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
     }, [shoppingList]);
+
     const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
@@ -163,18 +177,18 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                        {headerData.show_list_course === 't' ?
-                            (
-                                <button
-                                    className="view-format-dialog-open-list-course btn"
-                                    onClick={() => setModalOpen(true)}
-                                    title="Ouvrir ma liste de course"
-                                >
-                                    <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
-                                </button>
-                            )
-                            :(<></>)
-                        }
+                            {headerData.show_list_course === 't' ?
+                                (
+                                    <button
+                                        className="view-format-dialog-open-list-course btn"
+                                        onClick={() => setModalOpen(true)}
+                                        title="Ouvrir ma liste de course"
+                                    >
+                                        <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
+                                    </button>
+                                )
+                                : (<></>)
+                            }
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
@@ -196,8 +210,25 @@ function MainProduct() {
                         >
                             {productData ? (
                                 <>
-                                    <VueDetailArrow direction="previous" />
-                                    <VueDetailArrow direction="next" />
+                                    {!modalOpen && prevNextVueDetail && (
+                                        <>
+                                            {prevNextVueDetail.previous && (
+                                                <VueDetailArrow
+                                                    direction="previous"
+                                                    catalogId={catalogId}
+                                                    prevNextVueDetail={prevNextVueDetail}
+                                                />
+                                            )}
+                                            {prevNextVueDetail.next && (
+                                                <VueDetailArrow
+                                                    direction="next"
+                                                    catalogId={catalogId}
+                                                    prevNextVueDetail={prevNextVueDetail}
+                                                />
+                                            )}
+                                        </>
+                                    )}
+
                                     <iframe
                                         src={productData.html.html_name}
                                         className="product-item-detail placeholder-content"
@@ -230,7 +261,7 @@ function MainProduct() {
                                             </span>
                                         </button>
                                     )}
-                                    {modalOpen && (<ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData ? headerData.client_color : "#669999"} /> )}
+                                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
                                 </>
                             ) : (
                                 <LoadingSpinner />
