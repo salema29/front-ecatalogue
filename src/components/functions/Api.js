@@ -1,5 +1,40 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+export const fetchPrevNextVueDetail = async (productDetailId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}api/get-prev-next-vue-detail/${productDetailId}`);
+
+        if (!response.ok) {
+            console.error(`Erreur HTTP : ${response.status}`);
+            return null;
+        }
+
+        const fetchedData = await response.json();
+
+        if (fetchedData.status === 'success') {
+            const result = fetchedData.data;
+            return {
+                previous: result.previous ? {
+                    viewOrder: result.previous.view_order,
+                    categoryId: result.previous.product_categorie_id,
+                    productResumeId: result.previous.product_resume_id
+                } : null,
+                next: result.next ? {
+                    viewOrder: result.next.view_order,
+                    categoryId: result.next.product_categorie_id,
+                    productResumeId: result.next.product_resume_id
+                } : null
+            }
+        } else {
+            console.error('Erreur API:', fetchedData.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur de récupération des données:', error);
+        return null;
+    }
+};
+
 export const fetchViewChoice = async (catalogueId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/api/get-view-choice/${catalogueId}`);
@@ -59,7 +94,7 @@ export const postShoppingListImage = async (shoppingList, catalogId, options = {
     } catch (error) {
         if (error.name === "AbortError") {
             console.warn("Requête annulée par l'utilisateur.");
-            return null; 
+            return null;
         }
         console.error("Erreur lors de la requête :", error);
         return null;
