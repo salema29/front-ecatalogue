@@ -148,7 +148,6 @@ function Product() {
     const [modalOpen, setModalOpen] = useState(false);
 
     const [searchResults, setSearchResults] = useState(null);
-
     return (
         <>
             {headerData ? (
@@ -174,7 +173,7 @@ function Product() {
                             </div>
                             <div className="view-format-dialog-right-part">
                                 {/* search bar */}
-                                <SearchBar onResults={setSearchResults} />
+                                <SearchBar onResults={setSearchResults} catalogue_id={catalogId} />
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -234,12 +233,22 @@ function Product() {
                         }}
                     >
                         {searchResults ? (
-                            // Render API results
-                            <ul>
-                                {searchResults.map((item, index) => (
-                                <li key={index}>{item.name}</li> // adapt to your data structure
-                                ))}
-                            </ul>
+                            <div className="product-list-container" >
+                            {isLoading === false && searchResults.length > 0 ? (
+                                <>
+                                    <div className="grid-container">
+                                        {searchResults.map((product, index) => (
+                                                <ProductItem
+                                                    key={index}
+                                                    product={product}
+                                                    index={index}
+                                                    categoryId={categoryId}
+                                                    catalogId={catalogId}
+                                                    showListCourse="t"
+                                                    API_BASE_URL={API_BASE_URL} />
+                                        ))}
+                                    </div>
+                                </>
                             ) : (
                                 <div className="product-list-container" >
                                     {isLoading === false && productData.length > 0 ? (
@@ -258,13 +267,39 @@ function Product() {
                                                     ) : null
                                                 ))}
                                             </div>
-                                            {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                                         </>
                                     ) : (
                                         <LoadingSpinner />
                                     )}
                                 </div>
                             )}
+                        </div>
+                            ) : (
+                                <div className="product-list-container" >
+                                    {isLoading === false && productData.length > 0 ? (
+                                        <>
+                                            <div className="grid-container">
+                                                {productData.map((product, index) => (
+                                                    product.view_type === '1' ? (
+                                                        <ProductItem
+                                                            key={index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={categoryId}
+                                                            catalogId={catalogId}
+                                                            showListCourse={headerData.show_list_course}
+                                                            API_BASE_URL={API_BASE_URL} />
+                                                    ) : null
+                                                ))}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <LoadingSpinner />
+                                    )}
+                                </div>
+                            )
+                        }
+                        {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                     </div>
                 </div>
             ) : (

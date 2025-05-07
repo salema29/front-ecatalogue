@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash.debounce';
 import "../../components/search_bar/search_bar.css"
 
-const SearchBar = ({ onResults }) => {
+const SearchBar = ({ onResults, catalogue_id }) => {
     const [query, setQuery] = useState('');
     const abortControllerRef = useRef(null);
 
@@ -18,32 +18,42 @@ const SearchBar = ({ onResults }) => {
             abortControllerRef.current = controller;
 
             const formData = new FormData();
-            formData.append('value_to_search', value)
+            formData.append('value_to_search', value);
+            formData.append('catalogue_id', catalogue_id);
 
             try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}api/search-products`, {
-                method: 'POST',
-                body: formData,
-                signal: controller.signal,
-            });
+                if(value){
+                    const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}api/search-products`, {
+                        method: 'POST',
+                        body: formData,
+                        signal: controller.signal,
+                    });
 
-            const data = await response.json();
-            onResults(data); // Send result to parent
+                    const data = await response.json();
+                    if (data.result && data.result.length > 0) {
+                        onResults(data.result); // Send result to parent
+                    } else {
+                        console.warn("Empty or invalid product data received");
+                        onResults([]);
+                    }
+                }else{
+                    onResults([]);
+                }
             } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('API error:', error);
-            }
+                if (error.name !== 'AbortError') {
+                    console.error('API error:', error);
+                }
             }
         }, 300),
-        [onResults]
+        [onResults, catalogue_id]
     );
 
     // Cancel on unmount
     useEffect(() => {
         return () => {
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-        }
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
         };
     }, []);
 
