@@ -147,7 +147,11 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
+    const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState(null);
+    const handleQueryChange = (value) => {
+        setSearchQuery(value);
+    };
     return (
         <>
             {headerData ? (
@@ -173,7 +177,7 @@ function Product() {
                             </div>
                             <div className="view-format-dialog-right-part">
                                 {/* search bar */}
-                                <SearchBar onResults={setSearchResults} catalogue_id={catalogId} />
+                                <SearchBar onResults={setSearchResults} catalogue_id={catalogId} onQueryChange={handleQueryChange} />
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -232,7 +236,7 @@ function Product() {
                             overflowY: 'scroll'
                         }}
                     >
-                        {searchResults ? (
+                        {searchQuery ? (
                             <div className="product-list-container" >
                             {isLoading === false && searchResults.length > 0 ? (
                                 <>
@@ -250,28 +254,7 @@ function Product() {
                                     </div>
                                 </>
                             ) : (
-                                <div className="product-list-container" >
-                                    {isLoading === false && productData.length > 0 ? (
-                                        <>
-                                            <div className="grid-container">
-                                                {productData.map((product, index) => (
-                                                    product.view_type === '1' ? (
-                                                        <ProductItem
-                                                            key={index}
-                                                            product={product}
-                                                            index={index}
-                                                            categoryId={categoryId}
-                                                            catalogId={catalogId}
-                                                            showListCourse={headerData.show_list_course}
-                                                            API_BASE_URL={API_BASE_URL} />
-                                                    ) : null
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <LoadingSpinner />
-                                    )}
-                                </div>
+                                <p>no result</p>
                             )}
                         </div>
                             ) : (

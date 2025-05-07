@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash.debounce';
 import "../../components/search_bar/search_bar.css"
 
-const SearchBar = ({ onResults, catalogue_id }) => {
+const SearchBar = ({ onResults, catalogue_id, onQueryChange  }) => {
     const [query, setQuery] = useState('');
     const abortControllerRef = useRef(null);
 
@@ -60,6 +60,10 @@ const SearchBar = ({ onResults, catalogue_id }) => {
     const handleChange = (e) => {
         const value = e.target.value;
         setQuery(value);
+        // Notify parent of the new query value
+        if (onQueryChange) {
+            onQueryChange(value);
+        }
         debouncedSearch(value);
     };
 
