@@ -55,7 +55,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 }
             });
         }
-    }, [shoppingList, catalogId, totalEconomyData]);
+    }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
         if (isMobile()) {
