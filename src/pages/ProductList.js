@@ -149,8 +149,14 @@ function Product() {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [isLoadSearch, setIsLoadSearch] = useState(false);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
+        setIsLoadSearch(true);
+    };
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+        setIsLoadSearch(false); // <-- Stop loader after results arrive
     };
     return (
         <>
@@ -177,7 +183,7 @@ function Product() {
                             </div>
                             <div className="view-format-dialog-right-part">
 
-                                <SearchBar onResults={setSearchResults} catalogue_id={catalogId} onQueryChange={handleQueryChange} />
+                            <SearchBar  onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -236,52 +242,55 @@ function Product() {
                             overflowY: 'scroll'
                         }}
                     >
-                        {searchQuery ? (
-                            <div className="product-list-container" >
-                            {isLoading === false && searchResults.length > 0 ? (
-                                <>
-                                    <div className="grid-container">
-                                        {searchResults.map((product, index) => (
-                                                <ProductItem
-                                                    key={index}
-                                                    product={product}
-                                                    index={index}
-                                                    categoryId={product.product_categorie_id}
-                                                    catalogId={catalogId}
-                                                    showListCourse="t"
-                                                    API_BASE_URL={API_BASE_URL} />
-                                        ))}
-                                    </div>
-                                </>
-                            ) : (
-                                <p>no result</p>
-                            )}
-                        </div>
-                            ) : (
-                                <div className="product-list-container" >
-                                    {isLoading === false && productData.length > 0 ? (
-                                        <>
+                        <div className="product-list-container" >
+                            {searchQuery ?
+                                // si on cherhce qlq chose
+                                (
+                                    <div className="product-list-container">
+                                        {isLoadSearch ? (
+                                            <LoadingSpinner />
+                                        ) : searchResults.length > 0 ? (
                                             <div className="grid-container">
-                                                {productData.map((product, index) => (
-                                                    product.view_type === '1' ? (
-                                                        <ProductItem
-                                                            key={index}
-                                                            product={product}
-                                                            index={index}
-                                                            categoryId={categoryId}
-                                                            catalogId={catalogId}
-                                                            showListCourse={headerData.show_list_course}
-                                                            API_BASE_URL={API_BASE_URL} />
-                                                    ) : null
+                                                {searchResults.map((product, index) => (
+                                                    <ProductItem
+                                                        key={product.id_produit || index}
+                                                        product={product}
+                                                        index={index}
+                                                        categoryId={product.product_categorie_id}
+                                                        catalogId={catalogId}
+                                                        showListCourse="t"
+                                                        API_BASE_URL={API_BASE_URL}
+                                                    />
                                                 ))}
                                             </div>
-                                        </>
+                                        ) : (
+                                            <p>No result</p>
+                                        )}
+                                    </div>
+                                ) :
+                                (
+                                    isLoading === false && productData.length > 0 ?
+                                    (
+                                        <div className="grid-container">
+                                            {productData.map((product, index) => (
+                                                product.view_type === '1' ? (
+                                                    <ProductItem
+                                                        key={index}
+                                                        product={product}
+                                                        index={index}
+                                                        categoryId={categoryId}
+                                                        catalogId={catalogId}
+                                                        showListCourse={headerData.show_list_course}
+                                                        API_BASE_URL={API_BASE_URL} />
+                                                ) : null
+                                            ))}
+                                        </div>
                                     ) : (
                                         <LoadingSpinner />
-                                    )}
-                                </div>
-                            )
-                        }
+                                    )
+                                )
+                            }
+                        </div>
                         {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                     </div>
                 </div>
