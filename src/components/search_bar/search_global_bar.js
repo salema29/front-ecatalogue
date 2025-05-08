@@ -29,11 +29,16 @@ const SearchBar = ({ onResults, catalogue_id, onQueryChange  }) => {
                         signal: controller.signal,
                     });
 
-                    const data = await response.json();
-                    if (data.result && data.result.length > 0) {
-                        onResults(data.result); // Send result to parent
-                    } else {
-                        console.warn("Empty or invalid product data received");
+                    try {
+                        const data = await response.json();
+                        if (Array.isArray(data?.result) && data.result.length > 0) {
+                            onResults(data.result); // Send result to parent
+                        } else {
+                            console.warn("Empty or invalid product data received");
+                            onResults([]);
+                        }
+                    } catch (error) {
+                        console.error("Failed to parse JSON response:", error);
                         onResults([]);
                     }
                 }else{

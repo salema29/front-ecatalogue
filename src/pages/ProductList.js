@@ -148,7 +148,7 @@ function Product() {
     const [modalOpen, setModalOpen] = useState(false);
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState(null);
+    const [searchResults, setSearchResults] = useState([]);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
     };
@@ -176,7 +176,7 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
-                                {/* search bar */}
+
                                 <SearchBar onResults={setSearchResults} catalogue_id={catalogId} onQueryChange={handleQueryChange} />
 
                                 {viewChoice.isVueFeuilletable && (
@@ -246,7 +246,7 @@ function Product() {
                                                     key={index}
                                                     product={product}
                                                     index={index}
-                                                    categoryId={categoryId}
+                                                    categoryId={product.product_categorie_id}
                                                     catalogId={catalogId}
                                                     showListCourse="t"
                                                     API_BASE_URL={API_BASE_URL} />
