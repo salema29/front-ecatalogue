@@ -40,6 +40,11 @@ function Product() {
         navigate(`/catalogue/${catalogId}`);
     };
 
+    // for searching
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isLoadSearch, setIsLoadSearch] = useState(false);
+
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
         const handleResize = () => {
@@ -104,7 +109,7 @@ function Product() {
     }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
-        if (headerData && categoryList) {
+        if (headerData && categoryList && searchQuery) {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
@@ -120,7 +125,7 @@ function Product() {
                 window.removeEventListener('resize', updateHeight);
             };
         }
-    }, [headerData, categoryId, categoryList]);
+    }, [headerData, categoryId, categoryList, searchQuery]);
 
 
     useEffect(() => {
@@ -147,9 +152,6 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
         setIsLoadSearch(true);
@@ -230,7 +232,7 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        {productData.length > 0 ? (
+                        {productData.length > 0 && !searchQuery ? (
                             <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
                             :
                             (<></>)
@@ -268,6 +270,7 @@ function Product() {
                                         )}
                                     </div>
                                 ) :
+                                // si on consulte par categorie
                                 (
                                     isLoading === false && productData.length > 0 ?
                                     (
