@@ -164,7 +164,6 @@ function Product() {
             const updateHeightResultatSearch = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-
                 const height = window.innerHeight - stickyHeight;
                 setWrapperHeightSearch(height);
             };
