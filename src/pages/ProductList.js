@@ -23,6 +23,7 @@ function Product() {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const headerHeight = document.querySelector('.sticky'); // class "sticky" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
+    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight - headerHeight);
     const navigate = useNavigate();
     const { categoryList } = CategoryPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
@@ -39,11 +40,6 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalogue/${catalogId}`);
     };
-
-    // for searching
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -109,7 +105,7 @@ function Product() {
     }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
-        if (headerData && categoryList && searchQuery) {
+        if (headerData && categoryList ) {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
@@ -125,7 +121,7 @@ function Product() {
                 window.removeEventListener('resize', updateHeight);
             };
         }
-    }, [headerData, categoryId, categoryList, searchQuery]);
+    }, [headerData, categoryId, categoryList]);
 
 
     useEffect(() => {
@@ -152,6 +148,9 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isLoadSearch, setIsLoadSearch] = useState(false);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
         setIsLoadSearch(true);
@@ -160,6 +159,24 @@ function Product() {
         setSearchResults(results);
         setIsLoadSearch(false); // <-- Stop loader after results arrive
     };
+    useEffect(() => {
+        if (searchQuery ) {
+            const updateHeightResultatSearch = () => {
+                const stickyElement = document.querySelector('.sticky');
+                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+
+                const height = window.innerHeight - stickyHeight;
+                setWrapperHeightSearch(height);
+            };
+
+            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
+            window.addEventListener('resize', updateHeightResultatSearch);
+
+            return () => {
+                window.removeEventListener('resize', updateHeightResultatSearch);
+            };
+        }
+    }, [searchQuery]);
     return (
         <>
             {headerData ? (
@@ -240,7 +257,7 @@ function Product() {
                     </div>
                     <div className="wrapper"
                         style={{
-                            height: `${wrapperHeight}px`,
+                            height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
                             overflowY: 'scroll'
                         }}
                     >
