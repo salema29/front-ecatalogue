@@ -4,7 +4,7 @@
 
 .search-input {
     width: 15rem;
-    padding: 10px 40px 10px 20px; /* text avoids curved left, space for icon */
+    padding: 10px 40px 10px 40px; /* text avoids curved left, space for icon */
     border-radius: 9999px;
     border: none;
     background-color: #e6e3e3;
@@ -21,4 +21,16 @@
     height: 16px;
     fill: #666;
     pointer-events: none;
+}
+
+.search-clear {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    padding-right: 15px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    fill: #666;
+    cursor: pointer;
 }

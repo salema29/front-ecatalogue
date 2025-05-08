@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext  } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
@@ -80,27 +80,27 @@ function Product() {
         fetchHeaderData();
     }, [catalogId, API_BASE_URL]);
 
-    useEffect(() => {
-        const fetchProductData = async () => {
-            try {
-                const response = await fetch(
-                    `${API_BASE_URL}/api/getProducts/${categoryId}/${catalogId}`
-                );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                if (Array.isArray(data) && data.length > 0) {
-                    setProductData(data);
-                } else {
-                    console.warn("Empty or invalid product data received");
-                    setProductData([]);
-                }
-            } catch (error) {
-                console.error("Error fetching product data: ", error);
+    const fetchProductData = async () => {
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/getProducts/${categoryId}/${catalogId}`
+            );
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        };
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+                setProductData(data);
+            } else {
+                console.warn("Empty or invalid product data received");
+                setProductData([]);
+            }
+            } catch (error) {
+            console.error("Error fetching product data: ", error);
+        }
+    };
 
+    useEffect(() => {
         fetchProductData();
     }, [categoryId, API_BASE_URL, catalogId]);
 
@@ -177,6 +177,11 @@ function Product() {
             };
         }
     }, [searchQuery]);
+
+    const returnToCategory = () => {
+        setSearchQuery('')
+    };
+
     return (
         <>
             {headerData ? (
@@ -202,7 +207,7 @@ function Product() {
                             </div>
                             <div className="view-format-dialog-right-part">
 
-                            <SearchBar  onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
+                            <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -252,7 +257,12 @@ function Product() {
                         {productData.length > 0 && !searchQuery ? (
                             <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
                             :
-                            (<></>)
+                            (
+                                <button className="search-return btn" onClick={returnToCategory}>
+                                    <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}><path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                    <span>Retour </span>
+                                </button>
+                            )
                         }
                     </div>
                     <div className="wrapper"
@@ -269,19 +279,20 @@ function Product() {
                                         {isLoadSearch ? (
                                             <LoadingSpinner />
                                         ) : searchResults.length > 0 ? (
-                                            <div className="grid-container">
-                                                {searchResults.map((product, index) => (
-                                                    <ProductItem
-                                                        key={product.id_produit || index}
-                                                        product={product}
-                                                        index={index}
-                                                        categoryId={product.product_categorie_id}
-                                                        catalogId={catalogId}
-                                                        showListCourse="t"
-                                                        API_BASE_URL={API_BASE_URL}
-                                                    />
-                                                ))}
-                                            </div>
+                                            <>
+                                                <div className="grid-container">
+                                                    {searchResults.map((product, index) => (
+                                                        <ProductItem
+                                                            key={product.id_produit || index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={product.product_categorie_id}
+                                                            catalogId={catalogId}
+                                                            showListCourse="t"
+                                                            API_BASE_URL={API_BASE_URL} />
+                                                    ))}
+                                                </div>
+                                            </>
                                         ) : (
                                             <p>No result</p>
                                         )}
