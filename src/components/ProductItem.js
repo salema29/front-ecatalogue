@@ -5,7 +5,7 @@ import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 
-function ProductItem({ product, index, categoryId, catalogId, showListCourse, API_BASE_URL }) {
+function ProductItem({ product, index, categoryId, catalogId, showListCourse, API_BASE_URL,searchRef }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
@@ -20,8 +20,10 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
 
     const navigate = useNavigate();
     const id_produit_resume = product.id_produit;
-    const handleDetailedView = (productId) => {
-        navigate(`/product/${catalogId}/${productId}/${categoryId}/${id_produit_resume}`);
+    const handleDetailedView = (productId, ) => {
+        // navigate(`/product/${catalogId}/${productId}/${categoryId}/${id_produit_resume}`);
+        const className = searchRef.current?.getClassName?.();
+        console.log("Classe de la search bar :", className);
     };
 
     useEffect(() => {
