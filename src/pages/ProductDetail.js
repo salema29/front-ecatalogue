@@ -160,7 +160,7 @@ function MainProduct() {
     const {searchQuery, setSearchQuery, searchResults,setSearchResults,clearSearch} = useSearch();
     const [isLoadSearch, setIsLoadSearch] = useState(false);
     useEffect(() => {
-        if (searchQuery ) {
+        if (searchQuery || setSearchResults ) {
             const updateHeightResultatSearch = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
@@ -173,7 +173,7 @@ function MainProduct() {
                 window.removeEventListener('resize', updateHeightResultatSearch);
             };
         }
-    }, [searchQuery]);
+    }, [searchQuery, setSearchResults]);
     useEffect(() => {
         clearSearch();
         setProductData([])
@@ -253,88 +253,99 @@ function MainProduct() {
                             </button>
                         )} 
                     </div>
-                    {searchQuery ? (
-                        <div className="grid-container"
-                            style={{ height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`, overflowY: 'auto' }}
-                        >
-                            {searchResults.map((product, index) => (
-                                <ProductItem
-                                    key={product.id_produit || index}
-                                    product={product}
-                                    index={index}
-                                    categoryId={product.product_categorie_id}
-                                    catalogId={catalogId}
-                                    showListCourse="t"
-                                    API_BASE_URL={API_BASE_URL}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="product-detail-container">
-                            <div className="single-item-wrapper" style={{
-                                height: `${wrapperHeight}px` }}  >
-                                {productData.length !== 0 ? (
-                                    <>
-                                        {!modalOpen && prevNextVueDetail && (
-                                            <>
-                                                {prevNextVueDetail.previous && (
-                                                    <VueDetailArrow
-                                                        direction="previous"
+                    <div className="product-detail-container">
+                        <div className="single-item-wrapper" style={{ height: `${wrapperHeight}px` }}  >
+                            {searchQuery ? (
+                                isLoadSearch ? (
+                                    <LoadingSpinner />
+                                ) : (
+                                    <div className="single-item-wrapper" style={{
+                                        overflowY: 'scroll' }}  >
+                                        <div className="grid-container">
+                                            { searchResults.length > 0 ? (searchResults.map((product, index) => (
+                                            
+                                                    <ProductItem
+                                                        key={product.id_produit || index}
+                                                        product={product}
+                                                        index={index}
+                                                        categoryId={product.product_categorie_id}
                                                         catalogId={catalogId}
-                                                        prevNextVueDetail={prevNextVueDetail}
+                                                        showListCourse="t"
+                                                        API_BASE_URL={API_BASE_URL}
                                                     />
-                                                )}
-                                                {prevNextVueDetail.next && (
-                                                    <VueDetailArrow
-                                                        direction="next"
-                                                        catalogId={catalogId}
-                                                        prevNextVueDetail={prevNextVueDetail}
-                                                    />
-                                                )}
+                                                
+                                            ))
+                                        ) : 
+                                            (<p>Aucun résultat</p>) }
+                                        </div>
+                                    </div>
+                                )
+                            ) : (
+                                <div className="single-item-wrapper" style={{
+                                        height: `${wrapperHeight}px` }}  >
+                                    { productData.length !== 0 ? (
+                                        <>
+                                            {!modalOpen && prevNextVueDetail && (
+                                                <>
+                                                    {prevNextVueDetail.previous && (
+                                                        <VueDetailArrow
+                                                            direction="previous"
+                                                            catalogId={catalogId}
+                                                            prevNextVueDetail={prevNextVueDetail}
+                                                        />
+                                                    )}
+                                                    {prevNextVueDetail.next && (
+                                                        <VueDetailArrow
+                                                            direction="next"
+                                                            catalogId={catalogId}
+                                                            prevNextVueDetail={prevNextVueDetail}
+                                                        />
+                                                    )}
+                                                </>
+                                            )}
+
+                                            <iframe
+                                                src={productData.html.html_name}
+                                                className="product-item-detail placeholder-content"
+                                                title={productData.html.html_name}
+                                                width="auto"
+                                                onLoad={() => setIsLoading(false)}
+                                                // height="590px"
+                                            />
+
+                                            {!isLoading && headerData.show_list_course === "t" && (
+                                                <button
+                                                    className="add-bouton-detail"
+                                                    style={{ backgroundColor: headerData.client_color }}
+                                                        onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
+                                                >
+                                                    <span className="add-bouton-detail-text">
+                                                        {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
+                                                    </span>
+                                                    <span className="add-bouton-detail-icon">
+                                                            {isAddedInList ? (
+                                                                <img
+                                                                    src={addListIConOk}
+                                                                    alt="add-to-basket"
+                                                                />
+                                                            ) : (
+                                                                <img
+                                                                    src={addListICon}
+                                                                    alt="add-to-basket"
+                                                                />
+                                                            )}
+                                                    </span>
+                                                </button>
+                                            )}
+                                                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
                                             </>
+                                            ) : (
+                                                <LoadingSpinner />
                                         )}
-
-                                        <iframe
-                                            src={productData.html.html_name}
-                                            className="product-item-detail placeholder-content"
-                                            title={productData.html.html_name}
-                                            width="auto"
-                                            onLoad={() => setIsLoading(false)}
-                                            // height="590px"
-                                        />
-
-                                        {!isLoading && headerData.show_list_course === "t" && (
-                                            <button
-                                                className="add-bouton-detail"
-                                                style={{ backgroundColor: headerData.client_color }}
-                                                    onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
-                                            >
-                                                <span className="add-bouton-detail-text">
-                                                    {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
-                                                </span>
-                                                <span className="add-bouton-detail-icon">
-                                                        {isAddedInList ? (
-                                                            <img
-                                                                src={addListIConOk}
-                                                                alt="add-to-basket"
-                                                            />
-                                                        ) : (
-                                                            <img
-                                                                src={addListICon}
-                                                                alt="add-to-basket"
-                                                            />
-                                                        )}
-                                                </span>
-                                            </button>
-                                        )}
-                                            {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
-                                        </>
-                                    ) : (
-                                        <LoadingSpinner />
-                    )}
                                 </div>
-                            </div>) }
-                            
+                            ) }
+                        </div>
+                    </div>
                 </>
             ) : (
                 <LoadingSpinner />

@@ -158,6 +158,7 @@ function Product() {
         setIsLoadSearch(true);
     };
     const handleSearchResults = (results) => {
+        setIsLoadSearch(false);
         setSearchResults(results);
         setIsLoadSearch(false); // <-- Stop loader after results arrive
     };
@@ -282,28 +283,27 @@ function Product() {
                             {searchQuery ?
                                 // si on cherhce qlq chose
                                 (
-                                    <div className="product-list-container">
-                                        {isLoadSearch ? (
-                                            <LoadingSpinner />
-                                        ) : searchResults.length > 0 ? (
-                                            <>
-                                                <div className="grid-container">
-                                                    {searchResults.map((product, index) => (
-                                                        <ProductItem
-                                                            key={product.id_produit || index}
-                                                            product={product}
-                                                            index={index}
-                                                            categoryId={product.product_categorie_id}
-                                                            catalogId={catalogId}
-                                                            showListCourse="t"
-                                                            API_BASE_URL={API_BASE_URL} />
-                                                    ))}
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <p>No result</p>
-                                        )}
-                                    </div>
+                                    isLoadSearch ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        
+                                        searchResults.length > 0 ? (searchResults.map((product, index) => (
+                                            <div className="grid-container">
+                                                <ProductItem
+                                                    key={product.id_produit || index}
+                                                    product={product}
+                                                    index={index}
+                                                    categoryId={product.product_categorie_id}
+                                                    catalogId={catalogId}
+                                                    showListCourse="t"
+                                                    API_BASE_URL={API_BASE_URL}
+                                                />
+                                            </div>
+                                        ))) : 
+                                        (<p>Aucun résultat</p>) 
+                                            
+                                    
+                                    )
                                 ) :
                                 // si on consulte par categorie
                                 (
