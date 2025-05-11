@@ -207,8 +207,9 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
+                                {!isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
 
-                            <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
+                                
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -255,16 +256,21 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        {productData.length > 0 && !searchQuery ? (
-                            <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
-                            :
-                            (
-                                <button className="search-return btn" title="Retour" onClick={returnToCategory}>
-                                    <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}><path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
-                                    <span>Retour </span>
-                                </button>
-                            )
-                        }
+                        <div style={{ backgroundColor: "white"}}>
+                            {isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
+                            {productData.length > 0 && !searchQuery ? (
+                                <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
+                                :
+                                (
+                                    <button className="search-return btn" title="Retour" onClick={returnToCategory}>
+                                        <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
+                                            <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                        <span>Retour </span>
+                                    </button>
+                                )
+                            }
+                        </div>
+                            
                     </div>
                     <div className="wrapper"
                         style={{

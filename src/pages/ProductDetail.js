@@ -188,6 +188,10 @@ function MainProduct() {
         setIsLoadSearch(false);
     };
 
+    const returnToCategory = () => {
+        clearSearch();
+    };
+
     return (
         <>
             {headerData ? (
@@ -209,11 +213,7 @@ function MainProduct() {
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                            <SearchBar 
-                                onResults={handleSearchResults} 
-                                catalogue_id={catalogId} 
-                                onQueryChange={handleQueryChange} 
-                            />
+                            {!isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
 
                             {headerData.show_list_course === 't' && (
                                 <button
@@ -238,6 +238,19 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
+                    <div style={{ backgroundColor: "white"}}>
+                            {isMobileView && (
+                                <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
+                            )}                  
+                    
+                        {searchQuery &&   (
+                            <button className="search-return btn" title="Retour" onClick={returnToCategory}>
+                                <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
+                                    <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                <span>Retour </span>
+                            </button>
+                        )} 
+                    </div>
                     {searchQuery ? (
                         <div className="grid-container"
                             style={{ height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`, overflowY: 'auto' }}
@@ -257,9 +270,7 @@ function MainProduct() {
                     ) : (
                         <div className="product-detail-container">
                             <div className="single-item-wrapper" style={{
-height: `${wrapperHeight}px`
-                                    }}
->
+                                height: `${wrapperHeight}px` }}  >
                                 {productData ? (
                                     <>
                                         {!modalOpen && prevNextVueDetail && (
@@ -286,7 +297,7 @@ height: `${wrapperHeight}px`
                                             className="product-item-detail placeholder-content"
                                             title={productData.html.html_name}
                                             width="auto"
-                                                onLoad={() => setIsLoading(false)}
+                                            onLoad={() => setIsLoading(false)}
                                             // height="590px"
                                         />
 

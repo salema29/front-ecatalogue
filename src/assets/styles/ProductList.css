@@ -162,6 +162,7 @@ iframe>html>body {
   align-items: center;
   gap: 0.4em;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 .search-return-icon{
   display: block;
