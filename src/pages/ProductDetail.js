@@ -55,6 +55,7 @@ function MainProduct() {
 
         const fetchData = async () => {
             try {
+                setProductData([])
                 const response = await fetch(`${API_BASE_URL}/api/getProductDetailV2/${categoryId}/${productId}`);
                 const fetchedData = await response.json();
                 setProductData(fetchedData);
@@ -175,6 +176,7 @@ function MainProduct() {
     }, [searchQuery]);
     useEffect(() => {
         clearSearch();
+        setProductData([])
     }, []);
     
 
@@ -271,7 +273,7 @@ function MainProduct() {
                         <div className="product-detail-container">
                             <div className="single-item-wrapper" style={{
                                 height: `${wrapperHeight}px` }}  >
-                                {productData ? (
+                                {productData.length !== 0 ? (
                                     <>
                                         {!modalOpen && prevNextVueDetail && (
                                             <>
