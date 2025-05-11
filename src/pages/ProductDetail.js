@@ -240,7 +240,7 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
-                    <div style={{ backgroundColor: "white"}}>
+                    <div className="category-return" >
                             {isMobileView && (
                                 <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
                             )}                  
@@ -254,12 +254,12 @@ function MainProduct() {
                         )} 
                     </div>
                     <div className="product-detail-container">
-                        <div className="single-item-wrapper" style={{ height: `${wrapperHeight}px` }}  >
+                        {/* <div className="single-item-wrapper" style={{ height: `${wrapperHeight}px` }}  > */}
                             {searchQuery ? (
                                 isLoadSearch ? (
                                     <LoadingSpinner />
                                 ) : (
-                                    <div className="single-item-wrapper" style={{
+                                    <div className="single-item-wrappe" style={{height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
                                         overflowY: 'scroll' }}  >
                                         <div className="grid-container">
                                             { searchResults.length > 0 ? (searchResults.map((product, index) => (
@@ -344,7 +344,7 @@ function MainProduct() {
                                         )}
                                 </div>
                             ) }
-                        </div>
+                        {/* </div> */}
                     </div>
                 </>
             ) : (

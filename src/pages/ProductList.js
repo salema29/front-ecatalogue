@@ -279,56 +279,59 @@ function Product() {
                             overflowY: 'scroll'
                         }}
                     >
-                        <div className="product-list-container" >
+                        {/* <div className="product-list-container" > */}
                             {searchQuery ?
                                 // si on cherhce qlq chose
                                 (
-                                    isLoadSearch ? (
-                                        <LoadingSpinner />
-                                    ) : (
-                                        
-                                        searchResults.length > 0 ? (searchResults.map((product, index) => (
-                                            <div className="grid-container">
-                                                <ProductItem
-                                                    key={product.id_produit || index}
-                                                    product={product}
-                                                    index={index}
-                                                    categoryId={product.product_categorie_id}
-                                                    catalogId={catalogId}
-                                                    showListCourse="t"
-                                                    API_BASE_URL={API_BASE_URL}
-                                                />
-                                            </div>
-                                        ))) : 
-                                        (<p>Aucun résultat</p>) 
-                                            
-                                    
-                                    )
+                                    <div className="product-list-container">
+                                        {isLoadSearch ? (
+                                            <LoadingSpinner />
+                                        ) : searchResults.length > 0 ? (
+                                            <>
+                                                <div className="grid-container">
+                                                    {searchResults.map((product, index) => (
+                                                        <ProductItem
+                                                            key={product.id_produit || index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={product.product_categorie_id}
+                                                            catalogId={catalogId}
+                                                            showListCourse="t"
+                                                            API_BASE_URL={API_BASE_URL} />
+                                                    ))}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <p>Aucun résultat</p>
+                                        )}
+                                    </div>
                                 ) :
                                 // si on consulte par categorie
                                 (
-                                    isLoading === false && productData.length > 0 ?
-                                    (
-                                        <div className="grid-container">
-                                            {productData.map((product, index) => (
-                                                product.view_type === '1' ? (
-                                                    <ProductItem
-                                                        key={index}
-                                                        product={product}
-                                                        index={index}
-                                                        categoryId={categoryId}
-                                                        catalogId={catalogId}
-                                                        showListCourse={headerData.show_list_course}
-                                                        API_BASE_URL={API_BASE_URL} />
-                                                ) : null
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <LoadingSpinner />
-                                    )
+                                    <div className="product-list-container">
+                                        { isLoading === false && productData.length > 0 ?
+                                        (
+                                            <div className="grid-container">
+                                                {productData.map((product, index) => (
+                                                    product.view_type === '1' ? (
+                                                        <ProductItem
+                                                            key={index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={categoryId}
+                                                            catalogId={catalogId}
+                                                            showListCourse={headerData.show_list_course}
+                                                            API_BASE_URL={API_BASE_URL} />
+                                                    ) : null
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <LoadingSpinner />
+                                        )}
+                                    </div>
                                 )
                             }
-                        </div>
+                        {/* </div> */}
                         {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                     </div>
                 </div>
