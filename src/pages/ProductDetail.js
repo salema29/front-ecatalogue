@@ -176,7 +176,8 @@ function MainProduct() {
     }, [searchQuery, setSearchResults]);
     useEffect(() => {
         clearSearch();
-        setProductData([])
+        setProductData([]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
 

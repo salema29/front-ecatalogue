@@ -105,7 +105,8 @@ function Product() {
 
     useEffect(() => {
         fetchProductData();
-    }, [categoryId, API_BASE_URL, catalogId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (headerData && categoryList ) {
