@@ -12,7 +12,9 @@ import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
-import SearchBar from "../components/search_bar/search_global_bar"
+import SearchBar from "../components/search_bar/search_global_bar";
+import { useSearch } from '../components/search_bar/SearchContext';
+
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -40,6 +42,7 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalogue/${catalogId}`);
     };
+    const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch } = useSearch();
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -148,8 +151,7 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+ 
     const [isLoadSearch, setIsLoadSearch] = useState(false);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
@@ -178,7 +180,7 @@ function Product() {
     }, [searchQuery]);
 
     const returnToCategory = () => {
-        setSearchQuery('')
+        clearSearch();
     };
 
     return (
@@ -257,7 +259,7 @@ function Product() {
                             <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
                             :
                             (
-                                <button className="search-return btn" onClick={returnToCategory}>
+                                <button className="search-return btn" title="Retour" onClick={returnToCategory}>
                                     <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}><path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
                                     <span>Retour </span>
                                 </button>

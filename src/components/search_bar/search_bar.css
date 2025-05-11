@@ -34,3 +34,16 @@
     fill: #666;
     cursor: pointer;
 }
+
+.search-clear {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    padding-right: 15px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    fill: #666;
+    cursor: pointer;
+}
+

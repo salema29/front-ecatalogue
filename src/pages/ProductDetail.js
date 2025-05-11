@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import LoadingSpinner from '../components/spinner/LoadingSpinner'
+import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
@@ -14,9 +14,9 @@ import VueDetailArrow from "../components/arrow/VueDetailArrow";
 import { fetchPrevNextVueDetail } from "../components/functions/Api";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/search_bar/search_global_bar";
+import { useSearch } from '../components/search_bar/SearchContext';
 
 function MainProduct() {
-    const searchRef  = useRef(null);
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const { catalogId, productId, categoryId, id_produit_resume } = useParams();
     const [headerData, setHeaderData] = useState(null);
@@ -26,8 +26,10 @@ function MainProduct() {
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
+    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight - headerHeight);
     const [isLoading, setIsLoading] = useState(true);
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+
     const isAddedInList = shoppingList.some(
         (catalog) =>
             catalog.catalogId === catalogId &&
@@ -36,9 +38,7 @@ function MainProduct() {
             )
     );
     const [prevNextVueDetail, setPrevNextVueDetail] = useState(null);
-    // const getSearchBarClass = () => {
-    //     return searchInputRef.current?.className;
-    // };
+
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
@@ -47,9 +47,7 @@ function MainProduct() {
         fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
             .then((response) => response.json())
             .then((fetchedData) => setHeaderData(fetchedData))
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
+            .catch(console.error);
     }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
@@ -118,13 +116,13 @@ function MainProduct() {
                     ...prevList.slice(catalogIndex + 1),
                 ];
             } else {
-                return [
-                    ...prevList,
-                    {
-                        catalogId,
-                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
-                    },
-                ];
+            return [
+                ...prevList,
+                {
+                    catalogId,
+                    products: [{ productId, categoryId, count: 1, id_produit_resume }],
+                },
+            ];
             }
         });
     };
@@ -147,33 +145,48 @@ function MainProduct() {
                         ...prevList.slice(catalogIndex + 1),
                     ];
                 } else {
-                    return [
-                        ...prevList.slice(0, catalogIndex),
-                        ...prevList.slice(catalogIndex + 1),
-                    ];
+                return [
+                    ...prevList.slice(0, catalogIndex),
+                    ...prevList.slice(catalogIndex + 1),
+                ];
                 }
             }
             return prevList;
         });
     };
-
+    
     const [modalOpen, setModalOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const {searchQuery, setSearchQuery, searchResults,setSearchResults,clearSearch} = useSearch();
     const [isLoadSearch, setIsLoadSearch] = useState(false);
+    useEffect(() => {
+        if (searchQuery ) {
+            const updateHeightResultatSearch = () => {
+                const stickyElement = document.querySelector('.sticky');
+                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+                const height = window.innerHeight - stickyHeight;
+                setWrapperHeightSearch(height);
+            };
+            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
+            window.addEventListener('resize', updateHeightResultatSearch);
+            return () => {
+                window.removeEventListener('resize', updateHeightResultatSearch);
+            };
+        }
+    }, [searchQuery]);
+    useEffect(() => {
+        clearSearch();
+    }, []);
+    
+
     const handleQueryChange = (value) => {
         setSearchQuery(value);
         setIsLoadSearch(true);
     };
+
     const handleSearchResults = (results) => {
         setSearchResults(results);
-        setIsLoadSearch(false); // <-- Stop loader after results arrive
+        setIsLoadSearch(false);
     };
-    useEffect(() => {
-        // Vider la recherche quand on arrive sur la vue détaillée
-        setSearchQuery('');
-        setSearchResults([]);
-    }, []);
 
     return (
         <>
@@ -188,30 +201,30 @@ function MainProduct() {
                             />
                             <div className="header-text">
                                 <p style={{ color: headerData.client_color }}>
-                                    {headerData.catalogue_name_ln_un}{" "}
-                                    {headerData.catalogue_name_ln_deux}{" "}
+                                    {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux}
                                 </p>
                                 <p style={{ color: "black" }}>
-                                    du {headerData.catalogue_date_validite_debut} au{" "}
-                                    {headerData.catalogue_date_validite_fin}
+                                    du {headerData.catalogue_date_validite_debut} au {headerData.catalogue_date_validite_fin}
                                 </p>
                             </div>
                         </div>
                         <div className="view-format-dialog-right-part">
-                        <SearchBar ref={searchRef} onResults={handleSearchResults} catalogue_id={catalogId} onQueryChange={handleQueryChange} />
+                            <SearchBar 
+                                onResults={handleSearchResults} 
+                                catalogue_id={catalogId} 
+                                onQueryChange={handleQueryChange} 
+                            />
 
-                            {headerData.show_list_course === 't' ?
-                                (
-                                    <button
-                                        className="view-format-dialog-open-list-course btn"
-                                        onClick={() => setModalOpen(true)}
-                                        title="Ouvrir ma liste de course"
-                                    >
+                            {headerData.show_list_course === 't' && (
+                                <button
+                                    className="view-format-dialog-open-list-course btn"
+                                    onClick={() => setModalOpen(true)}
+                                    title="Ouvrir ma liste de course"
+                                >
                                         <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
-                                    </button>
-                                )
-                                : (<></>)
-                            }
+                                </button>
+                            )}
+                            
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
@@ -225,63 +238,68 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
-                    { searchQuery ? (<div className="grid-container">
-                                                    {searchResults.map((product, index) => (
-                                                        <ProductItem
-                                                            key={product.id_produit || index}
-                                                            product={product}
-                                                            index={index}
-                                                            categoryId={product.product_categorie_id}
-                                                            catalogId={catalogId}
-                                                            showListCourse="t"
-                                                            API_BASE_URL={API_BASE_URL}
-                                                            searchRef={searchRef} />
-                                                    ))}
-                                                </div>) : (<div className="product-detail-container">
-                                <div className="single-item-wrapper"
-                                    style={{
-                                        height: `${wrapperHeight}px`
+                    {searchQuery ? (
+                        <div className="grid-container"
+                            style={{ height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`, overflowY: 'auto' }}
+                        >
+                            {searchResults.map((product, index) => (
+                                <ProductItem
+                                    key={product.id_produit || index}
+                                    product={product}
+                                    index={index}
+                                    categoryId={product.product_categorie_id}
+                                    catalogId={catalogId}
+                                    showListCourse="t"
+                                    API_BASE_URL={API_BASE_URL}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="product-detail-container">
+                            <div className="single-item-wrapper" style={{
+height: `${wrapperHeight}px`
                                     }}
-                                >
-                                    {productData ? (
-                                        <>
-                                            {!modalOpen && prevNextVueDetail && (
-                                                <>
-                                                    {prevNextVueDetail.previous && (
-                                                        <VueDetailArrow
-                                                            direction="previous"
-                                                            catalogId={catalogId}
-                                                            prevNextVueDetail={prevNextVueDetail}
-                                                        />
-                                                    )}
-                                                    {prevNextVueDetail.next && (
-                                                        <VueDetailArrow
-                                                            direction="next"
-                                                            catalogId={catalogId}
-                                                            prevNextVueDetail={prevNextVueDetail}
-                                                        />
-                                                    )}
-                                                </>
-                                            )}
+>
+                                {productData ? (
+                                    <>
+                                        {!modalOpen && prevNextVueDetail && (
+                                            <>
+                                                {prevNextVueDetail.previous && (
+                                                    <VueDetailArrow
+                                                        direction="previous"
+                                                        catalogId={catalogId}
+                                                        prevNextVueDetail={prevNextVueDetail}
+                                                    />
+                                                )}
+                                                {prevNextVueDetail.next && (
+                                                    <VueDetailArrow
+                                                        direction="next"
+                                                        catalogId={catalogId}
+                                                        prevNextVueDetail={prevNextVueDetail}
+                                                    />
+                                                )}
+                                            </>
+                                        )}
 
-                                            <iframe
-                                                src={productData.html.html_name}
-                                                className="product-item-detail placeholder-content"
-                                                title={productData.html.html_name}
-                                                width="auto"
+                                        <iframe
+                                            src={productData.html.html_name}
+                                            className="product-item-detail placeholder-content"
+                                            title={productData.html.html_name}
+                                            width="auto"
                                                 onLoad={() => setIsLoading(false)}
                                             // height="590px"
-                                            />
-                                            {(isLoading === false && headerData.show_list_course === "t") && (
-                                                <button
-                                                    className="add-bouton-detail"
-                                                    style={{ backgroundColor: headerData.client_color }}
+                                        />
+
+                                        {!isLoading && headerData.show_list_course === "t" && (
+                                            <button
+                                                className="add-bouton-detail"
+                                                style={{ backgroundColor: headerData.client_color }}
                                                     onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
-                                                >
-                                                    <span className="add-bouton-detail-text">
-                                                        {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
-                                                    </span>
-                                                    <span className="add-bouton-detail-icon">
+                                            >
+                                                <span className="add-bouton-detail-text">
+                                                    {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
+                                                </span>
+                                                <span className="add-bouton-detail-icon">
                                                         {isAddedInList ? (
                                                             <img
                                                                 src={addListIConOk}
@@ -293,14 +311,14 @@ function MainProduct() {
                                                                 alt="add-to-basket"
                                                             />
                                                         )}
-                                                    </span>
-                                                </button>
-                                            )}
+                                                </span>
+                                            </button>
+                                        )}
                                             {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
                                         </>
                                     ) : (
                                         <LoadingSpinner />
-                                    )}
+                    )}
                                 </div>
                             </div>) }
                             
@@ -310,6 +328,6 @@ function MainProduct() {
             )}
         </>
     );
-};
+}
 
 export default MainProduct;
