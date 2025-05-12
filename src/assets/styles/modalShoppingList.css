@@ -92,3 +92,36 @@ button {
     display: flex;
     flex-direction: column;
 }
+
+.modal-footer-body {
+    height: 15%;
+    max-height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+    .modal-footer-body {
+        height: 25%;
+    }
+}
+
+.vente-total {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.vente-total-prix {
+    text-align: end;
+}
+
+.vente-total-texte, .vente-total-prix-remise {
+    font-size: larger;
+}
+
+.vente-total-prix-economie {
+    font-style: italic;
+}

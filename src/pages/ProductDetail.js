@@ -207,7 +207,7 @@ function MainProduct() {
                                 alt=""
                             />
                             <div className="header-text">
-                                <p style={{ color: headerData.client_color }}>
+                                <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }}>
                                     {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux}
                                 </p>
                                 <p style={{ color: "black" }}>
