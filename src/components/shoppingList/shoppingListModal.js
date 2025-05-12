@@ -154,10 +154,10 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
         return () => observerRef.current && observerRef.current.disconnect();
     }, []);
-    const [showMessage, setShowMessage] = useState(false);
+    const [showMessageEmptyShoppingList, setShowMessageEmptyShoppingList] = useState(false);
 
     const deleteShoppingList = () =>{
-        setShowMessage(true);
+        setShowMessageEmptyShoppingList(true);
     }
 
     const removeCatalog = (catalogId) => {
@@ -167,14 +167,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     };
 
     const handleLaunchFunction = (catalogId) => {
-        setShowMessage(true);
+        setShowMessageEmptyShoppingList(true);
         removeCatalog(catalogId);
-        setShowMessage(false);
+        setShowMessageEmptyShoppingList(false);
 
     };
 
     const closeEmptyListCourseModal = () => {
-        setShowMessage(false);
+        setShowMessageEmptyShoppingList(false);
     };
 
     const customStyles = {
@@ -234,7 +234,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
                 <div className="modal-body">
                 <div>
-                        {showMessage && (
+                        {showMessageEmptyShoppingList && (
                             <Modal
                                 isOpen={isOpen}
                                 onRequestClose={onClose}
