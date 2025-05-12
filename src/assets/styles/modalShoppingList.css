@@ -92,3 +92,30 @@ button {
     display: flex;
     flex-direction: column;
 }
+
+.modal-footer{
+    position: sticky;
+    height: 10%;
+}
+
+.empty-shopping-list{
+    width: 100% !important;
+    height: -webkit-fill-available;
+}
+
+.modal-header-empty-shopping-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px 12px;
+}
+.delete-list-message{
+    text-align: center;
+    position: relative;
+    top: 20%;
+}
+.delete-list-action-btn{
+    text-align: center;
+    position: relative;
+    top: 30%;
+}

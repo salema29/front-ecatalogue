@@ -36,7 +36,7 @@ const getModalStyles = () => {
 };
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
-    const { shoppingList } = useContext(ShoppingListContext);
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const currentAbortController = useRef(null);
     const isMounted = useRef(false);
@@ -154,6 +154,37 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
         return () => observerRef.current && observerRef.current.disconnect();
     }, []);
+    const [showMessage, setShowMessage] = useState(false);
+
+    const deleteShoppingList = () =>{
+        setShowMessage(true);
+    }
+
+    const removeCatalog = (catalogId) => {
+        setShoppingList((prevList) =>
+            prevList.filter((catalog) => catalog.catalogId !== catalogId)
+        );
+    };
+
+    const handleLaunchFunction = (catalogId) => {
+        removeCatalog(catalogId);
+
+    };
+
+    const handleGoBack = () => {
+        setShowMessage(false);
+    };
+
+    const customStyles = {
+        overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
+        content: {
+            maxWidth: "390px",
+            height: 'fit-content',
+            padding: 'none',
+            overflowY: 'hidden',
+            margin: 'auto auto'
+        },
+    };
 
     return (
         <>
@@ -190,6 +221,38 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </div>
 
                 <div className="modal-body">
+                <div>
+                        {showMessage && (
+                            <Modal
+                                isOpen={isOpen}
+                                onRequestClose={onClose}
+                                contentLabel="Vider la liste de courses"
+                                shouldCloseOnOverlayClick={true}
+                                ariaHideApp={false}
+                                style={customStyles}
+                            >
+                                <div className="modal-header-empty-shopping-list" style={{ background: clientColor }}>
+                                    <button className="close-btn" onClick={onClose} title='Fermer'>
+                                        fermer
+                                    </button>
+                                </div>
+                                <div style={{ height: '10rem' }}>
+                                    <span className="delete-list-message">Voulez-vous vraiment supprimer votre liste de course ?</span>
+                                    <div className="delete-list-action-btn">
+                                        <button className="btn"
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                handleLaunchFunction(catalogId);
+                                            }}
+                                        >
+                                            Oui
+                                        </button>
+                                        <button className="btn" onClick={handleGoBack} style={{ marginLeft: '8px' }}>Non</button>
+                                    </div>
+                                </div>
+                            </Modal>
+                        )}
+                    </div>
                     {productHtmls.length > 0 ?
                         (
                             productHtmls.map((productHtml) => (
@@ -236,7 +299,15 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         )
                         : (
                             <EmptyCart clientColor={clientColor} />
-                        )}
+                        )
+                    }
+                </div>
+                <div className="modal-footer">
+                { productHtmls.length > 0 &&
+                        <button className="btn empty-shopping-list" onClick={deleteShoppingList} title='Vider la liste de course'>
+                            Vider la liste de course
+                        </button>
+                    }
                 </div>
                 <ShareModal
                     isOpen={isShareModalOpen}
