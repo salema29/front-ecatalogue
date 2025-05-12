@@ -89,3 +89,13 @@
         background-position: 650px 0;
     }
 }
+
+.category-return{
+    background-color: white;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .category-return{
+    background-color: transparent;
+}
+}

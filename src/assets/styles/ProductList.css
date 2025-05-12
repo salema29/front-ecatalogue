@@ -154,3 +154,18 @@ iframe>html>body {
   0%{ background-position: -650px 0; }
   100%{ background-position: 650px 0; }
 }
+
+.search-return {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.search-return-icon{
+  display: block;
+  margin-left: 3.5rem;
+}
