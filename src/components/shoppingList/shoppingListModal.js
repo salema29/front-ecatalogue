@@ -9,7 +9,7 @@ import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
 import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
-import { postShoppingListImage } from "../functions/Api";
+import { postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
 import html2canvas from "html2canvas";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -42,9 +42,20 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
+    const [totalEconomyData, setTotalEconomyData] = useState(null);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
+
+    useEffect(() => {
+        if (shoppingList && shoppingList.length > 0) {
+            postTotalPriceEconomyByCatalogue(shoppingList, catalogId).then(data => {
+                if (data) {
+                    setTotalEconomyData(data[catalogId]);
+                }
+            });
+        }
+    }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
         if (isMobile()) {
@@ -340,6 +351,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         )
                     }
                 </div>
+                {(productHtmls.length > 0 && totalEconomyData) && (
+                    <div className="modal-footer modal-footer-body">
+                    <div className="vente-total">
+                        <div className="vente-total-texte">Total :</div>
+                        <div className="vente-total-prix">
+                            <div className="vente-total-prix-remise">{parseFloat(totalEconomyData.totalPriceAfterDiscount).toFixed(2)} €</div>
+                            <div className="vente-total-prix-economie" style={{ color : clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>
+                        </div>
+                    </div>
+                </div>
+                )}
                 <ShareModal
                     isOpen={isShareModalOpen}
                     onClose={() => setIsShareModalOpen(false)}

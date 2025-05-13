@@ -4,6 +4,7 @@ import '../assets/styles/ProductList.css';
 import addListICon from '../assets/icons/add-list.svg';
 import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
+import { useSearch } from '../components/search_bar/SearchContext';
 
 function ProductItem({ product, index, categoryId, catalogId, showListCourse, API_BASE_URL }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,14 +14,17 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
     const isAddedInList = shoppingList.some(
         (catalog) =>
             catalog.catalogId === catalogId &&
-            catalog.products.some(
+        catalog.products.some(
                 (item) => item.productId === product.view_order && item.categoryId === categoryId
-            )
+        )
     );
 
     const navigate = useNavigate();
     const id_produit_resume = product.id_produit;
+    const { clearSearch } = useSearch();
+
     const handleDetailedView = (productId) => {
+        clearSearch();
         navigate(`/product/${catalogId}/${productId}/${categoryId}/${id_produit_resume}`);
     };
 
@@ -30,7 +34,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
         };
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, [API_BASE_URL]);
+    }, []);
 
     useEffect(() => {
         localStorage.setItem("shopping-list", JSON.stringify(shoppingList));
@@ -39,19 +43,19 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
     const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
-            if (catalogIndex !== -1) {
-                const updatedCatalog = {
-                    ...prevList[catalogIndex],
-                    products: [
-                        ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1, id_produit_resume },
-                    ],
-                };
-                return [
-                    ...prevList.slice(0, catalogIndex),
-                    updatedCatalog,
-                    ...prevList.slice(catalogIndex + 1),
-                ];
+                if (catalogIndex !== -1) {
+                    const updatedCatalog = {
+                        ...prevList[catalogIndex],
+                        products: [
+                            ...prevList[catalogIndex].products,
+                            { productId, categoryId, count: 1, id_produit_resume },
+                        ],
+                    };
+                    return [
+                        ...prevList.slice(0, catalogIndex),
+                        updatedCatalog,
+                        ...prevList.slice(catalogIndex + 1),
+                    ];
             } else {
                 return [
                     ...prevList,
@@ -67,20 +71,20 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
     const removeInList = (productId, categoryId, catalogId) => {
         setShoppingList((prevList) => {
             const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
-            if (catalogIndex !== -1) {
-                const updatedProducts = prevList[catalogIndex].products.filter(
+                if (catalogIndex !== -1) {
+                    const updatedProducts = prevList[catalogIndex].products.filter(
                     (item) => !(item.productId === productId && item.categoryId === categoryId)
-                );
-                if (updatedProducts.length > 0) {
-                    const updatedCatalog = {
-                        ...prevList[catalogIndex],
-                        products: updatedProducts,
-                    };
-                    return [
-                        ...prevList.slice(0, catalogIndex),
-                        updatedCatalog,
-                        ...prevList.slice(catalogIndex + 1),
-                    ];
+                    );
+                    if (updatedProducts.length > 0) {
+                        const updatedCatalog = {
+                            ...prevList[catalogIndex],
+                            products: updatedProducts,
+                        };
+                        return [
+                            ...prevList.slice(0, catalogIndex),
+                            updatedCatalog,
+                            ...prevList.slice(catalogIndex + 1),
+                        ];
                 } else {
                     return [
                         ...prevList.slice(0, catalogIndex),
@@ -91,23 +95,22 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
             return prevList;
         });
     };
+    const gridStyle = {
+        gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
+        gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
+        order: product.view_order,
+    };
 
     return (
         <div
-            key={index}
-            className={`grid-item ${isLoading ? "placeholder-content" : ""} ${isMobileView ? "mobile-items" : "desktop-items"
-                }`}
-            style={{
-                gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,
-                gridRow: `span ${isMobileView ? product.mobile_height : product.desktop_height}`,
-                order: product.view_order,
-            }}
+            className={`grid-item ${isLoading ? "placeholder-content" : ""} ${isMobileView ? "mobile-items" : "desktop-items"}`}
+            style={gridStyle}
         >
-            {product.type === "0" ? (
-                <div className="item-wrapper">
-                    <div
+            <div className="item-wrapper">
+                {product.type === "0" ? (
+                    <div 
                         onClick={() => handleDetailedView(product.view_order, product.categoryId)}
-                        className="item-link"
+                        className="item-link" 
                         style={{ cursor: "pointer" }}
                     >
                         <iframe
@@ -117,7 +120,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                             scrolling="no"
                             onLoad={() => setIsLoading(false)}
                         />
-                        {(isLoading === false && showListCourse === "t") && (
+                        {!isLoading && showListCourse === "t" && (
                             <div className="add-bouton">
                                 {isAddedInList ? (
                                     <img
@@ -141,9 +144,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                             </div>
                         )}
                     </div>
-                </div>
-            ) : (
-                <div className="item-wrapper">
+                ) : (
                     <div className="item-link">
                         <iframe
                             src={product.html_name}
@@ -153,8 +154,8 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                             onLoad={() => setIsLoading(false)}
                         />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
