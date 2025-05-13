@@ -140,3 +140,7 @@ button {
     text-transform: none;
     word-wrap: break-word;
 }
+.empty-list-message-result{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
