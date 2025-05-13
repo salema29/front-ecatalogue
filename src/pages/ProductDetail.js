@@ -157,8 +157,8 @@ function MainProduct() {
     };
     
     const [modalOpen, setModalOpen] = useState(false);
-    const {searchQuery, setSearchQuery, searchResults,setSearchResults,clearSearch} = useSearch();
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
+    const {searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
+
     useEffect(() => {
         if (searchQuery || setSearchResults ) {
             const updateHeightResultatSearch = () => {
@@ -183,12 +183,11 @@ function MainProduct() {
 
     const handleQueryChange = (value) => {
         setSearchQuery(value);
-        setIsLoadSearch(true);
+        setLoading(false);
     };
-
     const handleSearchResults = (results) => {
         setSearchResults(results);
-        setIsLoadSearch(false);
+        setLoading(false);
     };
 
     const returnToCategory = () => {
@@ -227,7 +226,7 @@ function MainProduct() {
                                         <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
                                 </button>
                             )}
-                            
+
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
@@ -244,44 +243,49 @@ function MainProduct() {
                     <div className="category-return" >
                             {isMobileView && (
                                 <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
-                            )}                  
-                    
+                            )}
+
                         {searchQuery &&   (
                             <button className="search-return btn" title="Retour" onClick={returnToCategory}>
                                 <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
                                     <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
                                 <span>Retour </span>
                             </button>
-                        )} 
+                        )}
                     </div>
                     <div className="product-detail-container">
-                        {/* <div className="single-item-wrapper" style={{ height: `${wrapperHeight}px` }}  > */}
-                            {searchQuery ? (
-                                isLoadSearch ? (
-                                    <LoadingSpinner />
-                                ) : (
-                                    <div className="single-item-wrappe" style={{height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
-                                        overflowY: 'scroll' }}  >
-                                        <div className="grid-container">
-                                            { searchResults.length > 0 ? (searchResults.map((product, index) => (
-                                            
-                                                    <ProductItem
-                                                        key={product.id_produit || index}
-                                                        product={product}
-                                                        index={index}
-                                                        categoryId={product.product_categorie_id}
-                                                        catalogId={catalogId}
-                                                        showListCourse="t"
-                                                        API_BASE_URL={API_BASE_URL}
-                                                    />
-                                                
-                                            ))
-                                        ) : 
-                                            (<p>Aucun résultat</p>) }
-                                        </div>
-                                    </div>
-                                )
-                            ) : (
+                        {searchQuery ?
+                            // searching
+                            (
+                                <div className="product-list-container">
+                                    {loading ?
+                                        (
+                                            <LoadingSpinner />
+                                        ) : searchResults.length > 0 ? (
+                                            <div className="single-item-wrappe" style={{height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
+                                        overflowY: 'scroll' }}  >    
+                                                <div className="grid-container" >
+                                                    {searchResults.map((product, index) => (
+                                                        <ProductItem
+                                                            key={product.id_produit || index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={product.product_categorie_id}
+                                                            catalogId={catalogId}
+                                                            showListCourse="t"
+                                                            API_BASE_URL={API_BASE_URL}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <p>Aucun résultat</p>
+                                        )
+                                    }
+                                </div>
+                            ) :
+                            // displaying vue detaille
+                            (
                                 <div className="single-item-wrapper" style={{
                                         height: `${wrapperHeight}px` }}  >
                                     { productData.length !== 0 ? (

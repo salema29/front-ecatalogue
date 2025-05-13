@@ -1,4 +1,3 @@
-// src/contexts/SearchContext.js
 import { createContext, useContext, useState } from 'react';
 
 export const SearchContext = createContext();
@@ -6,19 +5,23 @@ export const SearchContext = createContext();
 export const SearchProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const clearSearch = () => {
     setSearchQuery('');
     setSearchResults([]);
+    setLoading(false);
   };
 
   return (
-    <SearchContext.Provider value={{ 
-      searchQuery, 
-      setSearchQuery, 
-      searchResults, 
+    <SearchContext.Provider value={{
+      searchQuery,
+      setSearchQuery,
+      searchResults,
       setSearchResults,
-      clearSearch 
+      clearSearch,
+      loading,
+      setLoading
     }}>
       {children}
     </SearchContext.Provider>

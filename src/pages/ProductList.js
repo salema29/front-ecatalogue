@@ -42,7 +42,7 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalogue/${catalogId}`);
     };
-    const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch } = useSearch();
+    const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -152,16 +152,13 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
- 
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
     const handleQueryChange = (value) => {
         setSearchQuery(value);
-        setIsLoadSearch(true);
+        setLoading(false);
     };
     const handleSearchResults = (results) => {
-        setIsLoadSearch(false);
         setSearchResults(results);
-        setIsLoadSearch(false); // <-- Stop loader after results arrive
+        setLoading(false);
     };
     useEffect(() => {
         if (searchQuery ) {
@@ -209,8 +206,6 @@ function Product() {
                             </div>
                             <div className="view-format-dialog-right-part">
                                 {!isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
-
-                                
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -271,7 +266,6 @@ function Product() {
                                 )
                             }
                         </div>
-                            
                     </div>
                     <div className="wrapper"
                         style={{
@@ -279,15 +273,14 @@ function Product() {
                             overflowY: 'scroll'
                         }}
                     >
-                        {/* <div className="product-list-container" > */}
                             {searchQuery ?
                                 // si on cherhce qlq chose
                                 (
                                     <div className="product-list-container">
-                                        {isLoadSearch ? (
-                                            <LoadingSpinner />
-                                        ) : searchResults.length > 0 ? (
-                                            <>
+                                        {loading ?
+                                            (
+                                                <LoadingSpinner />
+                                            ) : searchResults.length > 0 ? (
                                                 <div className="grid-container">
                                                     {searchResults.map((product, index) => (
                                                         <ProductItem
@@ -297,13 +290,14 @@ function Product() {
                                                             categoryId={product.product_categorie_id}
                                                             catalogId={catalogId}
                                                             showListCourse="t"
-                                                            API_BASE_URL={API_BASE_URL} />
+                                                            API_BASE_URL={API_BASE_URL}
+                                                        />
                                                     ))}
                                                 </div>
-                                            </>
-                                        ) : (
-                                            <p>Aucun résultat</p>
-                                        )}
+                                            ) : (
+                                                <p>Aucun résultat</p>
+                                            )
+                                        }
                                     </div>
                                 ) :
                                 // si on consulte par categorie
