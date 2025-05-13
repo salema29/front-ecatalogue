@@ -21,7 +21,7 @@
     .modal-header-title {
         font-size: smaller;
     }
-    
+
     .modal-header-subtitle {
         font-size: smaller;
     }
@@ -31,6 +31,7 @@
     min-width: 100px;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 .modal-body {
@@ -92,6 +93,52 @@ button {
     display: flex;
     flex-direction: column;
 }
+.modal-header-empty-shopping-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.delete-list-action-btn {
+    text-align: center;
+    position: relative;
+    top: 30%;
+}
+.btn-clear-action{
+    border: 0;
+    border-radius: .25em;
+    background: initial;
+    color: #fff;
+    cursor: pointer;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+}
+
+.empty-shopping-list{
+    border: none;
+    border-radius: 0.5rem;
+    height: fit-content;
+}
+
+
+.delete-list-message {
+    top: 10%;
+    position: relative;
+    max-width: 100%;
+    margin: 0;
+    padding: .8em 1em 0;
+    color: #595959;
+    font-weight: 600;
+    text-align: center;
+    text-transform: none;
+    word-wrap: break-word;
+}
+.empty-list-message-result{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 
 .modal-footer-body {
     height: 15%;
