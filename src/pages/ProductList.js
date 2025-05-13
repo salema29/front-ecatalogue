@@ -83,30 +83,29 @@ function Product() {
         fetchHeaderData();
     }, [catalogId, API_BASE_URL]);
 
-    const fetchProductData = async () => {
-        try {
-            const response = await fetch(
-                `${API_BASE_URL}/api/getProducts/${categoryId}/${catalogId}`
-            );
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
-                setProductData(data);
-            } else {
-                console.warn("Empty or invalid product data received");
-                setProductData([]);
-            }
-            } catch (error) {
-            console.error("Error fetching product data: ", error);
-        }
-    };
-
     useEffect(() => {
+        const fetchProductData = async () => {
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/api/getProducts/${categoryId}/${catalogId}`
+                );
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    setProductData(data);
+                } else {
+                    console.warn("Empty or invalid product data received");
+                    setProductData([]);
+                }
+            } catch (error) {
+                console.error("Error fetching product data: ", error);
+            }
+        };
+
         fetchProductData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
         if (headerData && categoryList ) {
