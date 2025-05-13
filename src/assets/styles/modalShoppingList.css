@@ -153,22 +153,3 @@ button {
     }
 }
 
-.vente-total {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 10px;
-    font-weight: bold;
-}
-
-.vente-total-prix {
-    text-align: end;
-}
-
-.vente-total-texte, .vente-total-prix-remise {
-    font-size: larger;
-}
-
-.vente-total-prix-economie {
-    font-style: italic;
-}

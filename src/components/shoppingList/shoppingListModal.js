@@ -42,7 +42,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
-    const [totalEconomyData, setTotalEconomyData] = useState(null);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
