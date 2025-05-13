@@ -279,7 +279,11 @@ function MainProduct() {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <p>Aucun résultat</p>
+                                            <div className="empty-search-result" >
+                                                <p style={{ color: headerData.client_color }}>
+                                                    Aucun produit trouvé
+                                                </p>
+                                            </div>
                                         )
                                     }
                                 </div>
