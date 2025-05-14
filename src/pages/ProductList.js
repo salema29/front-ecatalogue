@@ -160,23 +160,6 @@ function Product() {
         setSearchResults(results);
         setLoading(false);
     };
-    useEffect(() => {
-        if (searchQuery ) {
-            const updateHeightResultatSearch = () => {
-                const stickyElement = document.querySelector('.sticky');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeightSearch(height);
-            };
-
-            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeightResultatSearch);
-
-            return () => {
-                window.removeEventListener('resize', updateHeightResultatSearch);
-            };
-        }
-    }, [searchQuery]);
 
     const returnToCategory = () => {
         clearSearch();
@@ -205,7 +188,7 @@ function Product() {
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
-                                {!isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
+                                {!isMobileView && productData.length > 0 ? (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />) : (<></>)}
 
                                 {viewChoice.isVueFeuilletable && (
                                     <button
@@ -252,20 +235,22 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        <div style={{ backgroundColor: "white"}}>
-                            {isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
-                            {productData.length > 0 && !searchQuery ? (
-                                <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
-                                :
-                                (
-                                    <button className="search-return btn" title="Retour" onClick={returnToCategory}>
-                                        <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
-                                            <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
-                                        <span>Retour </span>
-                                    </button>
-                                )
-                            }
-                        </div>
+                        { productData.length > 0 && (
+                            <div style={{ backgroundColor: "white"}}>
+                                {isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
+                                {!searchQuery ? (
+                                    <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
+                                    :
+                                    (
+                                        <button className="search-return btn" title="Retour" onClick={returnToCategory}>
+                                            <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
+                                                <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                            <span>Retour </span>
+                                        </button>
+                                    )
+                                }
+                            </div>
+                        )}
                     </div>
                     <div className="wrapper"
                         style={{
@@ -307,25 +292,34 @@ function Product() {
                                 // si on consulte par categorie
                                 (
                                     <div className="product-list-container">
-                                        { isLoading === false && productData.length > 0 ?
-                                        (
-                                            <div className="grid-container">
-                                                {productData.map((product, index) => (
-                                                    product.view_type === '1' ? (
-                                                        <ProductItem
-                                                            key={index}
-                                                            product={product}
-                                                            index={index}
-                                                            categoryId={categoryId}
-                                                            catalogId={catalogId}
-                                                            showListCourse={headerData.show_list_course}
-                                                            API_BASE_URL={API_BASE_URL} />
-                                                    ) : null
-                                                ))}
-                                            </div>
-                                        ) : (
+                                        { isLoading ? (
                                             <LoadingSpinner />
-                                        )}
+                                            ):(
+                                                productData.length > 0 ?
+                                                (
+                                                    <div className="grid-container">
+                                                        {productData.map((product, index) => (
+                                                            product.view_type === '1' ? (
+                                                                <ProductItem
+                                                                    key={index}
+                                                                    product={product}
+                                                                    index={index}
+                                                                    categoryId={categoryId}
+                                                                    catalogId={catalogId}
+                                                                    showListCourse={headerData.show_list_course}
+                                                                    API_BASE_URL={API_BASE_URL} />
+                                                            ) : null
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="empty-search-result" >
+                                                        <p style={{ color: headerData.client_color }}>
+                                                            Aucun produit disponible
+                                                        </p>
+                                                    </div>
+                                                )
+                                            )
+                                        }
                                     </div>
                                 )
                             }
