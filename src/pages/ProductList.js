@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext  } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryMenu from "../components/navigation/CategoryMenu";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
@@ -9,9 +9,12 @@ import ProductItem from "../components/ProductItem";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
-import ListCourse  from '../components/shoppingList/shoppingListIcon';
+import ListCourse from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
+import SearchBar from "../components/search_bar/search_global_bar";
+import { useSearch } from '../components/search_bar/SearchContext';
+
 
 function Product() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -22,11 +25,12 @@ function Product() {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const headerHeight = document.querySelector('.sticky'); // class "sticky" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
+    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight - headerHeight);
     const navigate = useNavigate();
     const { categoryList } = CategoryPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
-        isVueProduit : true,
-        isVueFeuilletable : true
+        isVueProduit: true,
+        isVueFeuilletable: true
     });
     const { shoppingList } = useContext(ShoppingListContext);
 
@@ -38,6 +42,7 @@ function Product() {
     const handleCatalogView = () => {
         navigate(`/catalogue/${catalogId}`);
     };
+    const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
 
     // Gerer le media query pour la mise en page responsive du grille desktop/moble
     useEffect(() => {
@@ -103,7 +108,7 @@ function Product() {
     }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
-        if (headerData && categoryList) {
+        if (headerData && categoryList ) {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.sticky');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
@@ -125,7 +130,7 @@ function Product() {
     useEffect(() => {
         const wrapper = document.querySelector('.wrapper');
         if (wrapper) {
-          wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
+            wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
         }
     }, [categoryId]);
 
@@ -146,6 +151,37 @@ function Product() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
+    const handleQueryChange = (value) => {
+        setSearchQuery(value);
+        setLoading(false);
+    };
+    const handleSearchResults = (results) => {
+        setSearchResults(results);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (searchQuery || searchResults ) {
+            const updateHeightResultatSearch = () => {
+                const stickyElement = document.querySelector('.sticky');
+                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+                const height = window.innerHeight - stickyHeight;
+                setWrapperHeightSearch(height);
+            };
+
+            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
+            window.addEventListener('resize', updateHeightResultatSearch);
+
+            return () => {
+                window.removeEventListener('resize', updateHeightResultatSearch);
+            };
+        }
+    }, [searchQuery, searchResults]);
+
+    const returnToCategory = () => {
+        clearSearch();
+    };
+
     return (
         <>
             {headerData ? (
@@ -155,21 +191,22 @@ function Product() {
                             <div className="view-format-dialog-left-part">
                                 <img
                                     className="header-logo"
-                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
+                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
                                     alt=""
                                 />
                                 <div className="header-text">
-                                    <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
-                                        {headerData.catalogue_name_ln_un}{" "}
-                                        {headerData.catalogue_name_ln_deux}
+                                    <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }}>
+                                        {headerData.catalogue_name_ln_un} {headerData.catalogue_name_ln_deux}
                                     </p>
-                                    <p className="catalogue-date"style={{ color: "black" }}>
+                                    <p className="catalogue-date" style={{ color: "black" }}>
                                         du {headerData.catalogue_date_validite_debut} au{" "}
                                         {headerData.catalogue_date_validite_fin}
                                     </p>
                                 </div>
                             </div>
                             <div className="view-format-dialog-right-part">
+                                {!isMobileView && productData.length > 0 ? (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />) : (<></>)}
+
                                 {viewChoice.isVueFeuilletable && (
                                     <button
                                         className="view-format-switcher btn"
@@ -197,10 +234,10 @@ function Product() {
                                             onClick={() => setModalOpen(true)}
                                             title="Ouvrir ma liste de course"
                                         >
-                                            <ListCourse catalogId ={catalogId} shoppingList={shoppingList} clientColor = {headerData ? headerData.client_color : "#669999"}/>
+                                            <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
                                         </button>
                                     )
-                                    :(<></>)
+                                    : (<></>)
                                 }
                                 <button
                                     className="view-format-dialog-close btn"
@@ -215,41 +252,96 @@ function Product() {
                                 </button>
                             </div>
                         </header>
-                        {productData.length > 0 ? (
-                            <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
-                            :
-                            (<></>)
-                        }
+                        { productData.length > 0 && (
+                            <div style={{ backgroundColor: "white"}}>
+                                {isMobileView && (<SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />)}
+                                {!searchQuery ? (
+                                    <CategoryMenu categoryIdSelected={categoryId} categoryList={categoryList} />)
+                                    :
+                                    (
+                                        <button className="search-return btn" title="Retour" onClick={returnToCategory}>
+                                            <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
+                                                <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                            <span>Retour </span>
+                                        </button>
+                                    )
+                                }
+                            </div>
+                        )}
                     </div>
                     <div className="wrapper"
                         style={{
-                            height: `${wrapperHeight}px`,
+                            height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
                             overflowY: 'scroll'
                         }}
                     >
-                        <div className="product-list-container" >
-                            {isLoading === false && productData.length > 0 ? (
-                                <>
-                                    <div className="grid-container">
-                                        {productData.map((product, index) => (
-                                            product.view_type === '1' ? (
-                                                <ProductItem
-                                                    key={index}
-                                                    product={product}
-                                                    index={index}
-                                                    categoryId={categoryId}
-                                                    catalogId={catalogId}
-                                                    showListCourse={headerData.show_list_course}
-                                                    API_BASE_URL={API_BASE_URL} />
-                                            ) : null
-                                        ))}
+                            {searchQuery ?
+                                // si on cherhce qlq chose
+                                (
+                                    <div className="product-list-container">
+                                        {loading ?
+                                            (
+                                                <LoadingSpinner />
+                                            ) : searchResults.length > 0 ? (
+                                                <div className="grid-container">
+                                                    {searchResults.map((product, index) => (
+                                                        <ProductItem
+                                                            key={product.id_produit || index}
+                                                            product={product}
+                                                            index={index}
+                                                            categoryId={product.product_categorie_id}
+                                                            catalogId={catalogId}
+                                                            showListCourse="t"
+                                                            API_BASE_URL={API_BASE_URL}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="empty-search-result" >
+                                                    <p style={{ color: headerData.client_color }}>
+                                                        Aucun produit trouvé
+                                                    </p>
+                                                </div>
+                                            )
+                                        }
                                     </div>
-                                    {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
-                                </>
-                            ) : (
-                                <LoadingSpinner />
-                            )}
-                        </div>
+                                ) :
+                                // si on consulte par categorie
+                                (
+                                    <div className="product-list-container">
+                                        { isLoading ? (
+                                            <LoadingSpinner />
+                                            ):(
+                                                productData.length > 0 ?
+                                                (
+                                                    <div className="grid-container">
+                                                        {productData.map((product, index) => (
+                                                            product.view_type === '1' ? (
+                                                                <ProductItem
+                                                                    key={index}
+                                                                    product={product}
+                                                                    index={index}
+                                                                    categoryId={categoryId}
+                                                                    catalogId={catalogId}
+                                                                    showListCourse={headerData.show_list_course}
+                                                                    API_BASE_URL={API_BASE_URL} />
+                                                            ) : null
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="empty-search-result" >
+                                                        <p style={{ color: headerData.client_color }}>
+                                                            Aucun produit disponible
+                                                        </p>
+                                                    </div>
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                )
+                            }
+                        {/* </div> */}
+                        {modalOpen && ( <ShoppingListModal catalogId ={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor = {headerData.client_color} /> )}
                     </div>
                 </div>
             ) : (

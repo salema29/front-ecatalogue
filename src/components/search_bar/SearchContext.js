@@ -1,0 +1,37 @@
+import { createContext, useContext, useState } from 'react';
+
+export const SearchContext = createContext();
+
+export const SearchProvider = ({ children }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setLoading(false);
+  };
+
+  return (
+    <SearchContext.Provider value={{
+      searchQuery,
+      setSearchQuery,
+      searchResults,
+      setSearchResults,
+      clearSearch,
+      loading,
+      setLoading
+    }}>
+      {children}
+    </SearchContext.Provider>
+  );
+};
+
+export const useSearch = () => {
+  const context = useContext(SearchContext);
+  if (!context) {
+    throw new Error('useSearch must be used within a SearchProvider');
+  }
+  return context;
+};

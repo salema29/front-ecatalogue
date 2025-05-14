@@ -100,3 +100,4 @@ export const postShoppingListImage = async (shoppingList, catalogId, options = {
         return null;
     }
 };
+
