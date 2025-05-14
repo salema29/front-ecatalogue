@@ -35,6 +35,16 @@ const getModalStyles = () => {
     };
 };
 
+const categoryNameStyle = {
+    height: "30px",
+    backgroundColor: "#DADADA",
+    textAlign: "center",
+    textTransform: "uppercase",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+}
+
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -302,53 +312,79 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             </Modal>
                         )}
                     </div>
-                    {productHtmls.length > 0 ?
-                        (
-                            productHtmls.map((productHtml) => (
-                                <div
-                                    className="product-wrapper"
-                                    ref={(el) => el && observerRef.current.observe(el)}
-                                    key={productHtml.id_produit}
-                                    data-id-produit={productHtml.id_produit}
-                                >
-                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
-                                        <>
-                                            <div className="product">
-                                                <div className="product-item">
-                                                    <iframe
-                                                        className="product-shopping-list"
-                                                        src={productHtml.html_name}
-                                                        key={productHtml.id_produit}
-                                                        scrolling="no"
-                                                        title={productHtml.id_produit} />
-                                                </div>
-                                                <div className="side-btn">
-                                                    <div className="remove-product">
-                                                        <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                    </div>
-                                                    {!isMobile() && (
-                                                        <div className="update-count-btn">
-                                                            <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                        </div>
+                    {productHtmls.length > 0 ? (
+                        productHtmls.map((categoryGroup, groupIndex) => {
+                            if (categoryGroup.categorie_name && categoryGroup.products) {
+                                return (
+                                    <div key={groupIndex} className="category-group">
+                                        <div className="category-title" style={categoryNameStyle}><span>{categoryGroup.categorie_name}</span></div>
+                                        {categoryGroup.products.map((productHtml, productIndex) => {
+                                            const isLastProductInCategory = productIndex === categoryGroup.products.length - 1;
+                                            const isLastCategory = groupIndex === productHtmls.length - 1;
+
+                                            return (
+                                                <div
+                                                    className="product-wrapper"
+                                                    ref={(el) => el && observerRef.current.observe(el)}
+                                                    key={productHtml.id_produit}
+                                                    data-id-produit={productHtml.id_produit}
+                                                >
+                                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
+                                                        <>
+                                                            <div className="product">
+                                                                <div className="product-item">
+                                                                    <iframe
+                                                                        className="product-shopping-list"
+                                                                        src={productHtml.html_name}
+                                                                        scrolling="no"
+                                                                        title={productHtml.id_produit}
+                                                                    />
+                                                                </div>
+                                                                <div className="side-btn">
+                                                                    <div className="remove-product">
+                                                                        <RemoveProductFromList
+                                                                            id_produit_resume={productHtml.id_produit}
+                                                                            catalogue_id={catalogId}
+                                                                        />
+                                                                    </div>
+                                                                    {!isMobile() && (
+                                                                        <div className="update-count-btn">
+                                                                            <UpdateCountProduct
+                                                                                id_produit_resume={productHtml.id_produit}
+                                                                                catalogue_id={catalogId}
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            {isMobile() && (
+                                                                <div className="update-count-btn-mobile">
+                                                                    <UpdateCountProduct
+                                                                        id_produit_resume={productHtml.id_produit}
+                                                                        catalogue_id={catalogId}
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                            {
+                                                                (!isLastProductInCategory || isLastCategory) && (
+                                                                    <hr style={{ border: "1px solid black", width: "50%" }} />
+                                                                )
+                                                            }
+                                                        </>
+                                                    ) : (
+                                                        <ProductSkeleton height={200} width={"95%"} />
                                                     )}
                                                 </div>
-                                            </div>
-                                            {isMobile() && (
-                                                <div className="update-count-btn-mobile">
-                                                    <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                </div>
-                                            )}
-                                            <hr style={{ border: "1px solid black", width: "50%" }} />
-                                        </>
-                                    ) : (
-                                        <ProductSkeleton height={200} width={"95%"} />
-                                    )}
-                                </div>
-                            ))
-                        )
-                        : (
-                            <EmptyCart clientColor={clientColor} />
-                        )
+                                            );
+                                        })}
+
+                                    </div>
+                                )
+                            } else return null
+                        })
+                    ) : (
+                        <EmptyCart clientColor={clientColor} />
+                    )
                     }
                 </div>
                 {(productHtmls.length > 0 && totalEconomyData) && (
