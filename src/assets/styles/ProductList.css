@@ -169,3 +169,22 @@ iframe>html>body {
   display: block;
   margin-left: 3.5rem;
 }
+
+.empty-search-result {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30rem;
+  border-radius: 12px;
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 20px 0;
+  transition: all 0.3s ease;
+}
+
+.empty-search-result p {
+  margin: 0;
+  padding: 0 10px;
+}
