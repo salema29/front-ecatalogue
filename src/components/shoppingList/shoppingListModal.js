@@ -203,7 +203,10 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         setQuestionEmpyShoppingList(true);
         removeCatalog(catalogId);
         setQuestionEmpyShoppingList(false);
-
+        setTimeout(() => {
+            setShowMessageEmptyShoppingList(false); //close the question popup
+            onClose(true); //close the shopping list modal
+        }, 2000);
     };
 
     const closeEmptyListCourseModal = () => {
@@ -266,56 +269,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </div>
 
                 <div className="modal-body">
-                    <div>
-                        {showMessageEmptyShoppingList && (
-                            <Modal
-                                isOpen={isOpen}
-                                onRequestClose={onClose}
-                                contentLabel="Vider la liste de courses"
-                                shouldCloseOnOverlayClick={false}
-                                ariaHideApp={false}
-                                style={customStyles}
-                            >
-                                <div className="modal-header-empty-shopping-list" style={{ background: clientColor }}>
-                                    <button className="close-btn" onClick={closeEmptyListCourseModal} title='Fermer'>
-                                        <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="none" />
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
-                                                fill="black" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                {questionEmpyShoppingList ? (
-                                    <div style={{ height: '10rem' }}>
-                                        <p className="delete-list-message">Voulez-vous vraiment vider votre liste de courses ?</p>
-                                        <div className="delete-list-action-btn">
-                                            <button className="btn-clear-action"
-                                                onClick={(event) => {
-                                                    event.stopPropagation();
-                                                    handleLaunchFunction(catalogId);
-                                                }}
-                                                style={{ backgroundColor: 'rgb(40, 167, 69)' }}
-                                            >
-                                                Oui
-                                            </button >
-                                            <button className="btn-clear-action" onClick={closeEmptyListCourseModal} style={{ marginLeft: '8px', backgroundColor: '#ea5455' }}>Non</button>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="empty-list-message-result">
-                                        {messageType ?
-                                            (
-                                                <p style={{ color: "green", textAlign: "center" }}>Liste de courses vidée avec succès. </p>
-                                            ) : (
-                                                <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
-                                            )
-                                        }
-                                    </div>
-                                )
-                                }
-                            </Modal>
-                        )}
-                    </div>
                     {productHtmls.length > 0 ? (
                         productHtmls.map((categoryGroup, groupIndex) => {
                             if (categoryGroup.categorie_name && categoryGroup.products) {
@@ -402,14 +355,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         </div>
                     </div>
                 )}
-                <ShareModal
-                    isOpen={isShareModalOpen}
-                    onClose={() => setIsShareModalOpen(false)}
-                    shoppingList={shoppingList}
-                    catalogId={catalogId}
-                    clientColor={clientColor}
-                />
             </Modal>
+            <ShareModal
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+                shoppingList={shoppingList}
+                catalogId={catalogId}
+                clientColor={clientColor}
+            />
             {emailShare && (
                 <ShareWithEmail
                     isOpen={emailShare}
@@ -419,6 +372,54 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     clientColor={clientColor}
                     catalogId={catalogId}
                 />
+            )}
+            {showMessageEmptyShoppingList && (
+                <Modal
+                    isOpen={isOpen}
+                    onRequestClose={onClose}
+                    contentLabel="Vider la liste de courses"
+                    shouldCloseOnOverlayClick={false}
+                    ariaHideApp={false}
+                    style={customStyles}
+                >
+                    <div className="modal-header-empty-shopping-list" style={{ background: clientColor }}>
+                        <button className="close-btn" onClick={closeEmptyListCourseModal} title='Fermer'>
+                            <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="none" />
+                                <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
+                                    fill="black" />
+                            </svg>
+                        </button>
+                    </div>
+                    {questionEmpyShoppingList ? (
+                        <div style={{ height: '10rem' }}>
+                            <p className="delete-list-message">Voulez-vous vraiment vider votre liste de courses?</p>
+                            <div className="delete-list-action-btn">
+                                <button className="btn-clear-action"
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        confirmDeleteShoppingList(catalogId);
+                                    }}
+                                    style={{ backgroundColor: 'rgb(40, 167, 69)' }}
+                                >
+                                    Oui
+                                </button >
+                                <button className="btn-clear-action" onClick={closeEmptyListCourseModal} style={{ marginLeft: '8px', backgroundColor: '#ea5455' }}>Non</button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="empty-list-message-result">
+                            {messageType ?
+                                (
+                                    <p style={{ color: "rgb(40, 167, 69)", textAlign: "center", fontWeight: 'bold' }}>Liste de courses vidée avec succès. </p>
+                                ) : (
+                                    <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
+                                )
+                            }
+                        </div>
+                    )
+                    }
+                </Modal>
             )}
         </>
     );
