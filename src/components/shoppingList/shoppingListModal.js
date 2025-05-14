@@ -199,7 +199,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         });
     };
 
-    const handleLaunchFunction = (catalogId) => {
+    const confirmDeleteShoppingList = (catalogId) => {
         setQuestionEmpyShoppingList(true);
         removeCatalog(catalogId);
         setQuestionEmpyShoppingList(false);
