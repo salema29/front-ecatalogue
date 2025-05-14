@@ -99,3 +99,8 @@
     background-color: transparent;
 }
 }
+
+
+.wrapper-one{
+    height: inherit;
+}
