@@ -8,8 +8,8 @@ import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
-import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
-import { postShoppingListImage } from "../functions/Api";
+import { ShareWithEmail } from "../shoppingList/shareWithEmail";
+import { postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
 import html2canvas from "html2canvas";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -42,9 +42,20 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
+    const [totalEconomyData, setTotalEconomyData] = useState(null);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
+
+    useEffect(() => {
+        if (shoppingList && shoppingList.length > 0) {
+            postTotalPriceEconomyByCatalogue(shoppingList, catalogId).then(data => {
+                if (data) {
+                    setTotalEconomyData(data[catalogId]);
+                }
+            });
+        }
+    }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
         if (isMobile()) {
@@ -63,7 +74,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     };
 
-    const generateImage = useCallback( async () => {
+    const generateImage = useCallback(async () => {
         try {
             const controller = new AbortController();
             currentAbortController.current = controller;
@@ -82,7 +93,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 document.body.removeChild(tempDiv);
                 return;
             }
-            const dataUrl =  canvas.toDataURL("image/png");
+            const dataUrl = canvas.toDataURL("image/png");
             canvas.toBlob((blob) => {
                 if (blob) {
                     setBlob(blob);
@@ -114,7 +125,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 currentAbortController.current = null;
             }
         };
-    }, [emailShare,generateImage]);
+    }, [emailShare, generateImage]);
 
 
     const idListProducts = shoppingList.reduce((acc, item) =>
@@ -160,7 +171,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [messageType, setMessageType] = useState(false);
 
 
-    const deleteShoppingList = () =>{
+    const deleteShoppingList = () => {
         setShowMessageEmptyShoppingList(true);
         setQuestionEmpyShoppingList(true);
     }
@@ -217,7 +228,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         </p>
                     </div>
                     <div className="modal-header-icons">
-                        { productHtmls.length > 0 &&
+                        {productHtmls.length > 0 &&
                             <>
                                 <button className="share-btn"
                                     disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
@@ -260,7 +271,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                         <img src="/static/media/cross-icon-dark.41a0a72ea16f54970c5009d778fe574a.svg" width="25" alt="Fermer"></img>
                                     </button>
                                 </div>
-                                { questionEmpyShoppingList ? (
+                                {questionEmpyShoppingList ? (
                                     <div style={{ height: '10rem' }}>
                                         <p className="delete-list-message">Voulez-vous vraiment vider votre liste de course ?</p>
                                         <div className="delete-list-action-btn">
@@ -276,20 +287,20 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                             <button className="btn-clear-action" onClick={closeEmptyListCourseModal} style={{ marginLeft: '8px', backgroundColor: '#ea5455' }}>Non</button>
                                         </div>
                                     </div>
-                                    ) : (
-                                        <div className="empty-list-message-result">
-                                                { messageType ?
-                                                    (
-                                                        <p style={{ color: "green", textAlign: "center" }}>Liste de courses vidée avec succès. </p>
-                                                    ) :(
-                                                        <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
-                                                    )
-                                                }
-                                        </div>
-                                    )
+                                ) : (
+                                    <div className="empty-list-message-result">
+                                        {messageType ?
+                                            (
+                                                <p style={{ color: "green", textAlign: "center" }}>Liste de courses vidée avec succès. </p>
+                                            ) : (
+                                                <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
+                                            )
+                                        }
+                                    </div>
+                                )
                                 }
                             </Modal>
-                            )}
+                        )}
                     </div>
                     {productHtmls.length > 0 ?
                         (
@@ -340,6 +351,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         )
                     }
                 </div>
+                {(productHtmls.length > 0 && totalEconomyData) && (
+                    <div className="modal-footer modal-footer-body">
+                        <div className="vente-total">
+                            <div className="vente-total-texte">Total :</div>
+                            <div className="vente-total-prix">
+                                <div className="vente-total-prix-remise">{parseFloat(totalEconomyData.totalPriceAfterDiscount).toFixed(2)} €</div>
+                                <div className="vente-total-prix-economie" style={{ color: clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <ShareModal
                     isOpen={isShareModalOpen}
                     onClose={() => setIsShareModalOpen(false)}
@@ -348,7 +370,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     clientColor={clientColor}
                 />
             </Modal>
-            { emailShare && (
+            {emailShare && (
                 <ShareWithEmail
                     isOpen={emailShare}
                     onClose={closeEmailModal}
