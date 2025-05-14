@@ -44,7 +44,7 @@ const EmptyCart = ({clientColor}) => {
             <div style={styles.icon}>
             <BsCart3 size={48} color={clientColor} />
             </div>
-            <h2 style={styles.title}>Votre liste des courses est vide</h2>
+            <h2 style={styles.title}>Votre liste de courses est vide</h2>
             <p style={styles.message}>Veuillez ajouter des produits.</p>
         </div>
         </div>

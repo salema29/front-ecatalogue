@@ -160,6 +160,24 @@ function Product() {
         setLoading(false);
     };
 
+    useEffect(() => {
+        if (searchQuery || searchResults ) {
+            const updateHeightResultatSearch = () => {
+                const stickyElement = document.querySelector('.sticky');
+                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
+                const height = window.innerHeight - stickyHeight;
+                setWrapperHeightSearch(height);
+            };
+
+            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
+            window.addEventListener('resize', updateHeightResultatSearch);
+
+            return () => {
+                window.removeEventListener('resize', updateHeightResultatSearch);
+            };
+        }
+    }, [searchQuery, searchResults]);
+
     const returnToCategory = () => {
         clearSearch();
     };
