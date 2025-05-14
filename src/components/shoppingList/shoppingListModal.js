@@ -178,7 +178,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         });
     };
 
-    const handleLaunchFunction = (catalogId) => {
+    const confirmDeleteShoppingList = (catalogId) => {
         setQuestionEmpyShoppingList(true);
         removeCatalog(catalogId);
         setQuestionEmpyShoppingList(false);
@@ -342,7 +342,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                 <button className="btn-clear-action"
                                     onClick={(event) => {
                                         event.stopPropagation();
-                                        handleLaunchFunction(catalogId);
+                                        confirmDeleteShoppingList(catalogId);
                                     }}
                                     style={{ backgroundColor: 'rgb(40, 167, 69)' }}
                                 >
