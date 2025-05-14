@@ -158,7 +158,6 @@ function MainProduct() {
     
     const [modalOpen, setModalOpen] = useState(false);
     const {searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
     useEffect(() => {
         if (searchQuery || searchResults ) {
             const updateHeightResultatSearch = () => {
@@ -254,6 +253,7 @@ function MainProduct() {
                             )}
                         </div>
                     </div>
+                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
                     <div className="product-detail-container" style={{ marginBottom: '20px'}}>
                         {searchQuery ?
                             // searching
@@ -346,7 +346,7 @@ function MainProduct() {
                                                     </span>
                                                 </button>
                                             )}
-                                                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
+                                                
                                         </>
                                     ) : (
                                         <LoadingSpinner />
