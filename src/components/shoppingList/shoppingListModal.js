@@ -220,14 +220,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         { productHtmls.length > 0 &&
                             <>
                                 <button className="share-btn"
-                                    disabled={productHtmls.length <= 0} style={{ cursor: productHtmls.length <= 0 ? "not-allowed" : "pointer" }}
+                                    disabled={productHtmls.length <= 0} style={{ cursor: "pointer" }}
                                     title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
                                     onClick={handleShareClick}
                                 >
                                     <img src={ShareShoppingList} alt="partager-course" />
                                 </button>
 
-                                <button className="btn empty-shopping-list" onClick={deleteShoppingList} title='Vider la liste de course' >
+                                <button className="btn empty-shopping-list" onClick={deleteShoppingList} title='Vider la liste de courses' >
                                     <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M9.16666 23.625C8.525 23.625 7.97569 23.4047 7.51875 22.9641C7.0618 22.5234 6.83333 21.9937 6.83333 21.375V6.75H5.66666V4.5H11.5V3.375H18.5V4.5H24.3333V6.75H23.1667V21.375C23.1667 21.9937 22.9382 22.5234 22.4812 22.9641C22.0243 23.4047 21.475 23.625 20.8333 23.625H9.16666ZM20.8333 6.75H9.16666V21.375H20.8333V6.75ZM11.5 19.125H13.8333V9H11.5V19.125ZM16.1667 19.125H18.5V9H16.1667V19.125Z" fill={clientColor} />
                                     </svg>
@@ -257,12 +257,16 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             >
                                 <div className="modal-header-empty-shopping-list" style={{ background: clientColor }}>
                                     <button className="close-btn" onClick={closeEmptyListCourseModal} title='Fermer'>
-                                        <img src="/static/media/cross-icon-dark.41a0a72ea16f54970c5009d778fe574a.svg" width="25" alt="Fermer"></img>
+                                        <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="none" />
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
+                                                fill="black" />
+                                        </svg>
                                     </button>
                                 </div>
                                 { questionEmpyShoppingList ? (
                                     <div style={{ height: '10rem' }}>
-                                        <p className="delete-list-message">Voulez-vous vraiment vider votre liste de course ?</p>
+                                        <p className="delete-list-message">Voulez-vous vraiment vider votre liste de courses ?</p>
                                         <div className="delete-list-action-btn">
                                             <button className="btn-clear-action"
                                                 onClick={(event) => {
