@@ -26,7 +26,7 @@ function MainProduct() {
     const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
-    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight - headerHeight);
+    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight);
     const [isLoading, setIsLoading] = useState(true);
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
 
@@ -157,38 +157,16 @@ function MainProduct() {
     };
     
     const [modalOpen, setModalOpen] = useState(false);
-    const {searchQuery, setSearchQuery, searchResults,setSearchResults,clearSearch} = useSearch();
-    const [isLoadSearch, setIsLoadSearch] = useState(false);
-    useEffect(() => {
-        if (searchQuery || setSearchResults ) {
-            const updateHeightResultatSearch = () => {
-                const stickyElement = document.querySelector('.sticky');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeightSearch(height);
-            };
-            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeightResultatSearch);
-            return () => {
-                window.removeEventListener('resize', updateHeightResultatSearch);
-            };
-        }
-    }, [searchQuery, setSearchResults]);
-    useEffect(() => {
-        clearSearch();
-        setProductData([]);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const {searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
     
 
     const handleQueryChange = (value) => {
         setSearchQuery(value);
-        setIsLoadSearch(true);
+        setLoading(false);
     };
-
     const handleSearchResults = (results) => {
         setSearchResults(results);
-        setIsLoadSearch(false);
+        setLoading(false);
     };
 
     const returnToCategory = () => {
@@ -199,7 +177,7 @@ function MainProduct() {
         <>
             {headerData ? (
                 <>
-                    <header className="header">
+                    <header className="header" >
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
@@ -227,7 +205,7 @@ function MainProduct() {
                                         <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
                                 </button>
                             )}
-                            
+
                             <button
                                 className="view-format-dialog-close btn"
                                 onClick={handleClose}
@@ -241,111 +219,119 @@ function MainProduct() {
                             </button>
                         </div>
                     </header>
-                    <div className="category-return" >
+                    <div className="content-detail">
+                        <div className="category-return" >
                             {isMobileView && (
                                 <SearchBar onResults={handleSearchResults}  catalogue_id={catalogId} onQueryChange={handleQueryChange} />
-                            )}                  
-                    
-                        {searchQuery &&   (
-                            <button className="search-return btn" title="Retour" onClick={returnToCategory}>
-                                <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
-                                    <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
-                                <span>Retour </span>
-                            </button>
-                        )} 
-                    </div>
-                    <div className="product-detail-container">
-                        {/* <div className="single-item-wrapper" style={{ height: `${wrapperHeight}px` }}  > */}
-                            {searchQuery ? (
-                                isLoadSearch ? (
-                                    <LoadingSpinner />
-                                ) : (
-                                    <div className="single-item-wrappe" style={{height: searchQuery ? `${wrapperHeightSearch}px` : `${wrapperHeight}px`,
-                                        overflowY: 'scroll' }}  >
-                                        <div className="grid-container">
-                                            { searchResults.length > 0 ? (searchResults.map((product, index) => (
-                                            
-                                                    <ProductItem
-                                                        key={product.id_produit || index}
-                                                        product={product}
-                                                        index={index}
-                                                        categoryId={product.product_categorie_id}
-                                                        catalogId={catalogId}
-                                                        showListCourse="t"
-                                                        API_BASE_URL={API_BASE_URL}
-                                                    />
-                                                
-                                            ))
-                                        ) : 
-                                            (<p>Aucun résultat</p>) }
+                            )}
+
+                            {searchQuery &&   (
+                                <button className="search-return btn" title="Retour" onClick={returnToCategory}>
+                                    <svg className="search-return-icon" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="none" style={{ transform: "rotate(180deg)" }}>
+                                        <path fill="#414141" fill-rule="evenodd" d="m16.334 10.999-6.562 6.55 1.416 1.414 8.27-8.258.709-.706-.708-.707-8.271-8.257-1.416 1.413 6.562 6.551H0v2h16.334Z" clip-rule="evenodd"/></svg>
+                                    <span>Retour </span>
+                                </button>
+                            )}
+                        </div>
+                        <div className="product-detail-container" style={{ marginBottom: '20px'}}>
+                            {searchQuery ?
+                                // searching
+                                (
+                                    <div className="search-result-in-detail" style={{height:  `${wrapperHeightSearch}px`, overflowY: 'scroll' }}  >
+                                        <div className="product-list-container" >
+                                            {loading ?
+                                                (
+                                                    <LoadingSpinner />
+                                                ) : searchResults.length > 0 ? (<div className="grid-container" >
+                                                            {searchResults.map((product, index) => (
+                                                                <ProductItem
+                                                                    key={product.id_produit || index}
+                                                                    product={product}
+                                                                    index={index}
+                                                                    categoryId={product.product_categorie_id}
+                                                                    catalogId={catalogId}
+                                                                    showListCourse="t"
+                                                                    API_BASE_URL={API_BASE_URL}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                ) : (
+                                                    <div className="empty-search-result" >
+                                                        <p style={{ color: headerData.client_color }}>
+                                                            Aucun produit trouvé
+                                                        </p>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
-                                )
-                            ) : (
-                                <div className="single-item-wrapper" style={{
-                                        height: `${wrapperHeight}px` }}  >
-                                    { productData.length !== 0 ? (
-                                        <>
-                                            {!modalOpen && prevNextVueDetail && (
-                                                <>
-                                                    {prevNextVueDetail.previous && (
-                                                        <VueDetailArrow
-                                                            direction="previous"
-                                                            catalogId={catalogId}
-                                                            prevNextVueDetail={prevNextVueDetail}
-                                                        />
-                                                    )}
-                                                    {prevNextVueDetail.next && (
-                                                        <VueDetailArrow
-                                                            direction="next"
-                                                            catalogId={catalogId}
-                                                            prevNextVueDetail={prevNextVueDetail}
-                                                        />
-                                                    )}
+                                ) :
+                                // displaying vue detaille
+                                (
+                                    <div className="single-item-wrapper" style={{
+                                            height: `${wrapperHeight}px` }}  >
+                                        { productData.length !== 0 ? (
+                                            <>
+                                                {!modalOpen && prevNextVueDetail && (
+                                                    <>
+                                                        {prevNextVueDetail.previous && (
+                                                            <VueDetailArrow
+                                                                direction="previous"
+                                                                catalogId={catalogId}
+                                                                prevNextVueDetail={prevNextVueDetail}
+                                                            />
+                                                        )}
+                                                        {prevNextVueDetail.next && (
+                                                            <VueDetailArrow
+                                                                direction="next"
+                                                                catalogId={catalogId}
+                                                                prevNextVueDetail={prevNextVueDetail}
+                                                            />
+                                                        )}
+                                                    </>
+                                                )}
+
+                                                <iframe
+                                                    src={productData.html.html_name}
+                                                    className="product-item-detail placeholder-content"
+                                                    title={productData.html.html_name}
+                                                    width="auto"
+                                                    onLoad={() => setIsLoading(false)}
+                                                    // height="590px"
+                                                />
+
+                                                {!isLoading && headerData.show_list_course === "t" && (
+                                                    <button
+                                                        className="add-bouton-detail"
+                                                        style={{ backgroundColor: headerData.client_color }}
+                                                            onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
+                                                    >
+                                                        <span className="add-bouton-detail-text">
+                                                            {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
+                                                        </span>
+                                                        <span className="add-bouton-detail-icon">
+                                                                {isAddedInList ? (
+                                                                    <img
+                                                                        src={addListIConOk}
+                                                                        alt="add-to-basket"
+                                                                    />
+                                                                ) : (
+                                                                    <img
+                                                                        src={addListICon}
+                                                                        alt="add-to-basket"
+                                                                    />
+                                                                )}
+                                                        </span>
+                                                    </button>
+                                                )}
+                                                        {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
                                                 </>
+                                                ) : (
+                                                    <LoadingSpinner />
                                             )}
-
-                                            <iframe
-                                                src={productData.html.html_name}
-                                                className="product-item-detail placeholder-content"
-                                                title={productData.html.html_name}
-                                                width="auto"
-                                                onLoad={() => setIsLoading(false)}
-                                                // height="590px"
-                                            />
-
-                                            {!isLoading && headerData.show_list_course === "t" && (
-                                                <button
-                                                    className="add-bouton-detail"
-                                                    style={{ backgroundColor: headerData.client_color }}
-                                                        onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
-                                                >
-                                                    <span className="add-bouton-detail-text">
-                                                        {isAddedInList ? 'Supprimer à ma liste' : 'Ajouter à ma liste'}
-                                                    </span>
-                                                    <span className="add-bouton-detail-icon">
-                                                            {isAddedInList ? (
-                                                                <img
-                                                                    src={addListIConOk}
-                                                                    alt="add-to-basket"
-                                                                />
-                                                            ) : (
-                                                                <img
-                                                                    src={addListICon}
-                                                                    alt="add-to-basket"
-                                                                />
-                                                            )}
-                                                    </span>
-                                                </button>
-                                            )}
-                                                    {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData ? headerData.client_color : "#669999"} />)}
-                                            </>
-                                            ) : (
-                                                <LoadingSpinner />
-                                        )}
-                                </div>
-                            ) }
-                        {/* </div> */}
+                                    </div>
+                                ) }
+                        </div>
                     </div>
                 </>
             ) : (
