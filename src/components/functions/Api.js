@@ -101,3 +101,27 @@ export const postShoppingListImage = async (shoppingList, catalogId, options = {
     }
 };
 
+export const postTotalPriceEconomyByCatalogue = async (shoppingList, catalogId) => {
+    const filteredList = shoppingList.filter(item => item.catalogId === catalogId);
+    if (filteredList.length === 0) {
+        console.warn("Aucun produit trouvé pour ce catalogue.");
+        return null;
+    }
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/post-total-price-economy`, {
+            method: 'POST',
+            body: JSON.stringify({ shoppingList: filteredList }),
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            return result.data;
+        } else {
+            console.error('Erreur API:', result.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur réseau:', error);
+        return null;
+    }
+};
+

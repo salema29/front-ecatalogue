@@ -8,8 +8,8 @@ import ShareShoppingList from '../../assets/icons/share-list-shopping.svg';
 import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
-import  { ShareWithEmail } from "../shoppingList/shareWithEmail";
-import { postShoppingListImage } from "../functions/Api";
+import { ShareWithEmail } from "../shoppingList/shareWithEmail";
+import { postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
 import html2canvas from "html2canvas";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -35,6 +35,16 @@ const getModalStyles = () => {
     };
 };
 
+const categoryNameStyle = {
+    height: "30px",
+    backgroundColor: "#DADADA",
+    textAlign: "center",
+    textTransform: "uppercase",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+}
+
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -42,9 +52,20 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
+    const [totalEconomyData, setTotalEconomyData] = useState(null);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
+
+    useEffect(() => {
+        if (shoppingList && shoppingList.length > 0) {
+            postTotalPriceEconomyByCatalogue(shoppingList, catalogId).then(data => {
+                if (data) {
+                    setTotalEconomyData(data[catalogId]);
+                }
+            });
+        }
+    }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
         if (isMobile()) {
@@ -63,7 +84,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     };
 
-    const generateImage = useCallback( async () => {
+    const generateImage = useCallback(async () => {
         try {
             const controller = new AbortController();
             currentAbortController.current = controller;
@@ -82,7 +103,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 document.body.removeChild(tempDiv);
                 return;
             }
-            const dataUrl =  canvas.toDataURL("image/png");
+            const dataUrl = canvas.toDataURL("image/png");
             canvas.toBlob((blob) => {
                 if (blob) {
                     setBlob(blob);
@@ -114,7 +135,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 currentAbortController.current = null;
             }
         };
-    }, [emailShare,generateImage]);
+    }, [emailShare, generateImage]);
 
 
     const idListProducts = shoppingList.reduce((acc, item) =>
@@ -160,7 +181,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [messageType, setMessageType] = useState(false);
 
 
-    const deleteShoppingList = () =>{
+    const deleteShoppingList = () => {
         setShowMessageEmptyShoppingList(true);
         setQuestionEmpyShoppingList(true);
     }
@@ -186,7 +207,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             setShowMessageEmptyShoppingList(false); //close the question popup
             onClose(true); //close the shopping list modal
         }, 2000);
-
     };
 
     const closeEmptyListCourseModal = () => {
@@ -221,7 +241,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         </p>
                     </div>
                     <div className="modal-header-icons">
-                        { productHtmls.length > 0 &&
+                        {productHtmls.length > 0 &&
                             <>
                                 <button className="share-btn"
                                     disabled={productHtmls.length <= 0} style={{ cursor: "pointer" }}
@@ -249,56 +269,92 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </div>
 
                 <div className="modal-body">
-                    
-                    {productHtmls.length > 0 ?
-                        (
-                            productHtmls.map((productHtml) => (
-                                <div
-                                    className="product-wrapper"
-                                    ref={(el) => el && observerRef.current.observe(el)}
-                                    key={productHtml.id_produit}
-                                    data-id-produit={productHtml.id_produit}
-                                >
-                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
-                                        <>
-                                            <div className="product">
-                                                <div className="product-item">
-                                                    <iframe
-                                                        className="product-shopping-list"
-                                                        src={productHtml.html_name}
-                                                        key={productHtml.id_produit}
-                                                        scrolling="no"
-                                                        title={productHtml.id_produit} />
-                                                </div>
-                                                <div className="side-btn">
-                                                    <div className="remove-product">
-                                                        <RemoveProductFromList id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                    </div>
-                                                    {!isMobile() && (
-                                                        <div className="update-count-btn">
-                                                            <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                        </div>
+                    {productHtmls.length > 0 ? (
+                        productHtmls.map((categoryGroup, groupIndex) => {
+                            if (categoryGroup.categorie_name && categoryGroup.products) {
+                                return (
+                                    <div key={groupIndex} className="category-group">
+                                        <div className="category-title" style={categoryNameStyle}><span>{categoryGroup.categorie_name}</span></div>
+                                        {categoryGroup.products.map((productHtml, productIndex) => {
+                                            const isLastProductInCategory = productIndex === categoryGroup.products.length - 1;
+                                            const isLastCategory = groupIndex === productHtmls.length - 1;
+
+                                            return (
+                                                <div
+                                                    className="product-wrapper"
+                                                    ref={(el) => el && observerRef.current.observe(el)}
+                                                    key={productHtml.id_produit}
+                                                    data-id-produit={productHtml.id_produit}
+                                                >
+                                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
+                                                        <>
+                                                            <div className="product">
+                                                                <div className="product-item">
+                                                                    <iframe
+                                                                        className="product-shopping-list"
+                                                                        src={productHtml.html_name}
+                                                                        scrolling="no"
+                                                                        title={productHtml.id_produit}
+                                                                    />
+                                                                </div>
+                                                                <div className="side-btn">
+                                                                    <div className="remove-product">
+                                                                        <RemoveProductFromList
+                                                                            id_produit_resume={productHtml.id_produit}
+                                                                            catalogue_id={catalogId}
+                                                                        />
+                                                                    </div>
+                                                                    {!isMobile() && (
+                                                                        <div className="update-count-btn">
+                                                                            <UpdateCountProduct
+                                                                                id_produit_resume={productHtml.id_produit}
+                                                                                catalogue_id={catalogId}
+                                                                            />
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            {isMobile() && (
+                                                                <div className="update-count-btn-mobile">
+                                                                    <UpdateCountProduct
+                                                                        id_produit_resume={productHtml.id_produit}
+                                                                        catalogue_id={catalogId}
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                            {
+                                                                (!isLastProductInCategory || isLastCategory) && (
+                                                                    <hr style={{ border: "1px solid black", width: "50%" }} />
+                                                                )
+                                                            }
+                                                        </>
+                                                    ) : (
+                                                        <ProductSkeleton height={200} width={"95%"} />
                                                     )}
                                                 </div>
-                                            </div>
-                                            {isMobile() && (
-                                                <div className="update-count-btn-mobile">
-                                                    <UpdateCountProduct id_produit_resume={productHtml.id_produit} catalogue_id={catalogId} />
-                                                </div>
-                                            )}
-                                            <hr style={{ border: "1px solid black", width: "50%" }} />
-                                        </>
-                                    ) : (
-                                        <ProductSkeleton height={200} width={"95%"} />
-                                    )}
-                                </div>
-                            ))
-                        )
-                        : (
-                            <EmptyCart clientColor={clientColor} />
-                        )
+                                            );
+                                        })}
+
+                                    </div>
+                                )
+                            } else return null
+                        })
+                    ) : (
+                        <EmptyCart clientColor={clientColor} />
+                    )
                     }
                 </div>
+                {(productHtmls.length > 0 && totalEconomyData) && (
+                    <div className="modal-footer modal-footer-body">
+                        <div className="vente-total">
+                            <div className="vente-total-texte">Total :</div>
+                            <div className="vente-total-prix">
+                                <div className="vente-total-prix-remise">{parseFloat(totalEconomyData.totalPriceAfterDiscount).toFixed(2)} €</div>
+                                <div className="vente-total-prix-economie" style={{ color: clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </Modal>
             <ShareModal
                 isOpen={isShareModalOpen}
@@ -307,7 +363,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 catalogId={catalogId}
                 clientColor={clientColor}
             />
-            { emailShare && (
+            {emailShare && (
                 <ShareWithEmail
                     isOpen={emailShare}
                     onClose={closeEmailModal}
@@ -335,9 +391,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             </svg>
                         </button>
                     </div>
-                    { questionEmpyShoppingList ? (
+                    {questionEmpyShoppingList ? (
                         <div style={{ height: '10rem' }}>
-                            <p className="delete-list-message">Voulez-vous vraiment vider votre liste de courses? </p>
+                            <p className="delete-list-message">Voulez-vous vraiment vider votre liste de courses?</p>
                             <div className="delete-list-action-btn">
                                 <button className="btn-clear-action"
                                     onClick={(event) => {
@@ -351,17 +407,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                 <button className="btn-clear-action" onClick={closeEmptyListCourseModal} style={{ marginLeft: '8px', backgroundColor: '#ea5455' }}>Non</button>
                             </div>
                         </div>
-                        ) : (
-                            <div className="empty-list-message-result">
-                                    { messageType ?
-                                        (
-                                            <p style={{ color: "rgb(40, 167, 69)", textAlign: "center", fontWeight: 'bold' }}>Liste de courses vidée avec succès. </p>
-                                        ) :(
-                                            <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
-                                        )
-                                    }
-                            </div>
-                        )
+                    ) : (
+                        <div className="empty-list-message-result">
+                            {messageType ?
+                                (
+                                    <p style={{ color: "rgb(40, 167, 69)", textAlign: "center", fontWeight: 'bold' }}>Liste de courses vidée avec succès. </p>
+                                ) : (
+                                    <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
+                                )
+                            }
+                        </div>
+                    )
                     }
                 </Modal>
             )}
