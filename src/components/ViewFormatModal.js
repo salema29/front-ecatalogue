@@ -12,7 +12,7 @@ import byProductIcon from "../assets/icons/by-product-icon.svg";
 import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
-import { fetchDefinitionMagasinChoice } from "./functions/Api";
+import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -21,6 +21,7 @@ function ViewFormatDialog() {
     const [headerData, setHeaderData] = useState(null);
     const [shopModalOpen, setShopModalOpen] = useState(false);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
+    const [shopList, setShopList] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -61,6 +62,16 @@ function ViewFormatDialog() {
         fetchDefChoiceMagasin();
     }, [catalogId, clientId, API_BASE_URL]);
 
+    useEffect(() => {
+        if (definitionMagasinChoice === 1) {
+            async function fetchShopList() {
+                const shops = await fetchShopListByClient(clientId);
+                setShopList(shops);
+            }
+            fetchShopList();
+        }
+    }, [catalogId, clientId, API_BASE_URL, definitionMagasinChoice]);
+
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
     const handleProductView = () => {
@@ -81,7 +92,7 @@ function ViewFormatDialog() {
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src = {isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
+                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
                                 alt=""
                             />
                             <div className="header-text">
@@ -187,34 +198,34 @@ function ViewFormatDialog() {
                                 </h2>
                             </div>
                             <div className="view-format-dialog-button-container">
-                            <button
-                                        className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: headerData.client_color }}
-                                        onClick={firstCategorieId ? handleProductView : () => { }}
-                                    >
-                                        {firstCategorieId ? (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue produit
-                                                </span>
-                                                <span className="view-format-dialog-button-icon">
-                                                    <img
-                                                        src={byProductIcon}
-                                                        alt=""
-                                                    />
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue produit
-                                                </span>
-                                                <span className="view-format-dialog-button-icon">
-                                                    <MiniSpinner />
-                                                </span>
-                                            </>
-                                        )}
-                                    </button>
+                                <button
+                                    className="view-format-dialog-button btn"
+                                    style={{ backgroundColor: headerData.client_color }}
+                                    onClick={firstCategorieId ? handleProductView : () => { }}
+                                >
+                                    {firstCategorieId ? (
+                                        <>
+                                            <span className="view-format-dialog-button-text">
+                                                Vue produit
+                                            </span>
+                                            <span className="view-format-dialog-button-icon">
+                                                <img
+                                                    src={byProductIcon}
+                                                    alt=""
+                                                />
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="view-format-dialog-button-text">
+                                                Vue produit
+                                            </span>
+                                            <span className="view-format-dialog-button-icon">
+                                                <MiniSpinner />
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
                                 <button
                                     style={{ backgroundColor: headerData.client_color }}
                                     className="view-format-dialog-button"
@@ -240,7 +251,7 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
-            {(shopModalOpen && definitionMagasinChoice === 1) && ( <ShopModal catalogId ={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor = {'#669999'} /> )}
+            {(shopModalOpen && definitionMagasinChoice === 1 && shopList) && (<ShopModal catalogId={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor={headerData.client_color} shopList={shopList} />)}
         </>
     );
 }

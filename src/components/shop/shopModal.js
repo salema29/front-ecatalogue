@@ -7,58 +7,7 @@ import searchIcon from "../../assets/icons/search.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopItem from "./shopItem";
 
-const shops = [
-    {
-        shopId: 1,
-        shopTitle: "Bondues",
-        shopAdress: "14 Rue de la Loge 59910 Bondues",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 2,
-        shopTitle: "Lille",
-        shopAdress: "12 Rue de Paris 59000 Lille",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 3,
-        shopTitle: "Roubaix",
-        shopAdress: "8 Avenue Jean Lebas 59100 Roubaix",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 4,
-        shopTitle: "Tourcoing",
-        shopAdress: "5 Rue Nationale 59200 Tourcoing",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 5,
-        shopTitle: "Bondues",
-        shopAdress: "14 Rue de la Loge 59910 Bondues qfqfqfqsfqsfqfqsfqsfqfs",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 6,
-        shopTitle: "Lille",
-        shopAdress: "12 Rue de Paris 59000 Lille",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 7,
-        shopTitle: "Roubaix",
-        shopAdress: "8 Avenue Jean Lebas 59100 Roubaix",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    },
-    {
-        shopId: 8,
-        shopTitle: "Tourcoing",
-        shopAdress: "5 Rue Nationale 59200 Tourcoing",
-        shopImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAEBAk8JmfVm07SlFfjb5WIagpvWCM_e_0Zg&s"
-    }
-];
-
-const ShopModal = ({ catalogId, isOpen, onClose, clientColor }) => {
+const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
     
     const getModalStyles = () => {
@@ -212,13 +161,9 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </div>
                     <div className="shop-list" style={shopListStyle}>
                         <div className="shop-list-content" style={{ overflowY: "auto", height: "95%" }}>
-                            {shops.map((shop) => (
+                            {shopList.map((shop) => (
                                 <ShopItem
-                                    key={shop.shopId}
-                                    shopId={shop.shopId}
-                                    shopImage={shop.shopImage}
-                                    shopTitle={shop.shopTitle}
-                                    shopAdress={shop.shopAdress}
+                                    shop={shop}
                                     clientColor={clientColor}
                                 />
                             ))}

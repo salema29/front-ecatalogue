@@ -149,3 +149,27 @@ export const fetchDefinitionMagasinChoice = async (clientId) => {
     }
 }
 
+export const fetchShopListByClient = async (clientId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/get-shops-by-client/${clientId}`);
+
+        if (!response.ok) {
+            console.error(`Erreur HTTP : ${response.status}`);
+            return null;
+        }
+
+        const fetchedData = await response.json();
+
+        if (fetchedData.status === 'success') {
+            const result = fetchedData.data;
+            return result;
+        } else {
+            console.error('Erreur API:', fetchedData.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur de récupération des données:', error);
+        return null;
+    }
+}
+

@@ -1,7 +1,7 @@
 
 import React, {useState, useEffect} from "react";
 
-const ShopItem = ({ shopId, shopImage, shopTitle, shopAdress, clientColor }) => {
+const ShopItem = ({ shop, clientColor }) => {
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
 
     useEffect(() => {
@@ -35,9 +35,9 @@ const ShopItem = ({ shopId, shopImage, shopTitle, shopAdress, clientColor }) => 
     }
 
     return (
-        <div key={shopId} className="shop-item" style={shopItemStyle}>
+        <div key={shop.magasin_id_action} className="shop-item" style={shopItemStyle}>
             <div className="shop-info" style={{ margin: "0 10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div className="shop-info-title" style={{ fontWeight: "600", color: "#4A4A4A" }}>{shopTitle}</div>
+                <div className="shop-info-title" style={{ fontWeight: "600", color: "#4A4A4A" }}>{shop.magasin_city}</div>
                 <div className="shop-info-address" style={{ display: "flex", alignItems: "center" }}>
                     <div className="shop-info-address-location-icon" style={{ transform: "translate(-4px, 2px)" }}>
                         <svg width="34.08" height="34.08" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +45,8 @@ const ShopItem = ({ shopId, shopImage, shopTitle, shopAdress, clientColor }) => 
                         </svg>
                     </div>
                     <div className="shop-info-address-value" style={{ fontSize: "12px", color: "#4A4A4A" }}>
-                        {shopAdress.length > 45 ? shopAdress.slice(0, 45) + '...' : shopAdress}
+                        <div>{(shop.magasin_adresse + ' ' + shop.magasin_code_postal).length > 45 ? (shop.magasin_adresse + ' ' + shop.magasin_code_postal).slice(0, 45) + '...' : (shop.magasin_adresse + ' ' + shop.magasin_code_postal)}</div>
+                        {shop.distance && <div><strong>{parseFloat(shop.distance).toFixed(2)} Km</strong></div>}
                     </div>
                 </div>
             </div>
