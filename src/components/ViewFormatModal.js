@@ -12,13 +12,15 @@ import byProductIcon from "../assets/icons/by-product-icon.svg";
 import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
+import { fetchDefinitionMagasinChoice } from "./functions/Api";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const isMobileView = window.innerWidth <= 767;
-    const { catalogId } = useParams();
+    const { catalogId, clientId } = useParams();
     const [headerData, setHeaderData] = useState(null);
     const [shopModalOpen, setShopModalOpen] = useState(false);
+    const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,6 +52,14 @@ function ViewFormatDialog() {
             window.removeEventListener("orientationchange", handleOrientationChange);
         };
     }, []);
+
+    useEffect(() => {
+        async function fetchDefChoiceMagasin() {
+            const defChoiceMagasin = await fetchDefinitionMagasinChoice(clientId);
+            setDefinitionMagasinChoice(defChoiceMagasin);
+        }
+        fetchDefChoiceMagasin();
+    }, [catalogId, clientId, API_BASE_URL]);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
@@ -230,7 +240,7 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
-            {shopModalOpen && ( <ShopModal catalogId ={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor = {'#669999'} /> )}
+            {(shopModalOpen && definitionMagasinChoice === 1) && ( <ShopModal catalogId ={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor = {'#669999'} /> )}
         </>
     );
 }

@@ -105,6 +105,11 @@ function Carousel() {
         });
     }
 
+    useEffect(() => {
+        setClientId(process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : clientId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
         if (!isMobileView && sliderContainerRef.current) {
@@ -154,7 +159,7 @@ function Carousel() {
                             const viewChoice = await fetchViewChoice(slide.catalogue_id);
                             // vue produit ET vue feuilletable
                             if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
-                                navigate(`/view/${slide.catalogue_id}`);
+                                navigate(`/view/${slide.catalogue_id}/${clientId}`);
                             } 
                             // vue feuilletable
                             else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {

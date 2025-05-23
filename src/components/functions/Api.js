@@ -125,7 +125,27 @@ export const postTotalPriceEconomyByCatalogue = async (shoppingList, catalogId) 
     }
 };
 
-export const fetchDefinitionMagasinChoice = async () => {
-    return 1; // 0 : non, 1 : oui, 2 : recuperation web
+export const fetchDefinitionMagasinChoice = async (clientId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/get-shop-choice/${clientId}`);
+
+        if (!response.ok) {
+            console.error(`Erreur HTTP : ${response.status}`);
+            return null;
+        }
+
+        const fetchedData = await response.json();
+
+        if (fetchedData.status === 'success') {
+            const result = parseInt(fetchedData.data);
+            return result;
+        } else {
+            console.error('Erreur API:', fetchedData.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur de récupération des données:', error);
+        return null;
+    }
 }
 
