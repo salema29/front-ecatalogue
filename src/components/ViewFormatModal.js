@@ -11,13 +11,19 @@ import desktopFormatIconDark from "../assets/icons/desktop-view-format-icon-dark
 import byProductIcon from "../assets/icons/by-product-icon.svg";
 import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
+import ShopModal from "./shop/shopModal";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const isMobileView = window.innerWidth <= 767;
     const { catalogId } = useParams();
     const [headerData, setHeaderData] = useState(null);
+    const [shopModalOpen, setShopModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setShopModalOpen(true);
+    }, [])
 
     const handleClose = () => {
         navigate(`/`);
@@ -224,6 +230,7 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
+            {shopModalOpen && ( <ShopModal catalogId ={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor = {'#669999'} /> )}
         </>
     );
 }

@@ -125,3 +125,7 @@ export const postTotalPriceEconomyByCatalogue = async (shoppingList, catalogId) 
     }
 };
 
+export const fetchDefinitionMagasinChoice = async () => {
+    return 1; // 0 : non, 1 : oui, 2 : recuperation web
+}
+
