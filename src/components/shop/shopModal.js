@@ -6,6 +6,7 @@ import roofIcon from "../../assets/icons/roof.svg";
 import searchIcon from "../../assets/icons/search.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopItem from "./shopItem";
+import EmptyShopListContent from "./emptyShopListContent";
 
 const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
@@ -87,7 +88,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     const shopListStyle = {
         maxWidth: "335px",
         maxHeight: "470px",
-        backgroundColor: "#dfdfdf",
+        backgroundColor: shopList.length > 0 ? "#dfdfdf" : "transparent",
         borderRadius: "20px",
         overflowY: "auto",
         display: "flex",
@@ -161,12 +162,17 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                     </div>
                     <div className="shop-list" style={shopListStyle}>
                         <div className="shop-list-content" style={{ overflowY: "auto", height: "95%" }}>
-                            {shopList.map((shop) => (
+                            {shopList.length > 0 ? (shopList.map((shop) => (
                                 <ShopItem
+                                    key={shop.magasin_id_action}
+                                    catalogId={catalogId}
                                     shop={shop}
                                     clientColor={clientColor}
+                                    onClose={onClose}
                                 />
-                            ))}
+                            ))) : (
+                                <EmptyShopListContent clientColor={clientColor} />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -9,8 +9,13 @@ import ProductSkeleton from "../shoppingList/skelleton";
 import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
 import { ShareWithEmail } from "../shoppingList/shareWithEmail";
-import { postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
+import { fetchDefinitionMagasinChoice, fetchShopListByClient, postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
 import html2canvas from "html2canvas";
+import miniGeoIcon from "../../assets/icons/mini-geo.svg";
+import shopInfo from "../../assets/icons/shop-info.svg";
+import { getShopByCatalogId } from "../functions/Shop";
+import ShopModal from "../shop/shopModal";
+import { ClientContext } from "../../store-client";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
@@ -47,12 +52,17 @@ const categoryNameStyle = {
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+    const { storedClient, setStoredClient } = useContext(ClientContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const currentAbortController = useRef(null);
     const isMounted = useRef(false);
     const [imageurl, setImageurl] = useState("");
     const [blob, setBlob] = useState("");
     const [totalEconomyData, setTotalEconomyData] = useState(null);
+    const [currentShop, setCurrentShop] = useState(null);
+    const [shopModalOpen, setShopModalOpen] = useState(false);
+    const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
+    const [shopList, setShopList] = useState(null);
 
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
@@ -64,6 +74,22 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setTotalEconomyData(data[catalogId]);
                 }
             });
+        }
+    }, [shoppingList, catalogId]);
+
+    useEffect(() => {
+        if (shoppingList && shoppingList.length > 0) {
+            postTotalPriceEconomyByCatalogue(shoppingList, catalogId).then(data => {
+                if (data) {
+                    setTotalEconomyData(data[catalogId]);
+                }
+            });
+        }
+    }, [shoppingList, catalogId]);
+
+    useEffect(() => {
+        if(shoppingList) {
+            setCurrentShop(getShopByCatalogId(shoppingList, catalogId));
         }
     }, [shoppingList, catalogId]);
 
@@ -224,6 +250,24 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         },
     };
 
+    useEffect(() => {
+        async function fetchDefChoiceMagasin() {
+            const defChoiceMagasin = await fetchDefinitionMagasinChoice(storedClient);
+            setDefinitionMagasinChoice(defChoiceMagasin);
+        }
+        fetchDefChoiceMagasin();
+    }, [catalogId, storedClient]);
+
+    useEffect(() => {
+        if (definitionMagasinChoice !== 0) {
+            async function fetchShopList() {
+                const shops = await fetchShopListByClient(storedClient);
+                setShopList(shops);
+            }
+            fetchShopList();
+        }
+    }, [catalogId, storedClient, definitionMagasinChoice]);
+
     return (
         <>
             <Modal
@@ -235,9 +279,16 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             >
                 <div className="modal-header" style={{ background: clientColor }}>
                     <div>
-                        <h2 className="modal-header-title">Ma liste de courses</h2>
+                        <h2 className="modal-header-title">Préparez votre liste</h2>
                         <p className="modal-header-subtitle">
-                            Préparez votre liste de courses <br /> pour gagner du temps en magasin
+                            {(definitionMagasinChoice === 1 || definitionMagasinChoice === 2) && (
+                                currentShop ? 
+                                    (<>et rejoignez nous dans votre magasin {currentShop.magasin_name} <img src={shopInfo} style={{ width: "12px", margin: "0 0 0 5px", transform: "translateY(1px)", cursor: "pointer" }} alt="infoIcon"></img></>) : 
+                                    (<>et rejoignez-nous dans votre magasin préféré <img src={miniGeoIcon} onClick={() => setShopModalOpen(true)} style={{ width: "11px", margin: "0 0 0 5px", transform: "translateY(2px)", cursor: "pointer" }} alt="geoIcon"></img></>)
+                            )}
+                            {definitionMagasinChoice === 0 && 
+                                (<>et rejoignez-nous dans votre magasin préféré</>)
+                            }
                         </p>
                     </div>
                     <div className="modal-header-icons">
@@ -413,7 +464,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                 (
                                     <p style={{ color: "rgb(40, 167, 69)", textAlign: "center", fontWeight: 'bold' }}>Liste de courses vidée avec succès. </p>
                                 ) : (
-                                    <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n’a pas été vidée. Vous pouvez réessayer. </p>
+                                    <p style={{ color: "red", textAlign: "center" }}>Oups ! La liste de courses n'a pas été vidée. Vous pouvez réessayer. </p>
                                 )
                             }
                         </div>
@@ -421,6 +472,14 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     }
                 </Modal>
             )}
+            {(shopModalOpen && shopList) && 
+            (<ShopModal
+                catalogId={catalogId} 
+                isOpen={shopModalOpen} 
+                onClose={() => setShopModalOpen(false)} 
+                clientColor={clientColor} 
+                shopList={shopList} 
+            />)}
         </>
     );
 };

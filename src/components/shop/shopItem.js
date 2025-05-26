@@ -1,7 +1,9 @@
+import React, { useState, useEffect, useContext } from "react";
+import { ShoppingListContext } from '../../store-shopping-list';
+import { chooseShop } from "../functions/Shop";
 
-import React, {useState, useEffect} from "react";
-
-const ShopItem = ({ shop, clientColor }) => {
+const ShopItem = ({ catalogId, shop, clientColor, onClose }) => {
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
 
     useEffect(() => {
@@ -34,6 +36,13 @@ const ShopItem = ({ shop, clientColor }) => {
         cursor: "pointer"
     }
 
+    const handleChooseShop = () => {
+        const updatedList = chooseShop(shoppingList, catalogId, shop);
+        setShoppingList(updatedList);
+        onClose();
+    };
+
+
     return (
         <div key={shop.magasin_id_action} className="shop-item" style={shopItemStyle}>
             <div className="shop-info" style={{ margin: "0 10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -50,7 +59,7 @@ const ShopItem = ({ shop, clientColor }) => {
                     </div>
                 </div>
             </div>
-            <div className="shop-choice-btn" style={shopChoiceBtn}><span>Choisir</span></div>
+            <div className="shop-choice-btn" style={shopChoiceBtn} onClick={handleChooseShop}><span>Choisir</span></div>
         </div>
     );
 };

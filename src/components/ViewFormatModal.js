@@ -251,7 +251,14 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
-            {(shopModalOpen && definitionMagasinChoice === 1 && shopList) && (<ShopModal catalogId={1} isOpen={shopModalOpen} onClose={() => setShopModalOpen(false)} clientColor={headerData.client_color} shopList={shopList} />)}
+            {(shopModalOpen && definitionMagasinChoice === 1 && shopList) && 
+            (<ShopModal 
+                catalogId={catalogId} 
+                isOpen={shopModalOpen} 
+                onClose={() => setShopModalOpen(false)} 
+                clientColor={headerData.client_color} 
+                shopList={shopList} 
+            />)}
         </>
     );
 }

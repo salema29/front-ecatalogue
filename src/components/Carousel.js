@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
 import { fetchViewChoice } from "./functions/Api";
 import CategoryPerCatalogue from "./navigation/CategoryPerCatalogue";
+import { ClientContext } from "../store-client";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -16,6 +17,7 @@ function Carousel() {
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
     const sliderContainerRef = useRef(null);
+    const { storedClient, setStoredClient } = useContext(ClientContext);
 
     let environment_shop_id = 0;
 
@@ -47,6 +49,7 @@ function Carousel() {
         const hiddenInput = document.getElementById("catalogue-client");
         const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
         setClientId(fetchedValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -106,7 +109,11 @@ function Carousel() {
     }
 
     useEffect(() => {
-        setClientId(process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : clientId);
+        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || clientId;
+
+        setClientId(clientIdToUse);
+        setStoredClient(clientIdToUse);
+        localStorage.setItem('stored-client', JSON.stringify(clientIdToUse));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
