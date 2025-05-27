@@ -52,7 +52,11 @@ function Carousel() {
     useEffect(() => {
         const hiddenInput = document.getElementById("catalogue-client");
         const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
-        setClientId(fetchedValue);
+        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || fetchedValue;
+
+        setClientId(clientIdToUse);
+        clientContext.setStoredClient(clientIdToUse);
+        localStorage.setItem('stored-client', JSON.stringify(clientIdToUse));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -111,15 +115,6 @@ function Carousel() {
             console.error('Error fetching data:', error);
         });
     }
-
-    useEffect(() => {
-        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || clientId;
-
-        setClientId(clientIdToUse);
-        clientContext.setStoredClient(clientIdToUse);
-        localStorage.setItem('stored-client', JSON.stringify(clientIdToUse));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         async function fetchDefChoiceMagasin() {
