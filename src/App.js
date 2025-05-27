@@ -28,7 +28,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<Home />} /> {/* Landing page */}
-                    <Route path="view/:catalogId" element={<ViewFormatModal />} /> {/* Modal to view details */}
+                    <Route path="view/:catalogId/:clientId" element={<ViewFormatModal />} /> {/* Modal to view details */}
                     <Route path="product-list/:catalogId/:categoryId" element={<ProductList />} /> {/* Product resume view */}
                     <Route path="catalogue/:catalogId" element={<CatalogOverview />} /> {/* Catalog overview */}
                     <Route path="product/:catalogId/:productId/:categoryId/:id_produit_resume" element={<ProductDetail />} /> {/* Individual product details */}

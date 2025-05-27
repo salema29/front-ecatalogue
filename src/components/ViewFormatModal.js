@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
@@ -11,13 +11,27 @@ import desktopFormatIconDark from "../assets/icons/desktop-view-format-icon-dark
 import byProductIcon from "../assets/icons/by-product-icon.svg";
 import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
+import ShopModal from "./shop/shopModal";
+import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
+import { ShoppingListContext } from "../store-shopping-list";
+import { getShopByCatalogId } from "./functions/Shop";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const isMobileView = window.innerWidth <= 767;
-    const { catalogId } = useParams();
+    const { catalogId, clientId } = useParams();
     const [headerData, setHeaderData] = useState(null);
+    const [shopModalOpen, setShopModalOpen] = useState(false);
+    const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
+    const [shopList, setShopList] = useState(null);
+    const [currentShop, setCurrentShop] = useState(null);
+    const shoppingListContext = useContext(ShoppingListContext);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setShopModalOpen(true);
+    }, [])
 
     const handleClose = () => {
         navigate(`/`);
@@ -45,6 +59,30 @@ function ViewFormatDialog() {
         };
     }, []);
 
+    useEffect(() => {
+        async function fetchDefChoiceMagasin() {
+            const defChoiceMagasin = await fetchDefinitionMagasinChoice(clientId);
+            setDefinitionMagasinChoice(defChoiceMagasin);
+        }
+        fetchDefChoiceMagasin();
+    }, [catalogId, clientId, API_BASE_URL]);
+
+    useEffect(() => {
+        if (definitionMagasinChoice === 1) {
+            async function fetchShopList() {
+                const shops = await fetchShopListByClient(clientId);
+                setShopList(shops);
+            }
+            fetchShopList();
+        }
+    }, [catalogId, clientId, API_BASE_URL, definitionMagasinChoice]);
+
+    useEffect(() => {
+        if(shoppingListContext.shoppingList) {
+            setCurrentShop(getShopByCatalogId(shoppingListContext.shoppingList, catalogId));
+        }
+    }, [shoppingListContext.shoppingList, catalogId]);
+
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
     const handleProductView = () => {
@@ -65,7 +103,7 @@ function ViewFormatDialog() {
                         <div className="view-format-dialog-left-part">
                             <img
                                 className="header-logo"
-                                src = {isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
+                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
                                 alt=""
                             />
                             <div className="header-text">
@@ -171,34 +209,34 @@ function ViewFormatDialog() {
                                 </h2>
                             </div>
                             <div className="view-format-dialog-button-container">
-                            <button
-                                        className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: headerData.client_color }}
-                                        onClick={firstCategorieId ? handleProductView : () => { }}
-                                    >
-                                        {firstCategorieId ? (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue produit
-                                                </span>
-                                                <span className="view-format-dialog-button-icon">
-                                                    <img
-                                                        src={byProductIcon}
-                                                        alt=""
-                                                    />
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue produit
-                                                </span>
-                                                <span className="view-format-dialog-button-icon">
-                                                    <MiniSpinner />
-                                                </span>
-                                            </>
-                                        )}
-                                    </button>
+                                <button
+                                    className="view-format-dialog-button btn"
+                                    style={{ backgroundColor: headerData.client_color }}
+                                    onClick={firstCategorieId ? handleProductView : () => { }}
+                                >
+                                    {firstCategorieId ? (
+                                        <>
+                                            <span className="view-format-dialog-button-text">
+                                                Vue produit
+                                            </span>
+                                            <span className="view-format-dialog-button-icon">
+                                                <img
+                                                    src={byProductIcon}
+                                                    alt=""
+                                                />
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="view-format-dialog-button-text">
+                                                Vue produit
+                                            </span>
+                                            <span className="view-format-dialog-button-icon">
+                                                <MiniSpinner />
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
                                 <button
                                     style={{ backgroundColor: headerData.client_color }}
                                     className="view-format-dialog-button"
@@ -224,6 +262,14 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
+            {(shopModalOpen && definitionMagasinChoice === 1 && shopList && !currentShop) && 
+            (<ShopModal 
+                catalogId={catalogId} 
+                isOpen={shopModalOpen} 
+                onClose={() => setShopModalOpen(false)} 
+                clientColor={headerData.client_color} 
+                shopList={shopList} 
+            />)}
         </>
     );
 }
