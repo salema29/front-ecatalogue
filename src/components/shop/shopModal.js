@@ -161,7 +161,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                         <div className="geo-search" style={geoSearchStyle}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
                     </div>
                     <div className="shop-list" style={shopListStyle}>
-                        <div className="shop-list-content" style={{ overflowY: "auto", height: "95%" }}>
+                        <div className="shop-list-content" style={{ overflowY: shopList.length > 0 ? "auto" : "hidden", height: "95%" }}>
                             {shopList.length > 0 ? (shopList.map((shop) => (
                                 <ShopItem
                                     key={shop.magasin_id_action}

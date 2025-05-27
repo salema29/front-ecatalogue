@@ -2,6 +2,8 @@ import React from 'react';
 import { BsShop } from 'react-icons/bs';
 
 const EmptyShopListContent = ({clientColor}) => {
+    const isMobileView = window.innerWidth <= 767;
+
     const styles = {
         container: {
             display: 'flex',
@@ -40,10 +42,10 @@ const EmptyShopListContent = ({clientColor}) => {
     return (
         <div style={styles.container}>
         <div style={styles.card}>
-            <div style={styles.icon}>
+            {!isMobileView && <div style={styles.icon}>
             <BsShop size={48} color={clientColor} />
-            </div>
-            <h2 style={styles.title}>Oups</h2>
+            </div>}
+            {!isMobileView && <h2 style={styles.title}>Oups</h2>}
             <p style={styles.message}>Aucun magasin detecté autour de vous.</p>
         </div>
         </div>
