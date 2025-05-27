@@ -52,7 +52,7 @@ const categoryNameStyle = {
 
 const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
-    const { storedClient, setStoredClient } = useContext(ClientContext);
+    const clientContext = useContext(ClientContext);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const currentAbortController = useRef(null);
     const isMounted = useRef(false);
@@ -252,21 +252,21 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
 
     useEffect(() => {
         async function fetchDefChoiceMagasin() {
-            const defChoiceMagasin = await fetchDefinitionMagasinChoice(storedClient);
+            const defChoiceMagasin = await fetchDefinitionMagasinChoice(clientContext.storedClient);
             setDefinitionMagasinChoice(defChoiceMagasin);
         }
         fetchDefChoiceMagasin();
-    }, [catalogId, storedClient]);
+    }, [catalogId, clientContext.storedClient]);
 
     useEffect(() => {
         if (definitionMagasinChoice !== 0) {
             async function fetchShopList() {
-                const shops = await fetchShopListByClient(storedClient);
+                const shops = await fetchShopListByClient(clientContext.storedClient);
                 setShopList(shops);
             }
             fetchShopList();
         }
-    }, [catalogId, storedClient, definitionMagasinChoice]);
+    }, [catalogId, clientContext.storedClient, definitionMagasinChoice]);
 
     return (
         <>
