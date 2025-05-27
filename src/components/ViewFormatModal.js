@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
@@ -13,6 +13,8 @@ import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
+import { ShoppingListContext } from "../store-shopping-list";
+import { getShopByCatalogId } from "./functions/Shop";
 
 function ViewFormatDialog() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -22,6 +24,9 @@ function ViewFormatDialog() {
     const [shopModalOpen, setShopModalOpen] = useState(false);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
     const [shopList, setShopList] = useState(null);
+    const [currentShop, setCurrentShop] = useState(null);
+    const shoppingListContext = useContext(ShoppingListContext);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -71,6 +76,12 @@ function ViewFormatDialog() {
             fetchShopList();
         }
     }, [catalogId, clientId, API_BASE_URL, definitionMagasinChoice]);
+
+    useEffect(() => {
+        if(shoppingListContext.shoppingList) {
+            setCurrentShop(getShopByCatalogId(shoppingListContext.shoppingList, catalogId));
+        }
+    }, [shoppingListContext.shoppingList, catalogId]);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
@@ -251,7 +262,7 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
-            {(shopModalOpen && definitionMagasinChoice === 1 && shopList) && 
+            {(shopModalOpen && definitionMagasinChoice === 1 && shopList && !currentShop) && 
             (<ShopModal 
                 catalogId={catalogId} 
                 isOpen={shopModalOpen} 
