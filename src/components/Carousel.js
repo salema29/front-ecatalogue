@@ -22,11 +22,12 @@ function Carousel() {
     const sliderContainerRef = useRef(null);
     const clientContext = useContext(ClientContext);
 
-    let environment_shop_id = 0;
+    let environment_shop_id = process.env.REACT_APP_SHOP_ID_TEST ? process.env.REACT_APP_SHOP_ID_TEST : 0;
 
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
         environment_shop_id = window.dataLayer[0].cdl_environment_shop;
     }
+
     const client = document.getElementById("catalogue-client");
     const navigate = useNavigate();
     const handleOpenText = () => {
