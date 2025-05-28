@@ -197,3 +197,28 @@ export const fetchShopById = async (shopId) => {
     }
 }
 
+export const fetchShopsByGeolocation = async (clientId, position) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/post-search-geolocalisation/${clientId}`, {
+            method: 'POST',
+            body: JSON.stringify({ position }),
+        });
+
+        if (!response.ok) {
+            console.error(`Erreur HTTP : ${response.status}`);
+            return null;
+        }
+
+        const fetchedData = await response.json();
+
+        if (fetchedData.status === 'success') {
+            return fetchedData.data;
+        } else {
+            console.error('Erreur API:', fetchedData.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Erreur de récupération des données:', error);
+        return null;
+    }
+};

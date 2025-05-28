@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Modal from "react-modal";
 import shareModalCloseIcon from "../../assets/icons/shopModalClose.svg";
 import geolocalisationIcon from "../../assets/icons/geolocalisation.svg";
@@ -7,9 +7,14 @@ import searchIcon from "../../assets/icons/search.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopItem from "./shopItem";
 import EmptyShopListContent from "./emptyShopListContent";
+import { getCurrentLocation } from "../functions/Geolocalisation";
+import { ClientContext } from "../../store-client";
+import { fetchShopsByGeolocation } from "../functions/Api";
 
 const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
+    const clientContext = useContext(ClientContext);
+    const [currentShopList, setCurrentShopList] = useState(shopList);
     
     const getModalStyles = () => {
         return {
@@ -126,6 +131,12 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [isMobileView])
 
+    const handleGeolocation = async () => {
+        const position = await getCurrentLocation();
+        const shopListByGeolocation = await fetchShopsByGeolocation(clientContext.storedClient, position);
+        setCurrentShopList(shopListByGeolocation);
+    }
+
     return (
         <>
             <Modal
@@ -158,11 +169,11 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                             <input className="search-input" style={searchInputStyle} placeholder="Code postal, ville..." />
                             <div type="submit" className="icon-search" style={iconSearchStyle}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
                         </div>
-                        <div className="geo-search" style={geoSearchStyle}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
+                        <div className="geo-search" style={geoSearchStyle} onClick={handleGeolocation}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
                     </div>
                     <div className="shop-list" style={shopListStyle}>
-                        <div className="shop-list-content" style={{ overflowY: shopList.length > 0 ? "auto" : "hidden", height: "95%" }}>
-                            {shopList.length > 0 ? (shopList.map((shop) => (
+                        <div className="shop-list-content" style={{ overflowY: currentShopList.length > 0 ? "auto" : "hidden", height: "95%" }}>
+                            {currentShopList.length > 0 ? (currentShopList.map((shop) => (
                                 <ShopItem
                                     key={shop.magasin_id_action}
                                     catalogId={catalogId}
