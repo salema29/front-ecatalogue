@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import shareModalCloseIcon from "../../assets/icons/shopModalClose.svg";
 import geolocalisationIcon from "../../assets/icons/geolocalisation.svg";
@@ -7,15 +7,26 @@ import searchIcon from "../../assets/icons/search.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopItem from "./shopItem";
 import EmptyShopListContent from "./emptyShopListContent";
-import { getCurrentLocation } from "../functions/Geolocalisation";
+import { getCurrentLocation, getPlaceLocation } from "../functions/Geolocalisation";
 import { ClientContext } from "../../store-client";
-import { fetchShopsByGeolocation } from "../functions/Api";
+import { fetchShopsByGeolocation, fetchShopsByKeyword } from "../functions/Api";
 
 const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
     const clientContext = useContext(ClientContext);
     const [currentShopList, setCurrentShopList] = useState(shopList);
-    
+    const [keyword, setKeyword] = useState("");
+    const [shopListStyle, setShopListStyle] = useState({
+        maxWidth: "335px",
+        maxHeight: "470px",
+        backgroundColor: shopList.length > 0 ? "#dfdfdf" : "transparent",
+        borderRadius: "20px",
+        overflowY: "auto",
+        display: "flex",
+        alignItems: "center",
+        marginTop: isMobileView ? "20px" : "0"
+    })
+
     const getModalStyles = () => {
         return {
             overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
@@ -77,7 +88,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         justifyContent: "end",
         margin: "5px 0"
     }
-    
+
     const shopFilterStyle = {
         maxWidth: isMobileView ? "325px" : "310px",
         maxHeight: "382px",
@@ -89,31 +100,20 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         marginTop: isMobileView ? "-15px" : "",
         margin: "auto 0"
     }
-    
-    const shopListStyle = {
-        maxWidth: "335px",
-        maxHeight: "470px",
-        backgroundColor: shopList.length > 0 ? "#dfdfdf" : "transparent",
-        borderRadius: "20px",
-        overflowY: "auto",
-        display: "flex",
-        alignItems: "center",
-        marginTop : isMobileView ? "20px" : "0"
-    }
-    
+
     const searchBarStyle = {
         display: "flex",
-        marginTop:  isMobileView ? "15px" : "20px",
+        marginTop: isMobileView ? "15px" : "20px",
         alignItems: "center",
         width: "100%"
     }
-    
+
     const shopIconStyle = {
         display: "flex",
         flexDirection: "column",
         alignItems: "center"
     }
-    
+
     const searchInputStyle = {
         backgroundColor: "#dfdfdf",
         padding: "15px 20px",
@@ -131,10 +131,40 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [isMobileView])
 
+    useEffect(() => {
+        if (currentShopList) {
+            setShopListStyle((prevStyle) => ({
+                ...prevStyle,
+                backgroundColor: currentShopList.length > 0 ? "#dfdfdf" : "transparent",
+                marginTop: isMobileView ? "20px" : "0",
+            }));
+        }
+    }, [isMobileView, currentShopList]);
+
     const handleGeolocation = async () => {
-        const position = await getCurrentLocation();
-        const shopListByGeolocation = await fetchShopsByGeolocation(clientContext.storedClient, position);
-        setCurrentShopList(shopListByGeolocation);
+        try {
+            const position = await getCurrentLocation();
+            const shopListByGeolocation = await fetchShopsByGeolocation(clientContext.storedClient, position);
+            setCurrentShopList(shopListByGeolocation);
+        } catch (error) {
+            console.error("Geolocation error:", error.message);
+            alert("Impossible de récupérer votre position. Veuillez vérifier vos paramètres de localisation et réessayer.");
+        }
+    }
+
+    const handleSearchKeyword = async () => {
+        if (keyword.trim() === "") {
+            setCurrentShopList(shopList);
+            return;
+        }
+        try {
+            const position = await getPlaceLocation(keyword.trim());
+            const shopsByKeyword = await fetchShopsByKeyword(clientContext.storedClient, position, keyword);
+            setCurrentShopList(shopsByKeyword);
+        } catch (error) {
+            console.error("Geolocation error:", error.message);
+            alert("Impossible de récupérer la position de la ville ou du code postal. Veuillez vérifier vos paramètres de localisation ou réessayer avec une autre recherche.");
+        }
     }
 
     return (
@@ -166,8 +196,8 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                         {isMobileView && <div style={{ fontWeight: "500", fontSize: "25px", color: "#2C3336", marginTop: "5px" }}>Trouvez le magasin le plus proche participant
                             à l'opération</div>}
                         <div className="search-bar" style={searchBarStyle}>
-                            <input className="search-input" style={searchInputStyle} placeholder="Code postal, ville..." />
-                            <div type="submit" className="icon-search" style={iconSearchStyle}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
+                            <input className="search-input" style={searchInputStyle} value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="Code postal, ville..." />
+                            <div type="submit" className="icon-search" style={iconSearchStyle} onClick={handleSearchKeyword}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
                         </div>
                         <div className="geo-search" style={geoSearchStyle} onClick={handleGeolocation}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
                     </div>
