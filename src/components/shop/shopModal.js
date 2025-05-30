@@ -138,6 +138,12 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                 backgroundColor: currentShopList.length > 0 ? "#dfdfdf" : "transparent",
                 marginTop: isMobileView ? "20px" : "0",
             }));
+        } else {
+            setShopListStyle((prevStyle) => ({
+                ...prevStyle,
+                backgroundColor: "transparent",
+                marginTop: isMobileView ? "20px" : "0",
+            }));
         }
     }, [isMobileView, currentShopList]);
 
@@ -202,19 +208,23 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                         <div className="geo-search" style={geoSearchStyle} onClick={handleGeolocation}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
                     </div>
                     <div className="shop-list" style={shopListStyle}>
-                        <div className="shop-list-content" style={{ overflowY: currentShopList.length > 0 ? "auto" : "hidden", height: "95%" }}>
-                            {currentShopList.length > 0 ? (currentShopList.map((shop) => (
-                                <ShopItem
-                                    key={shop.magasin_id_action}
-                                    catalogId={catalogId}
-                                    shop={shop}
-                                    clientColor={clientColor}
-                                    onClose={onClose}
-                                />
-                            ))) : (
-                                <EmptyShopListContent clientColor={clientColor} />
-                            )}
-                        </div>
+                        {currentShopList ? (
+                            <div className="shop-list-content" style={{ overflowY: currentShopList.length > 0 ? "auto" : "hidden", height: "95%" }}>
+                                {currentShopList.length > 0 ? (currentShopList.map((shop) => (
+                                    <ShopItem
+                                        key={shop.magasin_id_action}
+                                        catalogId={catalogId}
+                                        shop={shop}
+                                        clientColor={clientColor}
+                                        onClose={onClose}
+                                    />
+                                ))) : (
+                                    <EmptyShopListContent clientColor={clientColor} />
+                                )}
+                            </div>
+                        ) : (
+                            <EmptyShopListContent clientColor={clientColor} />
+                        )}
                     </div>
                 </div>
             </Modal>
