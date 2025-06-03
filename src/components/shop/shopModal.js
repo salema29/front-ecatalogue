@@ -212,12 +212,12 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                     <div className="shop-filter" style={shopFilterStyle}>
                         {/* filter */}
                         <div className="shop-icon" style={shopIconStyle}>
-                            <img src={geolocalisationIcon} style={{ width: "46px", height: "65px", transform: "translateY(8px)" }} alt="geolocalisationIcon"></img>
+                            <img src={geolocalisationIcon} style={{ width: isMobileView ? "36px" : "46px", height: isMobileView ? "55px" : "65px", transform: "translateY(8px)" }} alt="geolocalisationIcon"></img>
                             <img src={roofIcon} style={{ width: "104px", height: "36px" }} alt="roofIcon"></img>
                         </div>
                         {!isMobileView && <div style={{ fontWeight: "bold", fontSize: "22px", color: "#2C3336", marginTop: "5px" }}>Choisissez votre commerce</div>}
                         {!isMobileView && <div style={{ maxWidth: "257px", fontSize: "18px", marginTop: "10px" }}>Renseignez votre code postal ou utilisez la géolocalisation pour choisir votre commerce.</div>}
-                        {isMobileView && <div style={{ fontWeight: "500", fontSize: "25px", color: "#2C3336", marginTop: "5px" }}>Trouvez le magasin le plus proche participant
+                        {isMobileView && <div style={{ maxWidth: "280px", fontWeight: "500", fontSize: "20px", color: "#2C3336", marginTop: "5px" }}>Trouvez le magasin le plus proche participant
                             à l'opération</div>}
                         <div className="search-bar" style={searchBarStyle}>
                             <input className="search-input" style={searchInputStyle} value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="Code postal, ville..." />
