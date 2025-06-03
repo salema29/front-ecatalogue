@@ -46,7 +46,9 @@ const ShopItem = ({ catalogId, shop, clientColor, onClose }) => {
     return (
         <div key={shop.magasin_id_action} className="shop-item" style={shopItemStyle}>
             <div className="shop-info" style={{ margin: "0 10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <div className="shop-info-title" style={{ fontWeight: "600", color: "#4A4A4A" }}>{shop.magasin_city}</div>
+                <div className="shop-info-title" style={{ fontWeight: "600", color: "#4A4A4A" }}>
+                    {(shop.magasin_name.length > 40 ? shop.magasin_name.slice(0, 40) + '...' : shop.magasin_name)}
+                </div>
                 <div className="shop-info-address" style={{ display: "flex", alignItems: "center" }}>
                     <div className="shop-info-address-location-icon" style={{ transform: "translate(-4px, 2px)" }}>
                         <svg width="34.08" height="34.08" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
