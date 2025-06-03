@@ -38,13 +38,13 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                 maxWidth: isMobileView ? "100%" : "956px",
                 minWidth: isMobileView ? "100%" : "785px",
                 width: isMobileView ? "100%" : "45%",
-                height: isMobileView ? "80%" : "58%",
+                height: isMobileView ? "85%" : "58%",
                 overflowY: "auto",
                 borderRadius: isMobileView ? "35px" : "10px",
                 position: "fixed", // fixed pour un vrai centrage par rapport à la fenêtre
                 top: isMobileView ? "55%" : "50%",
                 left: "50%",
-                transform: "translate(-50%, -50%)",
+                transform: isMobileView ? "translate(-50%, -55%)" : "translate(-50%, -50%)",
                 border: "none",
                 padding: "5px"
             },
