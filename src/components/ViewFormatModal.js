@@ -31,7 +31,7 @@ function ViewFormatDialog() {
 
     useEffect(() => {
         setShopModalOpen(true);
-    }, [])
+    }, []);
 
     const handleClose = () => {
         navigate(`/`);
@@ -82,6 +82,12 @@ function ViewFormatDialog() {
             setCurrentShop(getShopByCatalogId(shoppingListContext.shoppingList, catalogId));
         }
     }, [shoppingListContext.shoppingList, catalogId]);
+
+    useEffect(() => {
+        if(currentShop) {
+            setShopModalOpen(false);
+        }
+    }, [currentShop]);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
