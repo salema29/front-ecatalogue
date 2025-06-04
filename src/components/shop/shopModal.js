@@ -26,7 +26,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         alignItems: "center",
         marginTop: isMobileView ? "20px" : "0"
     });
-    
+
     const [isLoading, setIsLoading] = useState(false);
 
     const getModalStyles = () => {
@@ -156,7 +156,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                 backgroundColor: "transparent",
                 marginTop: isMobileView ? "20px" : "0",
             }));
-        } 
+        }
     }, [isLoading, isMobileView]);
 
     const handleGeolocation = async () => {
@@ -221,7 +221,11 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                         {isMobileView && <div style={{ maxWidth: "280px", fontWeight: "500", fontSize: "20px", color: "#2C3336", marginTop: "5px" }}>Trouvez le magasin le plus proche participant
                             à l'opération</div>}
                         <div className="search-bar" style={searchBarStyle}>
-                            <input className="search-input" style={searchInputStyle} value={keyword} onChange={(e) => setKeyword(e.target.value)} placeholder="Code postal, ville..." />
+                            <input className="search-input" style={searchInputStyle} value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSearchKeyword();
+                                }
+                            }} placeholder="Code postal, ville..." />
                             <div type="submit" className="icon-search" style={iconSearchStyle} onClick={handleSearchKeyword}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
                         </div>
                         <div className="geo-search" style={geoSearchStyle} onClick={handleGeolocation}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
