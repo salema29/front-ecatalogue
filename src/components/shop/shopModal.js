@@ -161,6 +161,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
 
     const handleGeolocation = async () => {
         setIsLoading(true);
+        setKeyword('');
         try {
             const position = await getCurrentLocation();
             const shopListByGeolocation = await fetchShopsByGeolocation(clientContext.storedClient, position);
