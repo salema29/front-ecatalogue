@@ -45,8 +45,7 @@ const EmptyShopListContent = ({clientColor}) => {
             {!isMobileView && <div style={styles.icon}>
             <BsShop size={48} color={clientColor} />
             </div>}
-            {!isMobileView && <h2 style={styles.title}>Oups</h2>}
-            <p style={styles.message}>Aucun magasin detecté autour de vous.</p>
+            <p style={styles.message}>Aucun magasin participant à l'opération près de chez vous</p>
         </div>
         </div>
     );

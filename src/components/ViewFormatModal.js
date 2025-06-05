@@ -31,7 +31,7 @@ function ViewFormatDialog() {
 
     useEffect(() => {
         setShopModalOpen(true);
-    }, [])
+    }, []);
 
     const handleClose = () => {
         navigate(`/`);
@@ -78,10 +78,16 @@ function ViewFormatDialog() {
     }, [catalogId, clientId, API_BASE_URL, definitionMagasinChoice]);
 
     useEffect(() => {
-        if(shoppingListContext.shoppingList) {
+        if (shoppingListContext.shoppingList) {
             setCurrentShop(getShopByCatalogId(shoppingListContext.shoppingList, catalogId));
         }
     }, [shoppingListContext.shoppingList, catalogId]);
+
+    useEffect(() => {
+        if(currentShop) {
+            setShopModalOpen(false);
+        }
+    }, [currentShop]);
 
     const { firstCategorieId } = CategoryPerCatalogue(catalogId);
 
@@ -99,38 +105,40 @@ function ViewFormatDialog() {
         <>
             {headerData ? (
                 <>
-                    <header className="header view-format-dialog-header">
-                        <div className="view-format-dialog-left-part">
-                            <img
-                                className="header-logo"
-                                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
-                                alt=""
-                            />
-                            <div className="header-text">
-                                <p style={{ color: headerData.client_color }}>
-                                    {" "}
-                                    {headerData.catalogue_name_ln_un}{" "}
-                                    {headerData.catalogue_name_ln_deux}{" "}
-                                </p>
-                                <p style={{ color: "black" }}>
-                                    du {headerData.catalogue_date_validite_debut} au{" "}
-                                    {headerData.catalogue_date_validite_fin}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="view-format-dialog-right-part">
-                            <button
-                                className="view-format-dialog-close btn"
-                                onClick={handleClose}
-                            >
+                    {!(isMobileView && shopModalOpen) && (
+                        <header className="header view-format-dialog-header">
+                            <div className="view-format-dialog-left-part">
                                 <img
-                                    src={crossIconDark}
-                                    alt="Fermer"
-                                    width="25"
+                                    className="header-logo"
+                                    src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop}
+                                    alt=""
                                 />
-                            </button>
-                        </div>
-                    </header>
+                                <div className="header-text">
+                                    <p style={{ color: headerData.client_color }}>
+                                        {" "}
+                                        {headerData.catalogue_name_ln_un}{" "}
+                                        {headerData.catalogue_name_ln_deux}{" "}
+                                    </p>
+                                    <p style={{ color: "black" }}>
+                                        du {headerData.catalogue_date_validite_debut} au{" "}
+                                        {headerData.catalogue_date_validite_fin}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="view-format-dialog-right-part">
+                                <button
+                                    className="view-format-dialog-close btn"
+                                    onClick={handleClose}
+                                >
+                                    <img
+                                        src={crossIconDark}
+                                        alt="Fermer"
+                                        width="25"
+                                    />
+                                </button>
+                            </div>
+                        </header>
+                    )}
                     <div className="view-format-dialog-content">
                         <div className="view-format-dialog-desktop-content container">
                             <div className="view-format-dialog-desktop-right-part">
@@ -262,14 +270,14 @@ function ViewFormatDialog() {
             ) : (
                 <LoadingSpinner />
             )}
-            {(shopModalOpen && definitionMagasinChoice === 1 && shopList && !currentShop) && 
-            (<ShopModal 
-                catalogId={catalogId} 
-                isOpen={shopModalOpen} 
-                onClose={() => setShopModalOpen(false)} 
-                clientColor={headerData.client_color} 
-                shopList={shopList} 
-            />)}
+            {(shopModalOpen && definitionMagasinChoice === 1 && shopList && !currentShop) &&
+                (<ShopModal
+                    catalogId={catalogId}
+                    isOpen={shopModalOpen}
+                    onClose={() => setShopModalOpen(false)}
+                    clientColor={headerData.client_color}
+                    shopList={shopList}
+                />)}
         </>
     );
 }
