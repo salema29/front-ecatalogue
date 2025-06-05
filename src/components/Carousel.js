@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
-import { fetchViewChoice } from "./functions/Api";
+import { fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
 import CategoryPerCatalogue from "./navigation/CategoryPerCatalogue";
+import { ClientContext } from "../store-client";
+import { ShoppingListContext } from "../store-shopping-list";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -15,13 +17,17 @@ function Carousel() {
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
+    const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
+    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
     const sliderContainerRef = useRef(null);
+    const clientContext = useContext(ClientContext);
 
-    let environment_shop_id = 0;
+    let environment_shop_id = process.env.REACT_APP_SHOP_ID_TEST ? process.env.REACT_APP_SHOP_ID_TEST : 0;
 
     if (window.dataLayer && window.dataLayer[0]?.cdl_environment_shop) {
         environment_shop_id = window.dataLayer[0].cdl_environment_shop;
     }
+
     const client = document.getElementById("catalogue-client");
     const navigate = useNavigate();
     const handleOpenText = () => {
@@ -46,7 +52,12 @@ function Carousel() {
     useEffect(() => {
         const hiddenInput = document.getElementById("catalogue-client");
         const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
-        setClientId(fetchedValue);
+        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || fetchedValue;
+
+        setClientId(clientIdToUse);
+        clientContext.setStoredClient(clientIdToUse);
+        localStorage.setItem('stored-client', JSON.stringify(clientIdToUse));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -105,6 +116,43 @@ function Carousel() {
         });
     }
 
+    useEffect(() => {
+        async function fetchDefChoiceMagasin() {
+            const defChoiceMagasin = await fetchDefinitionMagasinChoice(clientId);
+            setDefinitionMagasinChoice(defChoiceMagasin);
+        }
+        fetchDefChoiceMagasin();
+    }, [clientId, API_BASE_URL]);
+
+    useEffect(() => {
+        async function fetchEnvShop() {
+            if(definitionMagasinChoice === 2) {
+                const shop = await fetchShopById(environment_shop_id);
+                if(shop) {
+                    slidesData.forEach((slide) => {
+                        const existingItem = shoppingList.find(
+                            (item) => item.catalogId === slide.catalogue_id && item.shop !== null
+                        );
+
+                        if (!existingItem) {
+                            const newItem = {
+                                catalogId: slide.catalogue_id,
+                                shop: shop,
+                                products: []
+                            };
+                            shoppingList.push(newItem);
+                        }
+                    });
+
+                    localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
+                    setShoppingList(shoppingList);
+                }
+            }
+        }
+        fetchEnvShop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [definitionMagasinChoice, environment_shop_id, shoppingList, slidesData]);
+
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
         if (!isMobileView && sliderContainerRef.current) {
@@ -154,7 +202,7 @@ function Carousel() {
                             const viewChoice = await fetchViewChoice(slide.catalogue_id);
                             // vue produit ET vue feuilletable
                             if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
-                                navigate(`/view/${slide.catalogue_id}`);
+                                navigate(`/view/${slide.catalogue_id}/${clientId}`);
                             } 
                             // vue feuilletable
                             else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {

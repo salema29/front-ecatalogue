@@ -15,6 +15,7 @@
 
 .modal-header-subtitle {
     margin-top: 0px;
+    max-width: 400px;
 }
 
 @media screen and (max-width: 767px) {
@@ -24,6 +25,7 @@
 
     .modal-header-subtitle {
         font-size: smaller;
+        width: 186px;
     }
 }
 
