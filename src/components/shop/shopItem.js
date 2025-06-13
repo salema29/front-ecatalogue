@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { ShoppingListContext } from '../../store-shopping-list';
 import { chooseShop } from "../functions/Shop";
 
-const ShopItem = ({ catalogId, shop, clientColor, onClose }) => {
+const ShopItem = ({ catalogId, shop, clientColor, onClose, setKeyword }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
     const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
 
@@ -39,6 +39,7 @@ const ShopItem = ({ catalogId, shop, clientColor, onClose }) => {
     const handleChooseShop = () => {
         const updatedList = chooseShop(shoppingList, catalogId, shop);
         setShoppingList(updatedList);
+        setKeyword('');
         onClose();
     };
 
