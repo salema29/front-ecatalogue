@@ -285,7 +285,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         <p className="modal-header-subtitle">
                             {(definitionMagasinChoice === 1 || definitionMagasinChoice === 2) && (
                                 currentShop ?
-                                    (<>et rejoignez nous dans votre magasin {currentShop.magasin_name} <img src={shopInfo} onClick={() => setShopModalInfoOpen(true)} style={{ width: "12px", margin: "0 0 0 5px", transform: "translateY(1px)", cursor: "pointer" }} alt="infoIcon"></img></>) :
+                                    (<>et rejoignez-nous dans votre magasin {currentShop.magasin_name} <img src={shopInfo} onClick={() => setShopModalInfoOpen(true)} style={{ width: "12px", margin: "0 0 0 5px", transform: "translateY(1px)", cursor: "pointer" }} alt="infoIcon"></img></>) :
                                     (<>et rejoignez-nous dans votre magasin préféré <img src={miniGeoIcon} onClick={() => setShopModalOpen(true)} style={{ width: "11px", margin: "0 0 0 5px", transform: "translateY(2px)", cursor: "pointer" }} alt="geoIcon"></img></>)
                             )}
                             {definitionMagasinChoice === 0 &&
