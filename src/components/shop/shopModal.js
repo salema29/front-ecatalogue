@@ -248,6 +248,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                                         shop={shop}
                                         clientColor={clientColor}
                                         onClose={onClose}
+                                        setKeyword={setKeyword}
                                     />
                                 ))) : (
                                     <EmptyShopListContent clientColor={clientColor} />
