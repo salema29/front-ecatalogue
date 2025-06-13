@@ -203,7 +203,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
             >
                 <div className="modal-header" style={{ padding: 0 }}>
                     <div className="modal-header-icons" style={modalHeaderIconStyle}>
-                        <button className="close-btn" onClick={onClose} title='Fermer la liste de courses'>
+                        <button className="close-btn" onClick={() => {setKeyword(''); onClose()}} title='Fermer la liste de courses'>
                             <img src={shareModalCloseIcon} alt="close"></img>
                         </button>
                     </div>

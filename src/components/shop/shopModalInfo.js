@@ -20,11 +20,11 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
             overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
             content: {
                 maxHeight: isMobileView ? "100%" : "545px",
-                minHeight: isMobileView ? "auto" : "350px",
+                minHeight: isMobileView ? "80%" : "350px",
                 maxWidth: isMobileView ? "100%" : "956px",
                 minWidth: isMobileView ? "100%" : "330px",
                 width: isMobileView ? "100%" : "20%",
-                height: "fit-content",
+                height: isMobileView ? "70%" : "fit-content",
                 overflowY: "auto",
                 borderRadius: isMobileView ? "35px" : "10px",
                 position: "fixed", // fixed pour un vrai centrage par rapport à la fenêtre
@@ -72,7 +72,7 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
         flexDirection: "column",
         justifyContent: isMobileView ? "start" : "center",
         marginTop: isMobileView ? "-15px" : "",
-        margin: "auto 0",
+        margin: isMobileView ? "20px auto" : "0 auto",
         height: "100%"
     }
 
@@ -138,7 +138,6 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
 
                 <div className="modal-body" style={modalBodyStyle}>
                     <div className="shop-info" style={shopInfoStyle}>
-                        {/* filter */}
                         <div className="shop-icon" style={shopIconStyle}>
                             <img src={geolocalisationIcon} style={{ width: isMobileView ? "36px" : "46px", height: isMobileView ? "55px" : "65px", transform: "translateY(8px)" }} alt="geolocalisationIcon"></img>
                             <img src={roofIcon} style={{ width: "104px", height: "36px" }} alt="roofIcon"></img>
