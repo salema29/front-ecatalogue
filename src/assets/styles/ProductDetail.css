@@ -74,8 +74,8 @@
 
 .add-bouton-detail-icon {
     display: flex;
+    align-items: center;
     border: none;
-    margin-right: 6px;
     width: 32px;
     height: 32px;
 }
