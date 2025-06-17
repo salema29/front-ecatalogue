@@ -61,11 +61,19 @@ iframe>html>body {
   position: relative;
 }
 
-.product-item {
+.product-item,
+.product-item-encart {
   border: none;
   min-height: 100%;
   width: 100%;
+}
+
+.product-item {
   pointer-events: none;
+}
+
+.product-item-encart {
+  pointer-events: auto;
 }
 
 .product-list-container {
