@@ -148,7 +148,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, AP
                     <div className="item-link">
                         <iframe
                             src={product.html_name}
-                            className="product-item"
+                            className="product-item-encart"
                             title={`Product ${index}`}
                             scrolling="no"
                             onLoad={() => setIsLoading(false)}
