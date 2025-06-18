@@ -84,7 +84,7 @@ function ViewFormatDialog() {
     }, [shoppingListContext.shoppingList, catalogId]);
 
     useEffect(() => {
-        if(currentShop) {
+        if (currentShop) {
             setShopModalOpen(false);
         }
     }, [currentShop]);
@@ -152,10 +152,10 @@ function ViewFormatDialog() {
                                         style={{ color: headerData.client_color, marginBottom: 0 }}
                                         className="view-format-text"
                                     >
-                                        <span style={{ fontWeight: 700 }}>Nouveau !</span> choisissez votre mode de lecture...
+                                        <span style={{ fontWeight: 700 }}>Nouveau !</span> <br /> choisissez votre mode de lecture
                                     </h2 >
                                     <p style={{ color: "black", textAlign: "center" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
-                                        de courses, ou continuer en <span className="text-gras" >version feuilletable.</span>
+                                        de courses, <br /> ou continuer en <span className="text-gras" >version feuilletable.</span>
                                     </p>
                                 </div>
                                 <div className="view-format-dialog-button-container">
@@ -167,10 +167,11 @@ function ViewFormatDialog() {
                                         {firstCategorieId ? (
                                             <>
                                                 <span className="view-format-dialog-button-text">
-                                                    Vue produit
+                                                    Vue mosaïque
                                                 </span>
-                                                <span className="view-format-dialog-button-icon">
+                                                <span className="view-format-dialog-button-icon choice">
                                                     <img
+                                                        style={{ width: "100%", height: "100%" }}
                                                         src={byProductIcon}
                                                         alt=""
                                                     />
@@ -179,7 +180,7 @@ function ViewFormatDialog() {
                                         ) : (
                                             <>
                                                 <span className="view-format-dialog-button-text">
-                                                    Vue produit
+                                                    Vue mosaïque
                                                 </span>
                                                 <span className="view-format-dialog-button-icon">
                                                     <MiniSpinner />
@@ -195,8 +196,9 @@ function ViewFormatDialog() {
                                         <span className="view-format-dialog-button-text">
                                             Vue feuilletable
                                         </span>
-                                        <span className="view-format-dialog-button-icon">
+                                        <span className="view-format-dialog-button-icon choice">
                                             <img
+                                                style={{ width: "100%", height: "100%" }}
                                                 src={byCatalogIcon}
                                                 alt=""
                                             />
@@ -212,8 +214,8 @@ function ViewFormatDialog() {
                                     src={viewFormatIconDark}
                                     alt=""
                                 />
-                                <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 900 }}>
-                                    Choisissez votre mode de lecture
+                                <h2 className="view-format-text" style={{ color: headerData.client_color, fontWeight: 500 }}>
+                                    Choisissez <br/> votre mode de lecture
                                 </h2>
                             </div>
                             <div className="view-format-dialog-button-container">
@@ -225,10 +227,11 @@ function ViewFormatDialog() {
                                     {firstCategorieId ? (
                                         <>
                                             <span className="view-format-dialog-button-text">
-                                                Vue produit
+                                                Vue mosaïque
                                             </span>
-                                            <span className="view-format-dialog-button-icon">
+                                            <span className="view-format-dialog-button-icon choice">
                                                 <img
+                                                    style={{ width: "100%", height: "100%" }}
                                                     src={byProductIcon}
                                                     alt=""
                                                 />
@@ -237,7 +240,7 @@ function ViewFormatDialog() {
                                     ) : (
                                         <>
                                             <span className="view-format-dialog-button-text">
-                                                Vue produit
+                                                Vue mosaïque
                                             </span>
                                             <span className="view-format-dialog-button-icon">
                                                 <MiniSpinner />
@@ -256,8 +259,9 @@ function ViewFormatDialog() {
                                     >
                                         Vue feuilletable
                                     </span>
-                                    <span className="view-format-dialog-button-icon">
+                                    <span className="view-format-dialog-button-icon choice">
                                         <img
+                                            style={{ width: "100%", height: "100%" }}
                                             src={byCatalogIcon}
                                             alt=""
                                         />
