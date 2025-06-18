@@ -220,7 +220,7 @@ function MainProduct() {
                                     <button
                                         className="view-format-dialog-open-list-course btn"
                                         onClick={() => setModalOpen(true)}
-                                        title="Ouvrir ma liste de course"
+                                        title="Ouvrir ma liste de courses"
                                     >
                                             <ListCourse catalogId={catalogId} shoppingList={shoppingList} clientColor={headerData ? headerData.client_color : "#669999"} />
                                     </button>
