@@ -100,6 +100,15 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, cl
         order: product.view_order,
     };
 
+    const styles = {
+        addButton: {
+            height: "32px",
+            width: "32px",
+            right: isMobileView ? "30px" : "20px",
+            bottom: isMobileView ? "30px" : "20px"
+        }
+    }
+
     return (
         <div
             className={`grid-item ${isLoading ? "placeholder-content" : ""} ${isMobileView ? "mobile-items" : "desktop-items"}`}
@@ -120,9 +129,9 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, cl
                             onLoad={() => setIsLoading(false)}
                         />
                         {!isLoading && showListCourse === "t" && (
-                            <div className="add-bouton">
+                            <div className="add-bouton" style={styles.addButton}>
                                 {isAddedInList ? (
-                                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    <svg width={isMobileView ? "40" : "32"} height={isMobileView ? "40" : "32"} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
                                         onClick={(event) => {
                                             event.stopPropagation();
                                             removeInList(product.view_order, categoryId, catalogId);
@@ -133,7 +142,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, cl
                                     </svg>
 
                                 ) : (
-                                    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                    <svg width={isMobileView ? "40" : "32"} height={isMobileView ? "40" : "32"} viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
                                         onClick={(event) => {
                                             event.stopPropagation();
                                             addInList(product.view_order, categoryId, catalogId, id_produit_resume);
