@@ -65,7 +65,6 @@ iframe>html>body {
   border: none;
   min-height: 100%;
   width: 100%;
-  pointer-events: none;
 }
 
 .product-list-container {

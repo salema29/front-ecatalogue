@@ -66,6 +66,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const [shopList, setShopList] = useState(null);
     const [shopModalInfoOpen, setShopModalInfoOpen] = useState(false);
 
+    const styles = {
+        productItem: {
+            display: "flex",
+            alignItems: "center"
+        },
+        productCoche: {
+            margin: "0 0 0 5px",
+            accentColor: clientColor
+        }
+    }
+
     const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
     const [emailShare, setEmailShare] = useState(false);
 
@@ -270,6 +281,32 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     }, [clientContext.storedClient, definitionMagasinChoice]);
 
+    const updateProductCheckedStatus = (catalogId, productId, isChecked) => {
+        setShoppingList((prevList) =>
+            prevList.map((catalog) =>
+                catalog.catalogId === catalogId
+                    ? {
+                        ...catalog,
+                        products: catalog.products.map((product) =>
+                            product.id_produit_resume === productId
+                                ? { ...product, checked: isChecked }
+                                : product
+                        ),
+                    }
+                    : catalog
+            )
+        );
+    };
+
+    const isChecked = (productId) => {
+        return shoppingList.some(catalog =>
+            catalog.catalogId === catalogId &&
+            catalog.products.some(product =>
+                product.id_produit_resume === productId && product.checked
+            )
+        );
+    };
+
     return (
         <>
             <Modal
@@ -338,11 +375,29 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                     ref={(el) => el && observerRef.current.observe(el)}
                                                     key={productHtml.id_produit}
                                                     data-id-produit={productHtml.id_produit}
+                                                    style={{
+                                                        position: "relative",
+                                                        ...((isMobile() && isChecked(productHtml.id_produit)) && {
+                                                            filter: "opacity(60%)"
+                                                        }),
+                                                    }}
                                                 >
                                                     {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                                         <>
                                                             <div className="product">
-                                                                <div className="product-item">
+                                                                <div className="product-item" style={styles.productItem}>
+                                                                    {isMobile() && (
+                                                                        <input
+                                                                            name="checked"
+                                                                            type="checkbox"
+                                                                            style={styles.productCoche}
+                                                                            checked={isChecked(productHtml.id_produit)}
+                                                                            onChange={(e) => {
+                                                                                const isChecked = e.target.checked;
+                                                                                updateProductCheckedStatus(catalogId, productHtml.id_produit, isChecked);
+                                                                            }}
+                                                                        />
+                                                                    )}
                                                                     <iframe
                                                                         className="product-shopping-list"
                                                                         src={productHtml.html_name}
