@@ -66,10 +66,13 @@ iframe>html>body {
   border: none;
   min-height: 100%;
   width: 100%;
+<<<<<<< HEAD
 }
 
 .product-item {
   pointer-events: none;
+=======
+>>>>>>> GUT-117
 }
 
 .product-item-encart {
