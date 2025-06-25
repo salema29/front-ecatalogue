@@ -403,7 +403,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     )}
                                                                     <div className="left-part-panier" style={{  maxWidth: "90%", maxHeight: "100%" }}>
                                                                         <img
-                                                                            style={{  maxWidth: "100%", maxHeight: "90%" }}
+                                                                            style={{  maxWidth: "100%", maxHeight: "90%",     marginTop: "10px",  marginBottom: "10px" }}
                                                                             src={panierImage}
                                                                             alt='ecatalogue header media'
                                                                         />
@@ -421,14 +421,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                         <span style={{ paddingLeft: "30px", fontSize: "14px"}}> 29 $</span>
                                                                         <div  className="content-right">
                                                                             <span style={{ fontSize: "24px"}}> 19 $</span>
-                                                                            {/* {!isMobile() && ( */}
-                                                                                <div className="update-count-btn">
-                                                                                    <UpdateCountProduct
-                                                                                        id_produit_resume={productHtml.id_produit}
-                                                                                        catalogue_id={catalogId}
-                                                                                    />
-                                                                                </div>
-                                                                            {/* // )} */}
+                                                                            <div className="update-count-btn">
+                                                                                <UpdateCountProduct
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
