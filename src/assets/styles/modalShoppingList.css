@@ -170,3 +170,33 @@ button {
 .vente-total-prix-economie {
     font-style: italic;
 }
+.product {
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    max-height: 120px;
+}
+.left-part-panier{
+    display: flex;
+    width: 30%;
+}
+.right-part-panier {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.content-right{
+    display: flex;
+    justify-content: space-between;
+}
+.product-name{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-wrap: pretty;
+    font-size: 12px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    word-break:normal;
+}
