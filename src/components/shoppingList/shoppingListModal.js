@@ -17,6 +17,8 @@ import { getShopByCatalogId } from "../functions/Shop";
 import ShopModal from "../shop/shopModal";
 import { ClientContext } from "../../store-client";
 import ShopModalInfo from "../shop/shopModalInfo";
+import panierImage from '../../assets/images/visuel-panier.png';
+
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
@@ -25,7 +27,7 @@ const getModalStyles = () => {
     return {
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
         content: {
-            width: isMobile ? "100%" : "600px",
+            width: isMobile ? "100%" : "450px",
             marginLeft: isMobile ? "0" : "auto",
             height: isMobile ? "100%" : "92%",
             right: "0",
@@ -69,7 +71,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const styles = {
         productItem: {
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
+            maxWidth: "100%", maxHeight: "100%"
         },
         productCoche: {
             margin: "0 0 0 5px",
@@ -398,38 +401,38 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                             }}
                                                                         />
                                                                     )}
-                                                                    <iframe
-                                                                        className="product-shopping-list"
-                                                                        src={productHtml.html_name}
-                                                                        scrolling="no"
-                                                                        title={productHtml.id_produit}
-                                                                    />
-                                                                </div>
-                                                                <div className="side-btn">
-                                                                    <div className="remove-product">
-                                                                        <RemoveProductFromList
-                                                                            id_produit_resume={productHtml.id_produit}
-                                                                            catalogue_id={catalogId}
+                                                                    <div className="left-part-panier" style={{  maxWidth: "90%", maxHeight: "100%" }}>
+                                                                        <img
+                                                                            style={{  maxWidth: "100%", maxHeight: "90%" }}
+                                                                            src={panierImage}
+                                                                            alt='ecatalogue header media'
                                                                         />
                                                                     </div>
-                                                                    {!isMobile() && (
-                                                                        <div className="update-count-btn">
-                                                                            <UpdateCountProduct
-                                                                                id_produit_resume={productHtml.id_produit}
-                                                                                catalogue_id={catalogId}
-                                                                            />
+                                                                    <div className="right-part-panier">
+                                                                        <div  className="content-right">
+                                                                            <div className="product-name"> product name  : Tee-shirt running à manches longues Maiva  Femme ENERGETICS</div>
+                                                                            <div style={{ cursor: "pointer"}}>
+                                                                                <RemoveProductFromList
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
+                                                                            </div>
                                                                         </div>
-                                                                    )}
+                                                                        <span style={{ paddingLeft: "30px", fontSize: "14px"}}> 29 $</span>
+                                                                        <div  className="content-right">
+                                                                            <span style={{ fontSize: "24px"}}> 19 $</span>
+                                                                            {/* {!isMobile() && ( */}
+                                                                                <div className="update-count-btn">
+                                                                                    <UpdateCountProduct
+                                                                                        id_produit_resume={productHtml.id_produit}
+                                                                                        catalogue_id={catalogId}
+                                                                                    />
+                                                                                </div>
+                                                                            {/* // )} */}
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            {isMobile() && (
-                                                                <div className="update-count-btn-mobile">
-                                                                    <UpdateCountProduct
-                                                                        id_produit_resume={productHtml.id_produit}
-                                                                        catalogue_id={catalogId}
-                                                                    />
-                                                                </div>
-                                                            )}
                                                             {
                                                                 (!isLastProductInCategory || isLastCategory) && (
                                                                     <hr style={{ border: "1px solid black", width: "50%" }} />
