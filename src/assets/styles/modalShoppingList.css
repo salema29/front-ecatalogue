@@ -173,16 +173,21 @@ button {
 .product {
     display: flex;
     padding: 0px 10px 0px 10px;
-    max-height: 120px;
+    max-height: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
 }
 .left-part-panier{
     display: flex;
-    width: 30%;
+    height: 100%;
 }
 .right-part-panier {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
 }
 .content-right{
     display: flex;
