@@ -109,12 +109,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     }, [shoppingList, catalogId]);
 
+    const [isCapturing, setIsCapturing] = useState(false);
     const handleShareClick = async () => {
-        if (isMobile()) {
-            setIsShareModalOpen(true);
-        } else {
-            setEmailShare(true);
-        }
+        setIsCapturing(true);
+        setTimeout(async () => {
+            if (isMobile()) {
+                setIsShareModalOpen(true);
+            } else {
+                setIsCapturing(true);
+                setEmailShare(true);
+            }
+        }, 100);
     };
 
     const closeEmailModal = () => {
@@ -125,24 +130,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             currentAbortController.current = null;
         }
     };
-
+    const captureRef = useRef();
     const generateImage = useCallback(async () => {
         try {
             const controller = new AbortController();
             currentAbortController.current = controller;
             const { signal } = controller;
 
-            const html = await postShoppingListImage(shoppingList, catalogId, { signal });
+            const html = captureRef.current;
 
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
-
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            const canvas = await html2canvas(html, { allowTaint: true, useCORS: true, windowHeight: html.scrollHeight });
             if (!isMounted.current) {
-                document.body.removeChild(tempDiv);
                 return;
             }
             const dataUrl = canvas.toDataURL("image/png");
@@ -151,7 +149,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setBlob(blob);
                 }
             }, "image/png");
-            document.body.removeChild(tempDiv);
+            setIsCapturing(false);
             if (dataUrl.startsWith("data:image/png;base64,")) {
                 setImageurl(dataUrl);
             }
@@ -337,8 +335,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         {productHtmls.length > 0 &&
                             <>
                                 <button className="share-btn"
-                                    disabled={productHtmls.length <= 0} style={{ cursor: "pointer" }}
-                                    title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                    style={{ cursor: "pointer" }}
+                                    title='Partager la liste de courses'
                                     onClick={handleShareClick}
                                 >
                                     <img src={ShareShoppingList} alt="partager-course" />
@@ -361,7 +359,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </div>
                 </div>
 
-                <div className="modal-body">
+                <div ref={captureRef} className={`modal-body ${isCapturing ? 'no-scroll' : ''}`}>
                     {productHtmls.length > 0 ? (
                         productHtmls.map((categoryGroup, groupIndex) => {
                             if (categoryGroup.categorie_name && categoryGroup.products) {
@@ -385,7 +383,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                         }),
                                                     }}
                                                 >
-                                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
+                                                    { visibleProducts.has(productHtml.id_produit) ? (
                                                         <>
                                                             <div className="product">
                                                                 <div className="product-item-in-modal" style={styles.productItem}>
@@ -401,9 +399,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                             }}
                                                                         />
                                                                     )}
-                                                                    <div className="left-part-panier" style={{  maxWidth: "90%", maxHeight: "100%" }}>
+                                                                    <div className="left-part-panier" style={{maxWidth: "100%" }}>
                                                                         <img
-                                                                            style={{  maxWidth: "100%", maxHeight: "90%",     marginTop: "10px",  marginBottom: "10px" }}
+                                                                            style={{maxHeight: "100%"}}
                                                                             src={panierImage}
                                                                             alt='ecatalogue header media'
                                                                         />
@@ -411,14 +409,16 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     <div className="right-part-panier">
                                                                         <div  className="content-right">
                                                                             <div className="product-name"> product name  : Tee-shirt running à manches longues Maiva  Femme ENERGETICS</div>
-                                                                            <div style={{ cursor: "pointer"}}>
-                                                                                <RemoveProductFromList
-                                                                                    id_produit_resume={productHtml.id_produit}
-                                                                                    catalogue_id={catalogId}
-                                                                                />
-                                                                            </div>
+                                                                            {!isCapturing && (
+                                                                                <div style={{ cursor: "pointer"}}>
+                                                                                    <RemoveProductFromList
+                                                                                        id_produit_resume={productHtml.id_produit}
+                                                                                        catalogue_id={catalogId}
+                                                                                    />
+                                                                                </div>
+                                                                            )}
                                                                         </div>
-                                                                        <span style={{ paddingLeft: "30px", fontSize: "14px"}}> 29 $</span>
+                                                                        <div style={{ paddingLeft: "50px", fontSize: "14px"}}> 29 $</div>
                                                                         <div  className="content-right">
                                                                             <span style={{ fontSize: "24px"}}> 19 $</span>
                                                                             <div className="update-count-btn">
@@ -438,7 +438,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                             }
                                                         </>
                                                     ) : (
-                                                        <ProductSkeleton height={200} width={"95%"} />
+                                                        <ProductSkeleton height={100} width={"95%"} />
                                                     )}
                                                 </div>
                                             );

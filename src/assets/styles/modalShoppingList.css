@@ -42,6 +42,10 @@
     overflow-y: auto;
     margin-bottom: auto;
 }
+.modal-body.no-scroll {
+    max-height: none !important;
+    overflow: visible !important;
+}
 
 /* for safari */
 button {
