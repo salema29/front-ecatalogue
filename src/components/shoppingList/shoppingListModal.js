@@ -17,7 +17,6 @@ import { getShopByCatalogId } from "../functions/Shop";
 import ShopModal from "../shop/shopModal";
 import { ClientContext } from "../../store-client";
 import ShopModalInfo from "../shop/shopModalInfo";
-import panierImage from '../../assets/images/visuel-panier.png';
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -109,17 +108,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     }, [shoppingList, catalogId]);
 
-    const [isCapturing, setIsCapturing] = useState(false);
     const handleShareClick = async () => {
-        setIsCapturing(true);
-        setTimeout(async () => {
-            if (isMobile()) {
-                setIsShareModalOpen(true);
-            } else {
-                setIsCapturing(true);
-                setEmailShare(true);
-            }
-        }, 100);
+        if (isMobile()) {
+            setIsShareModalOpen(true);
+        } else {
+            setEmailShare(true);
+        }
     };
 
     const closeEmailModal = () => {
@@ -130,19 +124,21 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             currentAbortController.current = null;
         }
     };
-    const captureRef = useRef();
+
     const generateImage = useCallback(async () => {
         try {
             const controller = new AbortController();
             currentAbortController.current = controller;
             const { signal } = controller;
-            const html = captureRef.current;
-            const canvas = await html2canvas(html, {
-                useCORS: true,
-                allowTaint: false,
-                windowHeight: html.scrollHeight,
-                logging: true });
+            const html = await postShoppingListImage(shoppingList, catalogId, { signal });
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+            tempDiv.style.position = "absolute";
+            tempDiv.style.left = "-9999px";
+            document.body.appendChild(tempDiv);
+            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
             if (!isMounted.current) {
+                document.body.removeChild(tempDiv);
                 return;
             }
             const dataUrl = canvas.toDataURL("image/png");
@@ -151,7 +147,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setBlob(blob);
                 }
             }, "image/png");
-            setIsCapturing(false);
+            document.body.removeChild(tempDiv);
             if (dataUrl.startsWith("data:image/png;base64,")) {
                 setImageurl(dataUrl);
             }
@@ -198,10 +194,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setProductHtmls(data);
                 })
                 .catch(error => console.error("Error fetching htmls:", error));
-            } else {
-                setProductHtmls([]);
-            }
-    }, [idListProducts]);
+        } else {
+            setProductHtmls([]);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [shoppingList]);
 
     useEffect(() => {
         if (!observerRef.current) {
@@ -360,7 +358,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     </div>
                 </div>
 
-                <div ref={captureRef} className={`modal-body ${isCapturing ? 'no-scroll' : ''}`}>
+                <div className="modal-body">
                     {productHtmls.length > 0 ? (
                         productHtmls.map((categoryGroup, groupIndex) => {
                             if (categoryGroup.categorie_name && categoryGroup.products) {
@@ -384,7 +382,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                         }),
                                                     }}
                                                 >
-                                                    { visibleProducts.has(productHtml.id_produit) ? (
+                                                    {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                                         <>
                                                             <div className="product">
                                                                 <div className="product-item-in-modal" style={styles.productItem}>
@@ -414,14 +412,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     <div className="right-part-panier">
                                                                         <div  className="content-right">
                                                                             <div className="product-name"> {productHtml.product_name}</div>
-                                                                            {!isCapturing && (
-                                                                                <div style={{ cursor: "pointer"}}>
-                                                                                    <RemoveProductFromList
-                                                                                        id_produit_resume={productHtml.id_produit}
-                                                                                        catalogue_id={catalogId}
-                                                                                    />
-                                                                                </div>
-                                                                            )}
+                                                                            <div style={{ cursor: "pointer"}}>
+                                                                                <RemoveProductFromList
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
+                                                                            </div>
                                                                         </div>
                                                                         <div className="price" style={{ paddingLeft: "50px", fontSize: "14px"}}> {productHtml.prix_vente} </div>
                                                                         { productHtml.prix_remise && (
