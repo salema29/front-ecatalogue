@@ -136,10 +136,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             const controller = new AbortController();
             currentAbortController.current = controller;
             const { signal } = controller;
-
             const html = captureRef.current;
-
-            const canvas = await html2canvas(html, { allowTaint: true, useCORS: true, windowHeight: html.scrollHeight });
+            const canvas = await html2canvas(html, {
+                useCORS: true,
+                allowTaint: false,
+                windowHeight: html.scrollHeight,
+                logging: true });
             if (!isMounted.current) {
                 return;
             }
@@ -196,11 +198,10 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setProductHtmls(data);
                 })
                 .catch(error => console.error("Error fetching htmls:", error));
-        } else {
-            setProductHtmls([]);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [shoppingList]);
+            } else {
+                setProductHtmls([]);
+            }
+    }, [idListProducts]);
 
     useEffect(() => {
         if (!observerRef.current) {
@@ -401,14 +402,18 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     )}
                                                                     <div className="left-part-panier" style={{maxWidth: "100%" }}>
                                                                         <img
-                                                                            style={{maxHeight: "100%"}}
-                                                                            src={panierImage}
-                                                                            alt='ecatalogue header media'
+                                                                            src={decodeURIComponent(productHtml.visuel_panier).replace(/&amp;/g, '&')}
+                                                                            alt="Visuel produit"
+                                                                            style={{
+                                                                                width: "100px",
+                                                                                height: "100px",
+                                                                                objectFit: "contain"
+                                                                            }}
                                                                         />
                                                                     </div>
                                                                     <div className="right-part-panier">
                                                                         <div  className="content-right">
-                                                                            <div className="product-name"> product name  : Tee-shirt running à manches longues Maiva  Femme ENERGETICS</div>
+                                                                            <div className="product-name"> {productHtml.product_name}</div>
                                                                             {!isCapturing && (
                                                                                 <div style={{ cursor: "pointer"}}>
                                                                                     <RemoveProductFromList
@@ -418,16 +423,18 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                                 </div>
                                                                             )}
                                                                         </div>
-                                                                        <div style={{ paddingLeft: "50px", fontSize: "14px"}}> 29 $</div>
-                                                                        <div  className="content-right">
-                                                                            <span style={{ fontSize: "24px"}}> 19 $</span>
-                                                                            <div className="update-count-btn">
-                                                                                <UpdateCountProduct
-                                                                                    id_produit_resume={productHtml.id_produit}
-                                                                                    catalogue_id={catalogId}
-                                                                                />
+                                                                        <div className="price" style={{ paddingLeft: "50px", fontSize: "14px"}}> {productHtml.prix_vente} </div>
+                                                                        { productHtml.prix_remise && (
+                                                                            <div  className="content-right">
+                                                                                <span className="price" style={{ fontSize: "24px"}}>  {productHtml.prix_remise} </span>
+                                                                                <div className="update-count-btn">
+                                                                                    <UpdateCountProduct
+                                                                                        id_produit_resume={productHtml.id_produit}
+                                                                                        catalogue_id={catalogId}
+                                                                                    />
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
+                                                                        )}
                                                                     </div>
                                                                 </div>
                                                             </div>
