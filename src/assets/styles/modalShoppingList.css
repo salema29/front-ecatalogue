@@ -196,6 +196,7 @@ button {
 .content-right{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .product-name{
     display: -webkit-box;

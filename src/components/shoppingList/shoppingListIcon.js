@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useEffect,useState,useContext} from 'react';
+import { ShoppingListContext } from '../../store-shopping-list';
 
-const shoppingListIcon = ({ catalogId, shoppingList, clientColor }) => {
-    const nbProduit = shoppingList
-        .filter(item => item.catalogId === catalogId)
-        .reduce((acc, item) => acc + item.products.length, 0);
+const ShoppingListIcon = ({ catalogId, clientColor }) => {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+    const [nbProduit, setNbProduit] = useState(null);
+
+    useEffect(() => {
+        const idListProducts = shoppingList.reduce((acc, item) => {
+            if (item.catalogId === catalogId) {
+                return acc.concat(item.products.map(p => p.id_produit_resume));
+            }
+            return acc;
+        }, []);
+
+        if (idListProducts.length > 0) {
+            fetch(`${API_BASE_URL}/api/shopping-list/`, {
+                method: "POST",
+                body: JSON.stringify({ ids: idListProducts }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length === 0) {
+                        setShoppingList(prevList =>
+                            prevList.filter(catalog => catalog.catalogId !== catalogId)
+                        );
+                        setNbProduit(null);
+                    } else {
+                        const total = shoppingList
+                            .filter(item => item.catalogId === catalogId)
+                            .reduce((acc, item) => acc + item.products.length, 0);
+                        setNbProduit(total);
+                    }
+                })
+                .catch(error => console.error("Error fetching htmls:", error));
+        } else {
+            setNbProduit(null);
+        }
+    }, [shoppingList, catalogId, API_BASE_URL, setShoppingList]);
 
     const styles = {
         heart: {
@@ -52,4 +86,4 @@ const shoppingListIcon = ({ catalogId, shoppingList, clientColor }) => {
     );
 };
 
-export default shoppingListIcon;
+export default ShoppingListIcon;

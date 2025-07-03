@@ -191,7 +191,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setProductHtmls(data);
+                    if (data.length == 0 ){
+                        setProductHtmls([]);
+                    }else{
+                        setProductHtmls(data);
+                    }
                 })
                 .catch(error => console.error("Error fetching htmls:", error));
         } else {
@@ -401,7 +405,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     <div className="left-part-panier" style={{maxWidth: "100%" }}>
                                                                         <img
                                                                             src={decodeURIComponent(productHtml.visuel_panier).replace(/&amp;/g, '&')}
-                                                                            alt="Visuel produit"
+                                                                            alt={productHtml.product_name}
                                                                             style={{
                                                                                 width: "100px",
                                                                                 height: "100px",
@@ -421,7 +425,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                         </div>
                                                                         { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price" style={{ paddingLeft: "50px", fontSize: "14px", textDecorationLine: "line-through"}}> {productHtml.prix_vente}€ </div> }
                                                                         <div  className="content-right">
-                                                                            <span className="price" style={{ fontSize: "24px"}}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
+                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold"}}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
                                                                             <div className="update-count-btn">
                                                                                 <UpdateCountProduct
                                                                                     id_produit_resume={productHtml.id_produit}
