@@ -419,18 +419,16 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                                 />
                                                                             </div>
                                                                         </div>
-                                                                        <div className="price" style={{ paddingLeft: "50px", fontSize: "14px"}}> {productHtml.prix_vente} </div>
-                                                                        { productHtml.prix_remise && (
-                                                                            <div  className="content-right">
-                                                                                <span className="price" style={{ fontSize: "24px"}}>  {productHtml.prix_remise} </span>
-                                                                                <div className="update-count-btn">
-                                                                                    <UpdateCountProduct
-                                                                                        id_produit_resume={productHtml.id_produit}
-                                                                                        catalogue_id={catalogId}
-                                                                                    />
-                                                                                </div>
+                                                                        { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price" style={{ paddingLeft: "50px", fontSize: "14px", textDecorationLine: "line-through"}}> {productHtml.prix_vente}€ </div> }
+                                                                        <div  className="content-right">
+                                                                            <span className="price" style={{ fontSize: "24px"}}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
+                                                                            <div className="update-count-btn">
+                                                                                <UpdateCountProduct
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
                                                                             </div>
-                                                                        )}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
