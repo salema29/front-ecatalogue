@@ -405,7 +405,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     <div className="left-part-panier" style={{maxWidth: "100%" }}>
                                                                         <img
                                                                             src={decodeURIComponent(productHtml.visuel_panier).replace(/&amp;/g, '&')}
-                                                                            alt={productHtml.product_name}
+                                                                            alt="image du produit"
                                                                             style={{
                                                                                 width: "100px",
                                                                                 height: "100px",
