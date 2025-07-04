@@ -191,7 +191,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.length == 0 ){
+                    if (data.length === 0 ){
                         setProductHtmls([]);
                     }else{
                         setProductHtmls(data);
@@ -405,7 +405,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                     <div className="left-part-panier" style={{maxWidth: "100%" }}>
                                                                         <img
                                                                             src={decodeURIComponent(productHtml.visuel_panier).replace(/&amp;/g, '&')}
-                                                                            alt="image du produit"
+                                                                            alt="visuel du produit"
                                                                             style={{
                                                                                 width: "100px",
                                                                                 height: "100px",
