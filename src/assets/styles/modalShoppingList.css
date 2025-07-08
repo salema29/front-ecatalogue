@@ -203,13 +203,18 @@ button {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     text-wrap: pretty;
-    font-size: 12px;
-    color: #333;
+    font-size: 14px;
+    font-weight: 900;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
     word-break:normal;
-    font-weight: bold;
     font-size: 13px;
     text-transform: capitalize;
+}
+.price-promo{
+    padding-left: 100px;
+    font-size: 14px;
+    text-decoration-line: line-through;
+    color: #4A4A4A;
 }
