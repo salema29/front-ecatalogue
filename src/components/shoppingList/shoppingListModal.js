@@ -423,9 +423,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                                 />
                                                                             </div>
                                                                         </div>
-                                                                        { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price" style={{ paddingLeft: "50px", fontSize: "14px", textDecorationLine: "line-through"}}> {productHtml.prix_vente}€ </div> }
+                                                                        { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price price-promo"> {productHtml.prix_vente}€ </div> }
                                                                         <div  className="content-right">
-                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold"}}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
+                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold", color: productHtml.prix_remise ? "#FF5847" :" black " }}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
                                                                             <div className="update-count-btn">
                                                                                 <UpdateCountProduct
                                                                                     id_produit_resume={productHtml.id_produit}
