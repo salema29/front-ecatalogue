@@ -68,10 +68,6 @@ iframe>html>body {
   width: 100%;
 }
 
-.product-item {
-  pointer-events: none;
-}
-
 .product-item-encart {
   pointer-events: auto;
 }
