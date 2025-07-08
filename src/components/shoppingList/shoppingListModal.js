@@ -18,6 +18,7 @@ import ShopModal from "../shop/shopModal";
 import { ClientContext } from "../../store-client";
 import ShopModalInfo from "../shop/shopModalInfo";
 
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const getModalStyles = () => {
     const isMobile = window.innerWidth <= 768;
@@ -25,7 +26,7 @@ const getModalStyles = () => {
     return {
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
         content: {
-            width: isMobile ? "100%" : "600px",
+            width: isMobile ? "100%" : "450px",
             marginLeft: isMobile ? "0" : "auto",
             height: isMobile ? "100%" : "92%",
             right: "0",
@@ -69,7 +70,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     const styles = {
         productItem: {
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
+            maxWidth: "100%", maxHeight: "100%"
         },
         productCoche: {
             margin: "0 0 0 5px",
@@ -128,15 +130,12 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             const controller = new AbortController();
             currentAbortController.current = controller;
             const { signal } = controller;
-
             const html = await postShoppingListImage(shoppingList, catalogId, { signal });
-
             const tempDiv = document.createElement("div");
             tempDiv.innerHTML = html;
             tempDiv.style.position = "absolute";
             tempDiv.style.left = "-9999px";
             document.body.appendChild(tempDiv);
-
             const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
             if (!isMounted.current) {
                 document.body.removeChild(tempDiv);
@@ -192,12 +191,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    setProductHtmls(data);
+                    if (data.length === 0 ){
+                        setProductHtmls([]);
+                    }else{
+                        setProductHtmls(data);
+                    }
                 })
                 .catch(error => console.error("Error fetching htmls:", error));
         } else {
             setProductHtmls([]);
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shoppingList]);
 
@@ -334,8 +338,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                         {productHtmls.length > 0 &&
                             <>
                                 <button className="share-btn"
-                                    disabled={productHtmls.length <= 0} style={{ cursor: "pointer" }}
-                                    title={productHtmls.length <= 0 ? 'Fermez et ajoutez au moins un produit ' : 'Partager la liste de courses'}
+                                    style={{ cursor: "pointer" }}
+                                    title='Partager la liste de courses'
                                     onClick={handleShareClick}
                                 >
                                     <img src={ShareShoppingList} alt="partager-course" />
@@ -398,38 +402,40 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                             }}
                                                                         />
                                                                     )}
-                                                                    <iframe
-                                                                        className="product-shopping-list"
-                                                                        src={productHtml.html_name}
-                                                                        scrolling="no"
-                                                                        title={productHtml.id_produit}
-                                                                    />
-                                                                </div>
-                                                                <div className="side-btn">
-                                                                    <div className="remove-product">
-                                                                        <RemoveProductFromList
-                                                                            id_produit_resume={productHtml.id_produit}
-                                                                            catalogue_id={catalogId}
+                                                                    <div className="left-part-panier" style={{maxWidth: "100%" }}>
+                                                                        <img
+                                                                            src={decodeURIComponent(productHtml.visuel_panier).replace(/&amp;/g, '&')}
+                                                                            alt="visuel du produit"
+                                                                            style={{
+                                                                                width: "100px",
+                                                                                height: "100px",
+                                                                                objectFit: "contain"
+                                                                            }}
                                                                         />
                                                                     </div>
-                                                                    {!isMobile() && (
-                                                                        <div className="update-count-btn">
-                                                                            <UpdateCountProduct
-                                                                                id_produit_resume={productHtml.id_produit}
-                                                                                catalogue_id={catalogId}
-                                                                            />
+                                                                    <div className="right-part-panier">
+                                                                        <div  className="content-right">
+                                                                            <div className="product-name"> {productHtml.product_name}</div>
+                                                                            <div style={{ cursor: "pointer"}}>
+                                                                                <RemoveProductFromList
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
+                                                                            </div>
                                                                         </div>
-                                                                    )}
+                                                                        { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price price-promo"> {productHtml.prix_vente}€ </div> }
+                                                                        <div  className="content-right">
+                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold", color: productHtml.prix_remise ? "#FF5847" :" black " }}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
+                                                                            <div className="update-count-btn">
+                                                                                <UpdateCountProduct
+                                                                                    id_produit_resume={productHtml.id_produit}
+                                                                                    catalogue_id={catalogId}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            {isMobile() && (
-                                                                <div className="update-count-btn-mobile">
-                                                                    <UpdateCountProduct
-                                                                        id_produit_resume={productHtml.id_produit}
-                                                                        catalogue_id={catalogId}
-                                                                    />
-                                                                </div>
-                                                            )}
                                                             {
                                                                 (!isLastProductInCategory || isLastCategory) && (
                                                                     <hr style={{ border: "1px solid black", width: "50%" }} />
@@ -437,7 +443,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                             }
                                                         </>
                                                     ) : (
-                                                        <ProductSkeleton height={200} width={"95%"} />
+                                                        <ProductSkeleton height={100} width={"95%"} />
                                                     )}
                                                 </div>
                                             );

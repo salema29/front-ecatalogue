@@ -42,6 +42,10 @@
     overflow-y: auto;
     margin-bottom: auto;
 }
+.modal-body.no-scroll {
+    max-height: none !important;
+    overflow: visible !important;
+}
 
 /* for safari */
 button {
@@ -169,4 +173,48 @@ button {
 }
 .vente-total-prix-economie {
     font-style: italic;
+}
+.product {
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    max-height: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.left-part-panier{
+    display: flex;
+    height: 100%;
+}
+.right-part-panier {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+}
+.content-right{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.product-name{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-wrap: pretty;
+    font-size: 14px;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    word-break:normal;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+.price-promo{
+    padding-left: 100px;
+    font-size: 14px;
+    text-decoration-line: line-through;
+    color: #4A4A4A;
 }
