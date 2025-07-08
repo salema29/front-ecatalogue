@@ -62,7 +62,8 @@ iframe>html>body {
 }
 
 .product-item,
-.product-item-encart {
+.product-item-encart,
+.product-item-in-modal {
   border: none;
   min-height: 100%;
   width: 100%;
@@ -72,6 +73,9 @@ iframe>html>body {
   pointer-events: auto;
 }
 
+.product-item {
+  pointer-events: none;
+}
 .product-list-container {
   height: fit-content;
 }
