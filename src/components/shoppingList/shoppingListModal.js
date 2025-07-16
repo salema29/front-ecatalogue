@@ -389,7 +389,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                     {(!isShareModalOpen && !emailShare) && visibleProducts.has(productHtml.id_produit) ? (
                                                         <>
                                                             <div className="product">
-                                                                <div className="product-item" style={styles.productItem}>
+                                                                <div className="product-item-in-modal" style={styles.productItem}>
                                                                     {isMobile() && (
                                                                         <input
                                                                             name="checked"
