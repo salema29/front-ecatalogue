@@ -4,13 +4,10 @@ import { ClientContext } from "../../store-client";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const GtmLoader = () => {
     const clientContext = useContext(ClientContext);
-    const client_id = clientContext.storedClient;
+    const client_id = clientContext?.storedClient;
 
     useEffect(() => {
-        if (document.cookie.includes("disableGTM=true")) return;
-
-        let script = null;
-        let noscript = null;
+        if (!client_id || document.cookie.includes("disableGTM=true")) return;
 
         const loadGTM = async () => {
             try {
@@ -19,29 +16,31 @@ const GtmLoader = () => {
 
                 if (result.status === 200) {
                     const gtmId = result.data;
-                    const scriptId = 'gtm-script';
-                    const noscriptId = 'gtm-noscript';
+                    const scriptId = "gtm-script";
+                    const noscriptId = "gtm-noscript";
 
                     if (!document.getElementById(scriptId)) {
-                        script = document.createElement('script');
+                        const script = document.createElement("script");
                         script.id = scriptId;
-                        script.src = `https://www.googletagmanager.com/gtm.js?id=GTM-${gtmId}`;
-                        script.async = true;
-                        document.head.appendChild(script);
-
-                        window.dataLayer = window.dataLayer || [];
-                        window.dataLayer.push({
-                            'gtm.start': new Date().getTime(),
-                            event: 'gtm.js',
-                        });
+                        script.innerHTML = `
+                        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                        })(window,document,'script','dataLayer','${gtmId}');
+                        `;
+                        document.head.prepend(script);
                     }
 
                     if (!document.getElementById(noscriptId)) {
-                        noscript = document.createElement('noscript');
+                        const noscript = document.createElement("noscript");
                         noscript.id = noscriptId;
-                        noscript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+                        noscript.innerHTML = `
+                        <iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
                         document.body.insertBefore(noscript, document.body.firstChild);
                     }
+                } else {
+                    console.warn("Échec récupération ID GTM :", result);
                 }
             } catch (error) {
                 console.error("Erreur lors du chargement de GTM :", error);
@@ -49,15 +48,6 @@ const GtmLoader = () => {
         };
 
         loadGTM();
-
-        return () => {
-            if (script && document.head.contains(script)) {
-                document.head.removeChild(script);
-            }
-            if (noscript && document.body.contains(noscript)) {
-                document.body.removeChild(noscript);
-            }
-        };
     }, [client_id]);
 
     return null;
