@@ -16,7 +16,7 @@ export default function useGtagPerClient() {
                 const result = await response.json();
                 if (result.status === 200 && result.data) {
                     const gtagId = result.data;
-                    if (document.querySelector(`script[src="https://www.googletagmanager.com/ggtag/js?id=${gtagId}"]`)) return;
+                    if (document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${gtagId}"]`)) return;
 
                     const script = document.createElement("script");
                     script.async = true;
