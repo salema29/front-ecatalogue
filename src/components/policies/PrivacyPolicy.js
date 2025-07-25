@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../../assets/styles/PrivacyPolicy.css';
 import '../../assets/styles/ConfidentialTracking.css';
 import LoadingSpinner from '../../components/spinner/LoadingSpinner';
 import showOnlyEcatalogue from '../functions/ShowOnlyEcatalogue';
-import { getCookie, setCookie, deleteCookie } from '../../components/functions/RgpdCookieManager.js';
-import GtmLoader from '../functions/GtmCookiesHander';
 import { useNavigate } from "react-router-dom";
+import { GtmContext } from '../../store-gtm.js';
 
 function PrivacyPolicy() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [privacyPolicyContent, setPrivacyPolicyContent] = useState(null);
-    const [isChecked, setIsChecked] = useState(false);
+    const { storedGtmStatus, setStoredGtmStatus } = useContext(GtmContext);
+    const [isChecked, setIsChecked] = useState(!storedGtmStatus);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,20 +28,15 @@ function PrivacyPolicy() {
     }, [API_BASE_URL]);
 
     useEffect(() => {
-        if (getCookie("disableGTM") === "true") {
-            setIsChecked(true);
-        }
-    }, [privacyPolicyContent]);
+        setIsChecked(!storedGtmStatus);
+    }, [storedGtmStatus]);
 
     const handleCheckboxChange = (event) => {
-        const checked = event.target.checked;
-        setIsChecked(checked);
-
-        if (checked) {
-            setCookie("disableGTM", "true", 7);
-        } else {
-            deleteCookie("disableGTM");
-        }
+        const btn_status = event.target.checked;
+        setIsChecked(btn_status);
+        console.log("storedGtmStatus = "+!btn_status)
+        console.log("btn_status = "+btn_status)
+        setStoredGtmStatus(!btn_status);
     };
 
     const handleBackClick = () => {
@@ -52,7 +47,6 @@ function PrivacyPolicy() {
 
     return (
         <div className="privacy-container">
-            <GtmLoader />
             <div className="rgpd-head">
                 <div className="rgpd-back-btn" onClick={handleBackClick}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="icon-back">
