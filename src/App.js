@@ -10,6 +10,7 @@ import { SearchProvider } from './components/search_bar/SearchContext';
 import useGtagPerClient  from '../src/components/functions/Gtag';
 import GtmLoader from './components/functions/GtmCookiesHander';
 import { GtmStore } from './store-gtm';
+import GtmPageViewHandler from  "../src/components/functions/GtmPageViewHandler"
 
 function App() {
     useGtagPerClient();
@@ -33,6 +34,7 @@ function App() {
             <GtmLoader />
                 <SearchProvider>
                     <Router>
+                        <GtmPageViewHandler /> 
                         <Routes>
                             <Route path="/" element={<Home />} /> {/* Landing page */}
                             <Route path="view/:catalogId/:clientId" element={<ViewFormatModal />} /> {/* Modal to view details */}
