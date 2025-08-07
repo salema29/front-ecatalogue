@@ -209,6 +209,7 @@ button {
     text-overflow: ellipsis;
     width: 100%;
     word-break:normal;
+    font-size: 13px;
     text-transform: capitalize;
 }
 .price-promo{

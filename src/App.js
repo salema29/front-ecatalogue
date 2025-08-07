@@ -7,10 +7,8 @@ import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
 import { SearchProvider } from './components/search_bar/SearchContext';
-import useGtagPerClient  from '../src/components/functions/Gtag'
 
 function App() {
-    useGtagPerClient();
     useEffect(() => {
         // Ajout dynamique du lien CSS
         const fontsPath = `${process.env.REACT_APP_API_BASE_URL}/public/css/fontsuploaded.css`;
