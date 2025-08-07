@@ -13,18 +13,17 @@ const GtmLoader = () => {
             if (!storedGtmStatus || !client_id) return;
 
             const loadGTM = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}api/get-gtm-client/${client_id}`);
-                const result = await response.json();
+                try {
+                    const response = await fetch(`${API_BASE_URL}api/get-gtm-client/${client_id}`);
+                    const result = await response.json();
 
-                if (result.status === 200 ) {
-                    const gtmId = result.data
-                    console.log(gtmId)
-                    TagManager.initialize({ gtmId: 'GTM-TQC27TGK' });
+                    if (result.status === 200 ) {
+                        const gtmId = result.data
+                        TagManager.initialize({ gtmId: gtmId });
+                    }
+                } catch (error) {
+                    console.error("Erreur lors du chargement de GTM :", error);
                 }
-            } catch (error) {
-                console.error("Erreur lors du chargement de GTM :", error);
-            }
             };
 
             loadGTM();
