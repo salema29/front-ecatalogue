@@ -466,7 +466,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <div className="vente-total-texte">Total :</div>
                             <div className="vente-total-prix">
                                 <div className="vente-total-prix-remise">{parseFloat(totalEconomyData.totalPriceAfterDiscount).toFixed(2)} €</div>
-                                <div className="vente-total-prix-economie" style={{ color: clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>
+                                { totalEconomyData.economy > 0 && <div className="vente-total-prix-economie" style={{ color: clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>}
                             </div>
                         </div>
                     </div>
