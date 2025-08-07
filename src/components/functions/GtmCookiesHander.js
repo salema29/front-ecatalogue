@@ -1,23 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
+import { ClientContext } from "../../store-client";
+import TagManager from 'react-gtm-module';
+import { GtmContext } from  '../../store-gtm';
 
-const loadGtmScript = () => {
-    if (document.getElementById("gtm-script")) return; // Empêcher d'ajouter plusieurs fois GTM
-
-    const script = document.createElement("script");
-    script.id = "gtm-script";
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtm.js?id=GTM-KSBNZC3L";
-    
-    document.head.appendChild(script);
-};
-
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const GtmLoader = () => {
-    useEffect(() => {
-        if (document.cookie.includes("disableGTM=true")) return; // Vérifie si GTM est désactivé
-        loadGtmScript();
-    }, []);
+    const clientContext = useContext(ClientContext);
+    const client_id = clientContext?.storedClient;
+    const { storedGtmStatus } = useContext(GtmContext);
 
-    return null; // Ce composant ne rend rien, il sert juste à charger GTM
+    useEffect(() => {
+            if (!storedGtmStatus || !client_id) return;
+
+            const loadGTM = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}api/get-gtm-client/${client_id}`);
+                const result = await response.json();
+
+                if (result.status === 200 ) {
+                    const gtmId = result.data
+                    console.log(gtmId)
+                    TagManager.initialize({ gtmId: 'GTM-TQC27TGK' });
+                }
+            } catch (error) {
+                console.error("Erreur lors du chargement de GTM :", error);
+            }
+            };
+
+            loadGTM();
+        }, [storedGtmStatus, client_id]);
+
+    return null;
 };
 
 export default GtmLoader;

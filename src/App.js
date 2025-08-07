@@ -7,8 +7,14 @@ import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
 import { SearchProvider } from './components/search_bar/SearchContext';
+import useGtagPerClient  from '../src/components/functions/Gtag';
+import GtmLoader from './components/functions/GtmCookiesHander';
+import { GtmStore } from './store-gtm';
+import GtmPageViewHandler from  "../src/components/functions/GtmPageViewHandler"
 
 function App() {
+    useGtagPerClient();
+
     useEffect(() => {
         // Ajout dynamique du lien CSS
         const fontsPath = `${process.env.REACT_APP_API_BASE_URL}/public/css/fontsuploaded.css`;
@@ -24,18 +30,22 @@ function App() {
     }, []);
 
     return (
-        <SearchProvider>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home />} /> {/* Landing page */}
-                    <Route path="view/:catalogId/:clientId" element={<ViewFormatModal />} /> {/* Modal to view details */}
-                    <Route path="product-list/:catalogId/:categoryId" element={<ProductList />} /> {/* Product resume view */}
-                    <Route path="catalogue/:catalogId" element={<CatalogOverview />} /> {/* Catalog overview */}
-                    <Route path="product/:catalogId/:productId/:categoryId/:id_produit_resume" element={<ProductDetail />} /> {/* Individual product details */}
-                    <Route path="confidentiality" element={<Confidentiality />} /> {/* Confidentiality text */}
-                </Routes>
-            </Router>
-        </SearchProvider>
+        <GtmStore>
+            <GtmLoader />
+                <SearchProvider>
+                    <Router>
+                        <GtmPageViewHandler /> 
+                        <Routes>
+                            <Route path="/" element={<Home />} /> {/* Landing page */}
+                            <Route path="view/:catalogId/:clientId" element={<ViewFormatModal />} /> {/* Modal to view details */}
+                            <Route path="product-list/:catalogId/:categoryId" element={<ProductList />} /> {/* Product resume view */}
+                            <Route path="catalogue/:catalogId" element={<CatalogOverview />} /> {/* Catalog overview */}
+                            <Route path="product/:catalogId/:productId/:categoryId/:id_produit_resume" element={<ProductDetail />} /> {/* Individual product details */}
+                            <Route path="confidentiality" element={<Confidentiality />} /> {/* Confidentiality text */}
+                        </Routes>
+                    </Router>
+                </SearchProvider>
+        </GtmStore>
     );
 }
 
