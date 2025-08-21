@@ -425,7 +425,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                                         </div>
                                                                         { (productHtml.prix_remise && productHtml.prix_vente ) && <div className="price price-promo"> {productHtml.prix_vente}€ </div> }
                                                                         <div  className="content-right">
-                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold", color: productHtml.prix_remise ? "#FF5847" :" black " }}>{ productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) } </span>
+                                                                            <span className="price" style={{ fontSize: "24px", fontWeight: "bold", color:(productHtml.prix_remise && productHtml.prix_vente ) ? "#FF5847" :" black " }}>
+                                                                                { productHtml.prix_remise ? ( <> {productHtml.prix_remise}€</> ) : (<> {productHtml.prix_vente}€</>) }
+                                                                            </span>
                                                                             <div className="update-count-btn">
                                                                                 <UpdateCountProduct
                                                                                     id_produit_resume={productHtml.id_produit}
@@ -464,7 +466,9 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             <div className="vente-total-texte">Total :</div>
                             <div className="vente-total-prix">
                                 <div className="vente-total-prix-remise">{parseFloat(totalEconomyData.totalPriceAfterDiscount).toFixed(2)} €</div>
-                                <div className="vente-total-prix-economie" style={{ color: clientColor }}>Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €</div>
+                                {totalEconomyData.economy > 0 && <div className="vente-total-prix-economie" style={{ color: clientColor }}>
+                                    Vous économisez {parseFloat(totalEconomyData.economy).toFixed(2)} €
+                                </div>}
                             </div>
                         </div>
                     </div>
