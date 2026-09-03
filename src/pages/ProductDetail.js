@@ -11,6 +11,7 @@ import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import VueDetailArrow from "../components/arrow/VueDetailArrow";
 import { fetchPrevNextVueDetail } from "../components/functions/Api";
 import useCatalogHeader from "../components/functions/useCatalogHeader";
+import useIsMobile from "../components/functions/useIsMobile";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/search_bar/search_global_bar";
 import { useSearch } from '../components/search_bar/SearchContext';
@@ -20,7 +21,7 @@ function MainProduct() {
     const { catalogId, productId, categoryId, id_produit_resume } = useParams();
     const headerData = useCatalogHeader(catalogId);
     const [productData, setProductData] = useState(null);
-    const isMobileView = window.innerWidth <= 767;
+    const isMobileView = useIsMobile();
     const navigate = useNavigate();
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);

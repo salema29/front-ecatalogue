@@ -10,9 +10,10 @@ import EmptyShopListContent from "./emptyShopListContent";
 import { getCurrentLocation, getPlaceLocation } from "../functions/Geolocalisation";
 import { ClientContext } from "../../store-client";
 import { fetchShopsByGeolocation, fetchShopsByKeyword } from "../functions/Api";
+import useIsMobile from "../functions/useIsMobile";
 
 const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
-    const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = useIsMobile();
     const clientContext = useContext(ClientContext);
     const [currentShopList, setCurrentShopList] = useState(shopList);
     const [keyword, setKeyword] = useState("");
@@ -124,16 +125,6 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
     }
 
     useEffect(() => {
-        const handleResize = () => {
-            setisMobileView(window.innerWidth <= 767);
-        };
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [isMobileView])
-
-    useEffect(() => {
         if (currentShopList) {
             setShopListStyle((prevStyle) => ({
                 ...prevStyle,
@@ -226,7 +217,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                                     handleSearchKeyword();
                                 }
                             }} placeholder="Code postal, ville..." />
-                            <div type="submit" className="icon-search" style={iconSearchStyle} onClick={handleSearchKeyword}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
+                            <div className="icon-search" style={iconSearchStyle} onClick={handleSearchKeyword}><img style={{ margin: "0 10px" }} src={searchIcon} alt="search"></img></div>
                         </div>
                         <div className="geo-search" style={geoSearchStyle} onClick={handleGeolocation}><p>Me géolocaliser</p><img src={miniGeoIcon} style={{ margin: "0 0 0 15px" }} alt="geoIcon"></img></div>
                     </div>

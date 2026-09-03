@@ -7,13 +7,14 @@ import AbsCatalogue from "./AbsCatalogue";
 import { fetchCategories, fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
 import { ClientContext } from "../store-client";
 import { ShoppingListContext } from "../store-shopping-list";
+import useIsMobile from "./functions/useIsMobile";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = useIsMobile();
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
@@ -66,7 +67,6 @@ function Carousel() {
         updateSlideWidth();
         calculatePaginationVisibility();
         const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
             updateSlideWidth();
             calculatePaginationVisibility();
         };

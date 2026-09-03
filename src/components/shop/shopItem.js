@@ -1,20 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { ShoppingListContext } from '../../store-shopping-list';
 import { chooseShop } from "../functions/Shop";
+import useIsMobile from "../functions/useIsMobile";
 
 const ShopItem = ({ catalogId, shop, clientColor, onClose, setKeyword }) => {
     const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
-    const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setisMobileView(window.innerWidth <= 767);
-        };
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [isMobileView])
+    const isMobileView = useIsMobile();
 
     const shopItemStyle = {
         display: "flex",

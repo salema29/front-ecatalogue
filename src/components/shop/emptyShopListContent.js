@@ -1,8 +1,9 @@
 import React from 'react';
 import { BsShop } from 'react-icons/bs';
+import useIsMobile from '../functions/useIsMobile';
 
 const EmptyShopListContent = ({clientColor}) => {
-    const isMobileView = window.innerWidth <= 767;
+    const isMobileView = useIsMobile();
 
     const styles = {
         container: {

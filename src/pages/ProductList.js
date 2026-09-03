@@ -14,6 +14,7 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import SearchBar from "../components/search_bar/search_global_bar";
 import { useSearch } from '../components/search_bar/SearchContext';
+import useIsMobile from "../components/functions/useIsMobile";
 
 
 function Product() {
@@ -22,7 +23,9 @@ function Product() {
     const [headerData, setHeaderData] = useState(null);
     const [productData, setProductData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    // "mobile" ici = tablette et moins (mise en page de la grille + placement
+    // de la barre de recherche).
+    const isMobileView = useIsMobile(1024);
     // Hauteur initiale approximative ; recalculée précisément dans les useEffect
     // ci-dessous une fois le header ".sticky" monté (getBoundingClientRect).
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight);
@@ -44,15 +47,6 @@ function Product() {
         navigate(`/catalogue/${catalogId}`);
     };
     const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
-
-    // Gerer le media query pour la mise en page responsive du grille desktop/moble
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 1024);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [API_BASE_URL]);
 
     useEffect(() => {
         const fetchHeaderData = async () => {

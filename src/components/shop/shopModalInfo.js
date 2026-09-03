@@ -6,10 +6,11 @@ import roofIcon from "../../assets/icons/roof.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopModal from "./shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "../functions/Api";
+import useIsMobile from "../functions/useIsMobile";
 import { ClientContext } from "../../store-client";
 
 const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
-    const [isMobileView, setisMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = useIsMobile();
     const [shopModalOpen, setShopModalOpen] = useState(false);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
     const [shopList, setShopList] = useState(null);
@@ -91,15 +92,6 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
     }
 
 
-    useEffect(() => {
-        const handleResize = () => {
-            setisMobileView(window.innerWidth <= 767);
-        };
-        window.addEventListener("resize", handleResize);
-
-        return () => window.removeEventListener("resize", handleResize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [isMobileView]);
 
     useEffect(() => {
         async function fetchDefChoiceMagasin() {

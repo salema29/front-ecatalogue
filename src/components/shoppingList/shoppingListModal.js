@@ -17,12 +17,11 @@ import { getShopByCatalogId } from "../functions/Shop";
 import ShopModal from "../shop/shopModal";
 import { ClientContext } from "../../store-client";
 import ShopModalInfo from "../shop/shopModalInfo";
+import useIsMobile from "../functions/useIsMobile";
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const getModalStyles = () => {
-    const isMobile = window.innerWidth <= 768;
-
+const getModalStyles = (isMobile) => {
     return {
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
         content: {
@@ -79,7 +78,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     }
 
-    const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
+    const isMobile = useIsMobile(768);
     const [emailShare, setEmailShare] = useState(false);
 
     useEffect(() => {
@@ -99,7 +98,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
-        if (isMobile()) {
+        if (isMobile) {
             setIsShareModalOpen(true);
         } else {
             setEmailShare(true);
@@ -306,7 +305,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             <Modal
                 isOpen={isOpen}
                 onRequestClose={onClose}
-                style={getModalStyles()}
+                style={getModalStyles(isMobile)}
                 shouldCloseOnOverlayClick={true}
                 ariaHideApp={false}
             >
@@ -371,7 +370,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                     data-id-produit={productHtml.id_produit}
                                                     style={{
                                                         position: "relative",
-                                                        ...((isMobile() && isChecked(productHtml.id_produit)) && {
+                                                        ...((isMobile && isChecked(productHtml.id_produit)) && {
                                                             filter: "opacity(60%)"
                                                         }),
                                                     }}
@@ -380,7 +379,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                         <>
                                                             <div className="product">
                                                                 <div className="product-item-in-modal" style={styles.productItem}>
-                                                                    {isMobile() && (
+                                                                    {isMobile && (
                                                                         <input
                                                                             name="checked"
                                                                             type="checkbox"

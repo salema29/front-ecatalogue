@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import '../assets/styles/ProductList.css';
 import { ShoppingListContext } from '../store-shopping-list';
 import { useSearch } from '../components/search_bar/SearchContext';
+import useIsMobile from './functions/useIsMobile';
 
 function ProductItem({ product, index, categoryId, catalogId, showListCourse, clientColor }) {
     const [isLoading, setIsLoading] = useState(true);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = useIsMobile();
     const { shoppingList, addProduct, removeProduct } = useContext(ShoppingListContext);
 
     const isAddedInList = shoppingList.some(
@@ -25,14 +26,6 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, cl
         clearSearch();
         navigate(`/product/${catalogId}/${productId}/${categoryId}/${id_produit_resume}`);
     };
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
     const gridStyle = {
         gridColumn: `span ${isMobileView ? product.mobile_width : product.desktop_width}`,

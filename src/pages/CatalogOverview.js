@@ -5,6 +5,7 @@ import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import useCatalogHeader from "../components/functions/useCatalogHeader";
+import useIsMobile from "../components/functions/useIsMobile";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
@@ -15,7 +16,7 @@ function Catalog() {
   const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL ;
   const { catalogId } = useParams();
   const headerData = useCatalogHeader(catalogId);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+  const isMobileView = useIsMobile(1024);
   const [viewChoice, setViewChoice] = useState({
     isVueProduit : true,
     isVueFeuilletable : true
@@ -37,14 +38,6 @@ function Catalog() {
 
   useEffect(() => {
     disableEcatalogueAutoScroll();
-  }, []);
-
-  useEffect(() => {
-      const handleResize = () => {
-          setIsMobileView(window.innerWidth <= 1024);
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {

@@ -14,11 +14,12 @@ import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
 import useCatalogHeader from "./functions/useCatalogHeader";
+import useIsMobile from "./functions/useIsMobile";
 import { ShoppingListContext } from "../store-shopping-list";
 import { getShopByCatalogId } from "./functions/Shop";
 
 function ViewFormatDialog() {
-    const isMobileView = window.innerWidth <= 767;
+    const isMobileView = useIsMobile();
     const { catalogId, clientId } = useParams();
     const headerData = useCatalogHeader(catalogId);
     const [shopModalOpen, setShopModalOpen] = useState(false);
