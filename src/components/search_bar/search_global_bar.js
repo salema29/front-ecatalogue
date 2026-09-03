@@ -43,7 +43,7 @@ const SearchBar = ({ catalogue_id }) => {
         }
 
         }, 300),
-        [catalogue_id, setSearchResults]
+        [catalogue_id, setSearchResults, setLoading]
     );
 
     useEffect(() => {

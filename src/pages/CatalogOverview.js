@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import useCategoriesPerCatalogue from "../components/navigation/useCategoriesPerCatalogue";
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
+import useCatalogHeader from "../components/functions/useCatalogHeader";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
@@ -11,10 +12,9 @@ import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import  "../assets/styles/CatalogueOverview.css"
 
 function Catalog() {
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL ;
   const { catalogId } = useParams();
-  const [headerData, setHeaderData] = useState(null);
+  const headerData = useCatalogHeader(catalogId);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
   const [viewChoice, setViewChoice] = useState({
     isVueProduit : true,
@@ -26,7 +26,7 @@ function Catalog() {
     window.location.reload();
   };
 
-  const { firstCategorieId } = CategoryPerCatalogue(catalogId);
+  const { firstCategorieId } = useCategoriesPerCatalogue(catalogId);
 
   const handleProductView = () => {
     navigate(`/product-list/${catalogId}/${firstCategorieId}`);
@@ -34,15 +34,6 @@ function Catalog() {
 
   const { shoppingList } = useContext(ShoppingListContext);
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
-      .then((response) => response.json())
-      .then((fetchedData) => setHeaderData(fetchedData))
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [catalogId, API_BASE_URL]);
 
   useEffect(() => {
     disableEcatalogueAutoScroll();
@@ -67,7 +58,6 @@ function Catalog() {
 
   useEffect(() => {
     const handlePostMessage = (event) => {
-      console.log(event.origin, ALLOW_ORIGIN_ACCESS_URL)
       if (event.origin === `${ALLOW_ORIGIN_ACCESS_URL}`) {
         const { action, page } = event.data;
         if (action === "updatePage") {
@@ -95,7 +85,9 @@ function Catalog() {
   const urlParams = new URLSearchParams(hash.split('?')[1]);
   const page = urlParams.get('page') || 1; // Default to page 1 if no page param is found
 
-  showOnlyEcatalogue();
+  useEffect(() => {
+    showOnlyEcatalogue();
+  }, []);
 
   return (
     <>

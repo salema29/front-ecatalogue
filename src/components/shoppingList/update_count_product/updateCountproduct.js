@@ -3,36 +3,7 @@ import { ShoppingListContext } from '../../../store-shopping-list';
 import { BsPlusLg, BsDashLg } from 'react-icons/bs';
 
 function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
-    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
-
-    const updateProductCount = (increment) => {
-        const updatedList = JSON.parse(JSON.stringify(shoppingList));
-        const catalogIndex = updatedList.findIndex(catalog => catalog.catalogId === catalogue_id);
-
-        if (catalogIndex !== -1) {
-            const productIndex = updatedList[catalogIndex].products.findIndex(product => product.id_produit_resume === id_produit_resume );
-            if (productIndex !== -1) {
-                const product = updatedList[catalogIndex].products[productIndex];
-                if (increment) {
-                    product.count = (product.count || 0) + 1;
-                } else {
-                    const newCount = Math.max(0, (product.count || 0) - 1);
-                    if (newCount === 0) {
-                        // Remove the product from the array if count becomes 0
-                        updatedList[catalogIndex].products.splice(productIndex, 1);
-
-                        // If the catalog has no more products, remove the catalog too
-                        if (updatedList[catalogIndex].products.length === 0) {
-                            updatedList.splice(catalogIndex, 1);
-                        }
-                    } else {
-                        product.count = newCount;
-                    }
-                }
-                setShoppingList(updatedList);
-            }
-        }
-    };
+    const { shoppingList, changeProductCount } = useContext(ShoppingListContext);
 
     const getCurrentCount = () => {
         for (const catalog of shoppingList) {
@@ -47,11 +18,11 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
     const currentCount = getCurrentCount();
 
     const decrement = () => {
-        updateProductCount(false);
+        changeProductCount(catalogue_id, id_produit_resume, -1);
     };
 
     const increment = () => {
-        updateProductCount(true);
+        changeProductCount(catalogue_id, id_produit_resume, 1);
     };
 
     return (

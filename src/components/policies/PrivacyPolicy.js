@@ -34,8 +34,6 @@ function PrivacyPolicy() {
     const handleCheckboxChange = (event) => {
         const btn_status = event.target.checked;
         setIsChecked(btn_status);
-        console.log("storedGtmStatus = "+!btn_status)
-        console.log("btn_status = "+btn_status)
         setStoredGtmStatus(!btn_status);
     };
 
@@ -43,7 +41,9 @@ function PrivacyPolicy() {
         navigate('/');
     };
 
-    showOnlyEcatalogue();
+    useEffect(() => {
+        showOnlyEcatalogue();
+    }, []);
 
     return (
         <div className="privacy-container">

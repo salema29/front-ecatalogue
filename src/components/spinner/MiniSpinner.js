@@ -7,13 +7,10 @@ const override = {
 };
 
 function MiniSpinner() {
-    let loading = true;
-    let color = "#ffffff";
-
     return (
         <ClipLoader
-            color={color}
-            loading={loading}
+            color="#ffffff"
+            loading={true}
             cssOverride={override}
             size={30}
             aria-label="Loading Spinner"

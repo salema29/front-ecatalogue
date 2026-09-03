@@ -4,14 +4,13 @@ import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import '../assets/styles/ProductDetail.css';
 import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
-import addListICon from '../assets/icons/add-list.svg';
-import addListIConOk from '../assets/icons/add-list-ok.svg';
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import VueDetailArrow from "../components/arrow/VueDetailArrow";
 import { fetchPrevNextVueDetail } from "../components/functions/Api";
+import useCatalogHeader from "../components/functions/useCatalogHeader";
 import ProductItem from "../components/ProductItem";
 import SearchBar from "../components/search_bar/search_global_bar";
 import { useSearch } from '../components/search_bar/SearchContext';
@@ -19,16 +18,15 @@ import { useSearch } from '../components/search_bar/SearchContext';
 function MainProduct() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const { catalogId, productId, categoryId, id_produit_resume } = useParams();
-    const [headerData, setHeaderData] = useState(null);
+    const headerData = useCatalogHeader(catalogId);
     const [productData, setProductData] = useState(null);
     const isMobileView = window.innerWidth <= 767;
     const navigate = useNavigate();
-    const heightToMinus = 0;
     const headerHeight = 20; // class "header" height
     const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
     const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight);
     const [isLoading, setIsLoading] = useState(true);
-    const { shoppingList, setShoppingList } = useContext(ShoppingListContext);
+    const { shoppingList, addProduct, removeProduct } = useContext(ShoppingListContext);
 
     const isAddedInList = shoppingList.some(
         (catalog) =>
@@ -42,13 +40,6 @@ function MainProduct() {
     const handleClose = () => {
         navigate(`/product-list/${catalogId}/${categoryId}`);
     };
-
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
-            .then((response) => response.json())
-            .then((fetchedData) => setHeaderData(fetchedData))
-            .catch(console.error);
-    }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
         if (!API_BASE_URL || !categoryId || !productId) return;
@@ -77,7 +68,7 @@ function MainProduct() {
             const updateHeight = () => {
                 const stickyElement = document.querySelector('.header');
                 const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight - heightToMinus;
+                const height = window.innerHeight - stickyHeight;
                 setWrapperHeight(height);
             };
 
@@ -94,67 +85,9 @@ function MainProduct() {
         disableEcatalogueAutoScroll();
     }, []);
 
-    showOnlyEcatalogue();
-
     useEffect(() => {
-        localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
-    }, [shoppingList]);
-
-    const addInList = (productId, categoryId, catalogId, id_produit_resume) => {
-        setShoppingList((prevList) => {
-            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
-            if (catalogIndex !== -1) {
-                const updatedCatalog = {
-                    ...prevList[catalogIndex],
-                    products: [
-                        ...prevList[catalogIndex].products,
-                        { productId, categoryId, count: 1, id_produit_resume },
-                    ],
-                };
-                return [
-                    ...prevList.slice(0, catalogIndex),
-                    updatedCatalog,
-                    ...prevList.slice(catalogIndex + 1),
-                ];
-            } else {
-                return [
-                    ...prevList,
-                    {
-                        catalogId,
-                        products: [{ productId, categoryId, count: 1, id_produit_resume }],
-                    },
-                ];
-            }
-        });
-    };
-
-    const removeInList = (productId, categoryId, catalogId) => {
-        setShoppingList((prevList) => {
-            const catalogIndex = prevList.findIndex((item) => item.catalogId === catalogId);
-            if (catalogIndex !== -1) {
-                const updatedProducts = prevList[catalogIndex].products.filter(
-                    (item) => !(item.productId === productId && item.categoryId === categoryId)
-                );
-                if (updatedProducts.length > 0) {
-                    const updatedCatalog = {
-                        ...prevList[catalogIndex],
-                        products: updatedProducts,
-                    };
-                    return [
-                        ...prevList.slice(0, catalogIndex),
-                        updatedCatalog,
-                        ...prevList.slice(catalogIndex + 1),
-                    ];
-                } else {
-                    return [
-                        ...prevList.slice(0, catalogIndex),
-                        ...prevList.slice(catalogIndex + 1),
-                    ];
-                }
-            }
-            return prevList;
-        });
-    };
+        showOnlyEcatalogue();
+    }, []);
 
     const [modalOpen, setModalOpen] = useState(false);
     const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
@@ -293,7 +226,7 @@ function MainProduct() {
                                     height: `${wrapperHeight}px`
                                 }}
                                 >
-                                    {productData.length !== 0 ? (
+                                    {(productData && productData.html) ? (
                                         <>
                                             {!modalOpen && prevNextVueDetail && (
                                                 <>
@@ -320,14 +253,13 @@ function MainProduct() {
                                                 title={productData.html.html_name}
                                                 width="auto"
                                                 onLoad={() => setIsLoading(false)}
-                                            // height="590px"
                                             />
 
                                             {!isLoading && headerData.show_list_course === "t" && (
                                                 <button
                                                     className="add-bouton-detail"
                                                     style={{ backgroundColor: headerData.client_color }}
-                                                    onClick={() => isAddedInList ? removeInList(productId, categoryId, catalogId) : addInList(productId, categoryId, catalogId, id_produit_resume)}
+                                                    onClick={() => isAddedInList ? removeProduct(productId, categoryId, catalogId) : addProduct(productId, categoryId, catalogId, id_produit_resume)}
                                                 >
                                                     <span className="add-bouton-detail-text">
                                                         {isAddedInList ? 'Supprimer de ma liste' : 'Ajouter à ma liste'}

@@ -18,7 +18,9 @@ function Home() {
         };
     }, []);
 
-    showAllElements();
+    useEffect(() => {
+        showAllElements();
+    }, []);
 
     return (
         <>

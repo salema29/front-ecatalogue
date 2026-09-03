@@ -1,43 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import "../assets/styles/AbsCatalogue.css";
 import LoadingSpinner from './spinner/LoadingSpinner';
+import { fetchClientInfo } from './functions/Api';
+import { getClientId } from './functions/clientId';
 
 function AbsCatalogue() {
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const [client_id, setClientId] = useState(null);
     const [abs_cat_data, setAbsCatData] = useState(null);
-    const client = document.getElementById('catalogue-client');
 
     useEffect(() => {
-        const fetchedValue = client ? client.value : null;
-        setClientId(fetchedValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
+        const clientId = getClientId();
+        if (!clientId) return;
+
+        fetchClientInfo(clientId).then((data) => {
+            if (data) setAbsCatData(data);
+        });
     }, []);
-
-    useEffect(() => {
-        const fetchClientData = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/get-data-client-info-v2/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : client_id}`);
-
-                if (!response.ok) {
-                    console.error(`Erreur HTTP : ${response.status}`);
-                    return;
-                }
-
-                const fetchedData = await response.json();
-
-                if (fetchedData.status === 'success') {
-                    setAbsCatData(fetchedData.data);
-                } else {
-                    console.error('Erreur API:', fetchedData.message);
-                }
-            } catch (error) {
-                console.error('Erreur de récupération des données:', error);
-            }
-        };
-
-        fetchClientData();
-    }, [client_id, API_BASE_URL]);
 
     return (
         <>

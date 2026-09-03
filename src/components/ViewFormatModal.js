@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../assets/styles/ViewFormatDialog.css";
 import { useParams, useNavigate } from "react-router-dom";
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import useCategoriesPerCatalogue from "../components/navigation/useCategoriesPerCatalogue";
 import LoadingSpinner from '../components/spinner/LoadingSpinner';
 import handleOrientationChange from "./functions/Orientation";
 import showOnlyEcatalogue from "./functions/ShowOnlyEcatalogue";
@@ -13,14 +13,14 @@ import byCatalogIcon from "../assets/icons/by-catalog-icon.svg";
 import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
+import useCatalogHeader from "./functions/useCatalogHeader";
 import { ShoppingListContext } from "../store-shopping-list";
 import { getShopByCatalogId } from "./functions/Shop";
 
 function ViewFormatDialog() {
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const isMobileView = window.innerWidth <= 767;
     const { catalogId, clientId } = useParams();
-    const [headerData, setHeaderData] = useState(null);
+    const headerData = useCatalogHeader(catalogId);
     const [shopModalOpen, setShopModalOpen] = useState(false);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
     const [shopList, setShopList] = useState(null);
@@ -37,15 +37,6 @@ function ViewFormatDialog() {
         navigate(`/`);
         window.location.reload();
     };
-
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getOneSlide/${catalogId}`)
-            .then((response) => response.json())
-            .then((fetchedData) => setHeaderData(fetchedData))
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }, [catalogId, API_BASE_URL]);
 
     useEffect(() => {
         handleOrientationChange();
@@ -65,7 +56,7 @@ function ViewFormatDialog() {
             setDefinitionMagasinChoice(defChoiceMagasin);
         }
         fetchDefChoiceMagasin();
-    }, [catalogId, clientId, API_BASE_URL]);
+    }, [catalogId, clientId]);
 
     useEffect(() => {
         if (definitionMagasinChoice === 1) {
@@ -75,7 +66,7 @@ function ViewFormatDialog() {
             }
             fetchShopList();
         }
-    }, [catalogId, clientId, API_BASE_URL, definitionMagasinChoice]);
+    }, [catalogId, clientId, definitionMagasinChoice]);
 
     useEffect(() => {
         if (shoppingListContext.shoppingList) {
@@ -89,7 +80,7 @@ function ViewFormatDialog() {
         }
     }, [currentShop]);
 
-    const { firstCategorieId } = CategoryPerCatalogue(catalogId);
+    const { firstCategorieId } = useCategoriesPerCatalogue(catalogId);
 
     const handleProductView = () => {
         navigate(`/product-list/${catalogId}/${firstCategorieId}`);
@@ -99,7 +90,9 @@ function ViewFormatDialog() {
         navigate(`/catalogue/${catalogId}`);
     };
 
-    showOnlyEcatalogue();
+    useEffect(() => {
+        showOnlyEcatalogue();
+    }, []);
 
     return (
         <>

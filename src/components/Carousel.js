@@ -4,8 +4,7 @@ import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
-import { fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
-import CategoryPerCatalogue from "./navigation/CategoryPerCatalogue";
+import { fetchCategories, fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
 import { ClientContext } from "../store-client";
 import { ShoppingListContext } from "../store-shopping-list";
 
@@ -18,7 +17,7 @@ function Carousel() {
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
-    const {shoppingList, setShoppingList} = useContext(ShoppingListContext);
+    const { setShoppingList } = useContext(ShoppingListContext);
     const sliderContainerRef = useRef(null);
     const clientContext = useContext(ClientContext);
 
@@ -56,7 +55,6 @@ function Carousel() {
 
         setClientId(clientIdToUse);
         clientContext.setStoredClient(clientIdToUse);
-        localStorage.setItem('stored-client', JSON.stringify(clientIdToUse));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -126,32 +124,36 @@ function Carousel() {
 
     useEffect(() => {
         async function fetchEnvShop() {
-            if(definitionMagasinChoice === 2) {
-                const shop = await fetchShopById(environment_shop_id);
-                if(shop) {
-                    slidesData.forEach((slide) => {
-                        const existingItem = shoppingList.find(
-                            (item) => item.catalogId === slide.catalogue_id && item.shop !== null
-                        );
+            if (definitionMagasinChoice !== 2 || slidesData.length === 0) return;
 
-                        if (!existingItem) {
-                            const newItem = {
-                                catalogId: slide.catalogue_id,
-                                shop: shop,
-                                products: []
-                            };
-                            shoppingList.push(newItem);
-                        }
-                    });
+            const shop = await fetchShopById(environment_shop_id);
+            if (!shop) return;
 
-                    localStorage.setItem('shopping-list', JSON.stringify(shoppingList));
-                    setShoppingList(shoppingList);
-                }
-            }
+            // Mise à jour immuable : on ajoute les catalogues manquants sans muter
+            // le state, et on renvoie la liste inchangée s'il n'y a rien à ajouter
+            // (évite un re-render / une boucle inutile). La persistance est gérée
+            // par le store.
+            setShoppingList((prevList) => {
+                const slidesToAdd = slidesData.filter((slide) =>
+                    !prevList.some(
+                        (item) => item.catalogId === slide.catalogue_id && item.shop !== null
+                    )
+                );
+
+                if (slidesToAdd.length === 0) return prevList;
+
+                return [
+                    ...prevList,
+                    ...slidesToAdd.map((slide) => ({
+                        catalogId: slide.catalogue_id,
+                        shop,
+                        products: []
+                    }))
+                ];
+            });
         }
         fetchEnvShop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [definitionMagasinChoice, environment_shop_id, shoppingList, slidesData]);
+    }, [definitionMagasinChoice, environment_shop_id, slidesData, setShoppingList]);
 
     const updateSlideWidth = () => {
         const dataSlideLength = slidesData.length;
@@ -210,8 +212,8 @@ function Carousel() {
                             } 
                             // vue produit
                             else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {
-                                const { firstCategorieId } = CategoryPerCatalogue(slide.catalogue_id);
-                                navigate(`/product-list/${slide.catalogue_id}/${firstCategorieId}`);
+                                const categories = await fetchCategories(slide.catalogue_id);
+                                navigate(`/product-list/${slide.catalogue_id}/${categories[0]?.categorie_id}`);
                             } else {
                                 navigate(`/view/${slide.catalogue_id}`);
                             }

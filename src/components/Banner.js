@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/styles/Banner.css';
+import { getClientId } from './functions/clientId';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function Banner() {
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    const [client_id, setClientId] = useState(null);
     const [bannerMedia, setBannerMedia] = useState('');
     const [titleFont, setTitleFont] = useState('');
-    const client = document.getElementById('catalogue-client');
 
     useEffect(() => {
-        const fetchedValue = client ? client.value : null;
-        setClientId(fetchedValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, []);
+        const clientId = getClientId();
+        if (!clientId) return;
 
-    useEffect(() => {
-        fetch(`${API_BASE_URL}/api/getDataClient/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : client_id}`)
+        fetch(`${API_BASE_URL}/api/getDataClient/${clientId}`)
             .then((response) => response.json())
             .then((fetchedData) => {
                 setBannerMedia(fetchedData.client_global_image);
                 setTitleFont(fetchedData.font_title);
             })
             .catch((error) => console.error("Error fetching data:", error));
-
-    }, [API_BASE_URL, client_id]);
+    }, []);
 
     return (
         <div className='section-banner'>

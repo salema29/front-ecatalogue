@@ -6,7 +6,7 @@ import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import "../assets/styles/ProductList.css";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import ProductItem from "../components/ProductItem";
-import CategoryPerCatalogue from "../components/navigation/CategoryPerCatalogue";
+import useCategoriesPerCatalogue from "../components/navigation/useCategoriesPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse from '../components/shoppingList/shoppingListIcon';
@@ -23,11 +23,12 @@ function Product() {
     const [productData, setProductData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
-    const headerHeight = document.querySelector('.sticky'); // class "sticky" height
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
-    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight - headerHeight);
+    // Hauteur initiale approximative ; recalculée précisément dans les useEffect
+    // ci-dessous une fois le header ".sticky" monté (getBoundingClientRect).
+    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight);
+    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight);
     const navigate = useNavigate();
-    const { categoryList } = CategoryPerCatalogue(catalogId);
+    const { categoryList } = useCategoriesPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
         isVueProduit: true,
         isVueFeuilletable: true
@@ -147,7 +148,9 @@ function Product() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    showOnlyEcatalogue();
+    useEffect(() => {
+        showOnlyEcatalogue();
+    }, []);
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -341,7 +344,6 @@ function Product() {
                                 </div>
                             )
                         }
-                        {/* </div> */}
                         {modalOpen && (<ShoppingListModal catalogId={catalogId} isOpen={modalOpen} onClose={() => setModalOpen(false)} clientColor={headerData.client_color} />)}
                     </div>
                 </div>

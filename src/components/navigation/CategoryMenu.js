@@ -32,10 +32,7 @@ const CategoryMenu = ({ categoryIdSelected, categoryList }) => {
 
                 </div>
             ) : (
-                <>
-                    {/* <p> Il n'y a pas de catégorie disponible </p> */}
-                    <p> Chargement en cours ... </p>
-                </>
+                <p> Chargement en cours ... </p>
             )}
         </div>
     );

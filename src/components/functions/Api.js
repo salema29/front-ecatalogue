@@ -1,82 +1,22 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-export const fetchPrevNextVueDetail = async (productDetailId) => {
+/**
+ * Effectue une requête vers l'API et renvoie `data.data` lorsque la réponse a la
+ * forme `{ status: 'success', data: ... }`. Dans tous les autres cas (erreur
+ * réseau, HTTP non-2xx, statut != 'success', requête annulée) l'erreur est
+ * loguée et la fonction renvoie `null`.
+ *
+ * @param {string} path   chemin ajouté à API_BASE_URL (avec ou sans "/" initial
+ *                         selon l'endpoint historique).
+ * @param {{ method?: string, body?: any, signal?: AbortSignal }} [opts]
+ */
+const requestData = async (path, { method = 'GET', body, signal } = {}) => {
     try {
-        const response = await fetch(`${API_BASE_URL}api/get-prev-next-vue-detail/${productDetailId}`);
+        const options = { method };
+        if (body !== undefined) options.body = JSON.stringify(body);
+        if (signal) options.signal = signal;
 
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            const result = fetchedData.data;
-            return {
-                previous: result.previous ? {
-                    viewOrder: result.previous.view_order,
-                    categoryId: result.previous.product_categorie_id,
-                    productResumeId: result.previous.product_resume_id
-                } : null,
-                next: result.next ? {
-                    viewOrder: result.next.view_order,
-                    categoryId: result.next.product_categorie_id,
-                    productResumeId: result.next.product_resume_id
-                } : null
-            }
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-};
-
-export const fetchViewChoice = async (catalogueId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/get-view-choice/${catalogueId}`);
-
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            const result = fetchedData.data;
-            return {
-                isVueProduit: result.is_vue_produit,
-                isVueFeuilletable: result.is_vue_feuilletable
-            }
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-};
-
-export const postShoppingListImage = async (shoppingList, catalogId, options = {}) => {
-    try {
-        // Filtrer la liste des achats par catalogId
-        const filteredShoppingList = shoppingList.filter(item => item.catalogId === catalogId);
-
-        if (filteredShoppingList.length === 0) {
-            console.warn("Aucun élément correspondant au catalogId fourni.");
-            return null;
-        }
-
-        const response = await fetch(`${API_BASE_URL}/api/post-shopping-list-html`, {
-            method: "POST",
-            body: JSON.stringify({ shoppingList: filteredShoppingList }),
-            signal: options.signal, // Ajout du signal pour annuler le fetch si nécessaire 
-        });
+        const response = await fetch(`${API_BASE_URL}${path}`, options);
 
         if (!response.ok) {
             console.error(`Erreur HTTP : ${response.status}`);
@@ -85,166 +25,123 @@ export const postShoppingListImage = async (shoppingList, catalogId, options = {
 
         const data = await response.json();
 
-        if (data.status === "success") {
-            return data.data; // Contient le HTML de la shopping list
-        } else {
-            console.error("Erreur :", data.message);
-            return null;
+        if (data.status === 'success') {
+            return data.data;
         }
+
+        console.error('Erreur API:', data.message);
+        return null;
     } catch (error) {
-        if (error.name === "AbortError") {
-            console.warn("Requête annulée par l'utilisateur.");
+        if (error.name === 'AbortError') {
+            console.warn('Requête annulée.');
             return null;
         }
-        console.error("Erreur lors de la requête :", error);
+        console.error('Erreur de récupération des données:', error);
         return null;
     }
+};
+
+const mapPrevNextEntry = (entry) =>
+    entry
+        ? {
+            viewOrder: entry.view_order,
+            categoryId: entry.product_categorie_id,
+            productResumeId: entry.product_resume_id
+        }
+        : null;
+
+export const fetchPrevNextVueDetail = async (productDetailId) => {
+    // NB : cet endpoint historique n'a pas de "/" après API_BASE_URL.
+    const result = await requestData(`api/get-prev-next-vue-detail/${productDetailId}`);
+    if (!result) return null;
+    return {
+        previous: mapPrevNextEntry(result.previous),
+        next: mapPrevNextEntry(result.next)
+    };
+};
+
+// Renvoie la liste des catégories d'un catalogue (tableau, vide en cas d'erreur).
+// Version « fonction » du hook useCategoriesPerCatalogue, utilisable hors rendu
+// (ex. dans un gestionnaire d'événement).
+export const fetchCategories = async (catalogueId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/getCategory/${catalogueId}`);
+
+        if (!response.ok) {
+            console.error(`Erreur HTTP : ${response.status}`);
+            return [];
+        }
+
+        const categories = await response.json();
+        return Array.isArray(categories) ? categories : [];
+    } catch (error) {
+        console.error('Erreur de récupération des catégories:', error);
+        return [];
+    }
+};
+
+// Infos client de la page « catalogue abstrait » (get-data-client-info-v2).
+export const fetchClientInfo = (clientId) =>
+    requestData(`/api/get-data-client-info-v2/${clientId}`);
+
+export const fetchViewChoice = async (catalogueId) => {
+    const result = await requestData(`/api/get-view-choice/${catalogueId}`);
+    if (!result) return null;
+    return {
+        isVueProduit: result.is_vue_produit,
+        isVueFeuilletable: result.is_vue_feuilletable
+    };
+};
+
+export const postShoppingListImage = async (shoppingList, catalogId, options = {}) => {
+    const filteredShoppingList = shoppingList.filter(item => item.catalogId === catalogId);
+
+    if (filteredShoppingList.length === 0) {
+        console.warn('Aucun élément correspondant au catalogId fourni.');
+        return null;
+    }
+
+    // Renvoie le HTML de la shopping list.
+    return requestData('/api/post-shopping-list-html', {
+        method: 'POST',
+        body: { shoppingList: filteredShoppingList },
+        signal: options.signal
+    });
 };
 
 export const postTotalPriceEconomyByCatalogue = async (shoppingList, catalogId) => {
     const filteredList = shoppingList.filter(item => item.catalogId === catalogId);
+
     if (filteredList.length === 0) {
-        console.warn("Aucun produit trouvé pour ce catalogue.");
+        console.warn('Aucun produit trouvé pour ce catalogue.');
         return null;
     }
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/post-total-price-economy`, {
-            method: 'POST',
-            body: JSON.stringify({ shoppingList: filteredList }),
-        });
-        const result = await response.json();
-        if (result.status === 'success') {
-            return result.data;
-        } else {
-            console.error('Erreur API:', result.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur réseau:', error);
-        return null;
-    }
+
+    return requestData('/api/post-total-price-economy', {
+        method: 'POST',
+        body: { shoppingList: filteredList }
+    });
 };
 
 export const fetchDefinitionMagasinChoice = async (clientId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/get-shop-choice/${clientId}`);
-
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            const result = parseInt(fetchedData.data);
-            return result;
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-}
-
-export const fetchShopListByClient = async (clientId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/get-shops-by-client/${clientId}`);
-
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            const result = fetchedData.data;
-            return result;
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-}
-
-export const fetchShopById = async (shopId) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/get-shop-by-id/${shopId}`);
-
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            const result = fetchedData.data;
-            return result;
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-}
-
-export const fetchShopsByGeolocation = async (clientId, position) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/post-search-geolocalisation/${clientId}`, {
-            method: 'POST',
-            body: JSON.stringify({ position }),
-        });
-
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
-
-        const fetchedData = await response.json();
-
-        if (fetchedData.status === 'success') {
-            return fetchedData.data;
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
+    const result = await requestData(`/api/get-shop-choice/${clientId}`);
+    return result === null ? null : parseInt(result);
 };
 
-export const fetchShopsByKeyword = async (clientId, position) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/search-city-code/${clientId}`, {
-            method: 'POST',
-            body: JSON.stringify({ position }),
-        });
+export const fetchShopListByClient = (clientId) =>
+    requestData(`/api/get-shops-by-client/${clientId}`);
 
-        if (!response.ok) {
-            console.error(`Erreur HTTP : ${response.status}`);
-            return null;
-        }
+export const fetchShopById = (shopId) =>
+    requestData(`/api/get-shop-by-id/${shopId}`);
 
-        const fetchedData = await response.json();
+export const fetchShopsByGeolocation = (clientId, position) =>
+    requestData(`/api/post-search-geolocalisation/${clientId}`, {
+        method: 'POST',
+        body: { position }
+    });
 
-        if (fetchedData.status === 'success') {
-            return fetchedData.data;
-        } else {
-            console.error('Erreur API:', fetchedData.message);
-            return null;
-        }
-    } catch (error) {
-        console.error('Erreur de récupération des données:', error);
-        return null;
-    }
-};
+export const fetchShopsByKeyword = (clientId, position) =>
+    requestData(`/api/search-city-code/${clientId}`, {
+        method: 'POST',
+        body: { position }
+    });

@@ -93,16 +93,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     }, [shoppingList, catalogId]);
 
     useEffect(() => {
-        if (shoppingList && shoppingList.length > 0) {
-            postTotalPriceEconomyByCatalogue(shoppingList, catalogId).then(data => {
-                if (data) {
-                    setTotalEconomyData(data[catalogId]);
-                }
-            });
-        }
-    }, [shoppingList, catalogId]);
-
-    useEffect(() => {
         if (shoppingList) {
             setCurrentShop(getShopByCatalogId(shoppingList, catalogId));
         }

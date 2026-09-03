@@ -71,8 +71,20 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                 body: formData,
             });
 
-            const result =  response;
-            if (result.status) {
+            // Corps JSON optionnel : si l'API renvoie l'enveloppe { status: ... }
+            // on la respecte, sinon on se base sur le code HTTP.
+            let payload = null;
+            try {
+                payload = await response.clone().json();
+            } catch (e) {
+                // réponse non-JSON : on ignore
+            }
+
+            const success = response.ok &&
+                (payload == null || payload.status === undefined ||
+                    payload.status === "success" || payload.status === 200);
+
+            if (success) {
                 setSendStatus("success");
                 setEmail("");
                 setTimeout(() => {
@@ -81,7 +93,7 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
             } else {
                 setSendStatus("error");
             }
-            return result.status;
+            return success;
         } catch (err) {
             console.error("Error while sending email:", err);
             setSendStatus("error");
