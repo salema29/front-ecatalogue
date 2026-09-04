@@ -1,8 +1,9 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { ShoppingListContext } from '../../../store-shopping-list';
 import { BsPlusLg, BsDashLg } from 'react-icons/bs';
+import '../../../assets/styles/UpdateCountProduct.css';
 
-function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
+function UpdateCountProduct({ id_produit_resume, catalogue_id }) {
     const { shoppingList, changeProductCount } = useContext(ShoppingListContext);
 
     const getCurrentCount = () => {
@@ -26,36 +27,12 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
     };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '72px',
-                height: '29px',
-                backgroundColor: "white",
-                borderRadius: '14px',
-                border: `1px solid black`,
-                overflow: 'hidden',
-                position: 'relative'
-            }}
-        >
+        <div className="qty-counter">
             <button
-                disabled={currentCount <= 1 }
+                className="qty-counter-btn"
+                disabled={currentCount <= 1}
                 title={currentCount <= 1 ? "Vous ne pouvez plus diminuer la quantité " : "Diminuer la quantité"}
                 onClick={decrement}
-                style={{
-                    width: '29px',
-                    height: '29px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'transparent',
-                    border: 'none',
-                    outline: 'none',
-                    padding: 0,
-                    cursor: currentCount <= 1 ? "not-allowed" : "pointer",
-                }}
                 aria-label="Diminuer la quantité"
             >
                 <div>
@@ -63,50 +40,21 @@ function UpdateCountProduct ( {id_produit_resume, catalogue_id} ) {
                 </div>
             </button>
 
-            <div
-                style={{
-                fontFamily: 'Arial, sans-serif',
-                fontSize: '14px',
-                color: "black",
-                textAlign: 'center',
-                userSelect: 'none'
-                }}
-            >
-                {currentCount}
-            </div>
+            <div className="qty-counter-value">{currentCount}</div>
 
-        <button
-            title='Augmenter la quantité'
-            onClick={increment}
-            style={{
-                width: '29px',
-                height: '29px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                outline: 'none',
-                padding: 0,
-                position: 'relative'
-            }}
-            aria-label="Augmenter la quantité"
-        >
-        <div>
-            <BsPlusLg style={{ height: '10px' }}  />
+            <button
+                className="qty-counter-btn"
+                title='Augmenter la quantité'
+                onClick={increment}
+                aria-label="Augmenter la quantité"
+            >
+                <div>
+                    <BsPlusLg style={{ height: '10px' }} />
+                </div>
+                <div className="qty-counter-plus-bar" />
+            </button>
         </div>
-        <div
-            style={{
-            width: '1.5px',
-            height: '10px',
-            backgroundColor: "black",
-            position: 'absolute'
-            }}
-        />
-        </button>
-    </div>
     );
-};
+}
 
 export default UpdateCountProduct;

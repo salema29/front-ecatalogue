@@ -166,26 +166,28 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     );
 
     const [productHtmls, setProductHtmls] = useState([]);
+    // true tant que le fetch des produits est en cours : evite le flash
+    // "liste vide" a l'ouverture quand la liste contient des produits.
+    const [htmlsLoading, setHtmlsLoading] = useState(idListProducts.length > 0);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
     const observerRef = useRef(null);
 
     useEffect(() => {
         if (idListProducts.length > 0) {
+            setHtmlsLoading(true);
             fetch(`${API_BASE_URL}/api/shopping-list/`, {
                 method: "POST",
                 body: JSON.stringify({ ids: idListProducts }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.length === 0 ){
-                        setProductHtmls([]);
-                    }else{
-                        setProductHtmls(data);
-                    }
+                    setProductHtmls(data.length === 0 ? [] : data);
                 })
-                .catch(error => console.error("Error fetching htmls:", error));
+                .catch(error => console.error("Error fetching htmls:", error))
+                .finally(() => setHtmlsLoading(false));
         } else {
             setProductHtmls([]);
+            setHtmlsLoading(false);
         }
     }, [idListProducts]);
 
@@ -343,7 +345,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 </div>
 
                 <div className="modal-body">
-                    {productHtmls.length > 0 ? (
+                    {htmlsLoading ? (
+                        [0, 1, 2].map((i) => (
+                            <ProductSkeleton key={i} height={100} width={"95%"} />
+                        ))
+                    ) : productHtmls.length > 0 ? (
                         productHtmls.map((categoryGroup, groupIndex) => {
                             if (categoryGroup.categorie_name && categoryGroup.products) {
                                 return (

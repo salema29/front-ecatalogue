@@ -4,6 +4,7 @@ import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
+import LoadingSpinner from "./spinner/LoadingSpinner";
 import { fetchCategories, fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
 import { ClientContext } from "../store-client";
 import { ShoppingListContext } from "../store-shopping-list";
@@ -13,6 +14,7 @@ import { getClientId } from "./functions/clientId";
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
+    const [slidesLoaded, setSlidesLoaded] = useState(false);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
     const isMobileView = useIsMobile();
@@ -119,19 +121,28 @@ function Carousel() {
     ]);
 
     const fetchSlideData = () => {
-    fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((fetchedData) => {
-            setSlidesData(fetchedData);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
+        if (shopId == null) return; // shopId pas encore resolu
+        if (!clientId) {
+            // aucun client identifiable : on abandonne et on affiche le fallback
+            setSlidesLoaded(true);
+            return;
+        }
+        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((fetchedData) => {
+                setSlidesData(Array.isArray(fetchedData) ? fetchedData : []);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            })
+            .finally(() => {
+                setSlidesLoaded(true);
+            });
     }
 
     useEffect(() => {
@@ -210,7 +221,9 @@ function Carousel() {
 
     return (
         <div ref={sliderContainerRef}>
-            {slidesData && slidesData.length > 0 ? (
+            {!slidesLoaded ? (
+                <LoadingSpinner />
+            ) : slidesData && slidesData.length > 0 ? (
                 <Flickity
                     options={flickityOptions}
                     className={
