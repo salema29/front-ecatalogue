@@ -5,25 +5,28 @@ const GtmContext = createContext({
     setStoredGtmStatus: () => {}
 });
 
+// GTM actif par defaut ; lecture sans effet de bord (l'ecriture est faite
+// par le useEffect ci-dessous).
+const readStoredGtmStatus = () => {
+    const storedValue = localStorage.getItem('stored-gtm-status');
+    if (storedValue === null) return true;
+    try {
+        return JSON.parse(storedValue);
+    } catch (e) {
+        console.error('Erreur de parsing localStorage:', e);
+        return true;
+    }
+};
+
 const GtmStore = (props) => {
-    const [storedGtmStatus, setStoredGtmStatus] = useState(() => {
-        const storedValue = localStorage.getItem('stored-gtm-status');
-        if (storedValue !== null) {
-            try {
-                return JSON.parse(storedValue);
-            } catch (e) {
-                console.error('Erreur de parsing localStorage:', e);
-                return true;
-            }
-        } else {
-            const defaultValue = true;
-            localStorage.setItem('stored-gtm-status', JSON.stringify(defaultValue));
-            return defaultValue;
-        }
-    });
+    const [storedGtmStatus, setStoredGtmStatus] = useState(readStoredGtmStatus);
 
     useEffect(() => {
-        localStorage.setItem('stored-gtm-status', JSON.stringify(storedGtmStatus));
+        try {
+            localStorage.setItem('stored-gtm-status', JSON.stringify(storedGtmStatus));
+        } catch (e) {
+            console.error('Erreur de sauvegarde du statut GTM:', e);
+        }
     }, [storedGtmStatus]);
 
     return (
