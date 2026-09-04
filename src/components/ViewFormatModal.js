@@ -14,11 +14,45 @@ import viewFormatIconDark from "../assets/icons/view-format-icon-dark.svg";
 import ShopModal from "./shop/shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "./functions/Api";
 import useCatalogHeader from "./functions/useCatalogHeader";
+import useIsMobile from "./functions/useIsMobile";
 import { ShoppingListContext } from "../store-shopping-list";
 import { getShopByCatalogId } from "./functions/Shop";
 
+// Les deux boutons "Vue mosaique / Vue feuilletable" (identiques entre le
+// bloc desktop et le bloc mobile de la modale).
+const ViewModeButtons = ({ clientColor, firstCategorieId, onProductView, onCatalogView }) => (
+    <div className="view-format-dialog-button-container">
+        <button
+            className="view-format-dialog-button btn"
+            style={{ backgroundColor: clientColor }}
+            onClick={firstCategorieId ? onProductView : () => { }}
+        >
+            <span className="view-format-dialog-button-text">Vue mosaïque</span>
+            {firstCategorieId ? (
+                <span className="view-format-dialog-button-icon choice">
+                    <img style={{ width: "100%", height: "100%" }} src={byProductIcon} alt="" />
+                </span>
+            ) : (
+                <span className="view-format-dialog-button-icon">
+                    <MiniSpinner />
+                </span>
+            )}
+        </button>
+        <button
+            className="view-format-dialog-button btn"
+            style={{ backgroundColor: clientColor }}
+            onClick={onCatalogView}
+        >
+            <span className="view-format-dialog-button-text">Vue feuilletable</span>
+            <span className="view-format-dialog-button-icon choice">
+                <img style={{ width: "100%", height: "100%" }} src={byCatalogIcon} alt="" />
+            </span>
+        </button>
+    </div>
+);
+
 function ViewFormatDialog() {
-    const isMobileView = window.innerWidth <= 767;
+    const isMobileView = useIsMobile();
     const { catalogId, clientId } = useParams();
     const headerData = useCatalogHeader(catalogId);
     const [shopModalOpen, setShopModalOpen] = useState(false);
@@ -35,7 +69,6 @@ function ViewFormatDialog() {
 
     const handleClose = () => {
         navigate(`/`);
-        window.location.reload();
     };
 
     useEffect(() => {
@@ -146,58 +179,17 @@ function ViewFormatDialog() {
                                         className="view-format-text"
                                     >
                                         <span style={{ fontWeight: 700 }}>Nouveau !</span> <br /> choisissez votre mode de lecture
-                                    </h2 >
+                                    </h2>
                                     <p style={{ color: "black", textAlign: "center" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
                                         de courses, <br /> ou continuer en <span className="text-gras" >version feuilletable.</span>
                                     </p>
                                 </div>
-                                <div className="view-format-dialog-button-container">
-                                    <button
-                                        className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: headerData.client_color }}
-                                        onClick={firstCategorieId ? handleProductView : () => { }}
-                                    >
-                                        {firstCategorieId ? (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue mosaïque
-                                                </span>
-                                                <span className="view-format-dialog-button-icon choice">
-                                                    <img
-                                                        style={{ width: "100%", height: "100%" }}
-                                                        src={byProductIcon}
-                                                        alt=""
-                                                    />
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span className="view-format-dialog-button-text">
-                                                    Vue mosaïque
-                                                </span>
-                                                <span className="view-format-dialog-button-icon">
-                                                    <MiniSpinner />
-                                                </span>
-                                            </>
-                                        )}
-                                    </button>
-                                    <button
-                                        className="view-format-dialog-button btn"
-                                        style={{ backgroundColor: headerData.client_color }}
-                                        onClick={handleCatalogView}
-                                    >
-                                        <span className="view-format-dialog-button-text">
-                                            Vue feuilletable
-                                        </span>
-                                        <span className="view-format-dialog-button-icon choice">
-                                            <img
-                                                style={{ width: "100%", height: "100%" }}
-                                                src={byCatalogIcon}
-                                                alt=""
-                                            />
-                                        </span>
-                                    </button>
-                                </div>
+                                <ViewModeButtons
+                                    clientColor={headerData.client_color}
+                                    firstCategorieId={firstCategorieId}
+                                    onProductView={handleProductView}
+                                    onCatalogView={handleCatalogView}
+                                />
                             </div>
                         </div>
                         <div className="view-format-dialog-mobile-content container">
@@ -211,56 +203,12 @@ function ViewFormatDialog() {
                                     Choisissez <br/> votre mode de lecture
                                 </h2>
                             </div>
-                            <div className="view-format-dialog-button-container">
-                                <button
-                                    className="view-format-dialog-button btn"
-                                    style={{ backgroundColor: headerData.client_color }}
-                                    onClick={firstCategorieId ? handleProductView : () => { }}
-                                >
-                                    {firstCategorieId ? (
-                                        <>
-                                            <span className="view-format-dialog-button-text">
-                                                Vue mosaïque
-                                            </span>
-                                            <span className="view-format-dialog-button-icon choice">
-                                                <img
-                                                    style={{ width: "100%", height: "100%" }}
-                                                    src={byProductIcon}
-                                                    alt=""
-                                                />
-                                            </span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className="view-format-dialog-button-text">
-                                                Vue mosaïque
-                                            </span>
-                                            <span className="view-format-dialog-button-icon">
-                                                <MiniSpinner />
-                                            </span>
-                                        </>
-                                    )}
-                                </button>
-                                <button
-                                    style={{ backgroundColor: headerData.client_color }}
-                                    className="view-format-dialog-button"
-                                    onClick={handleCatalogView}
-                                >
-                                    <span
-                                        className="view-format-dialog-button-text"
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        Vue feuilletable
-                                    </span>
-                                    <span className="view-format-dialog-button-icon choice">
-                                        <img
-                                            style={{ width: "100%", height: "100%" }}
-                                            src={byCatalogIcon}
-                                            alt=""
-                                        />
-                                    </span>
-                                </button>
-                            </div>
+                            <ViewModeButtons
+                                clientColor={headerData.client_color}
+                                firstCategorieId={firstCategorieId}
+                                onProductView={handleProductView}
+                                onCatalogView={handleCatalogView}
+                            />
                         </div>
                     </div>
                 </>

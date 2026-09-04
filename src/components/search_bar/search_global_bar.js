@@ -61,8 +61,10 @@ const SearchBar = ({ catalogue_id }) => {
     };
 
     const clearInput = () => {
+        debouncedSearch.cancel();
         setSearchQuery('');
         setSearchResults([]);
+        setLoading(false);
     };
 
     return (

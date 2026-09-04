@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback, useMemo } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
 import { ShoppingListContext } from '../../store-shopping-list';
@@ -10,19 +10,19 @@ import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
 import { ShareWithEmail } from "../shoppingList/shareWithEmail";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient, postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
-import html2canvas from "html2canvas";
+import { renderHtmlToCanvas } from "../functions/renderHtmlToCanvas";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import shopInfo from "../../assets/icons/shop-info.svg";
 import { getShopByCatalogId } from "../functions/Shop";
 import ShopModal from "../shop/shopModal";
 import { ClientContext } from "../../store-client";
 import ShopModalInfo from "../shop/shopModalInfo";
+import useIsMobile from "../functions/useIsMobile";
+import CloseIcon from "../CloseIcon";
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const getModalStyles = () => {
-    const isMobile = window.innerWidth <= 768;
-
+const getModalStyles = (isMobile) => {
     return {
         overlay: { backgroundColor: "rgba(0, 0, 0, 0.5)" },
         content: {
@@ -79,7 +79,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         }
     }
 
-    const isMobile = () => window.innerWidth <= 768; // Détection simple du mobile
+    const isMobile = useIsMobile(768);
     const [emailShare, setEmailShare] = useState(false);
 
     useEffect(() => {
@@ -99,7 +99,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     }, [shoppingList, catalogId]);
 
     const handleShareClick = async () => {
-        if (isMobile()) {
+        if (isMobile) {
             setIsShareModalOpen(true);
         } else {
             setEmailShare(true);
@@ -121,14 +121,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             currentAbortController.current = controller;
             const { signal } = controller;
             const html = await postShoppingListImage(shoppingList, catalogId, { signal });
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            const canvas = await renderHtmlToCanvas(html);
             if (!isMounted.current) {
-                document.body.removeChild(tempDiv);
                 return;
             }
             const dataUrl = canvas.toDataURL("image/png");
@@ -137,7 +131,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setBlob(blob);
                 }
             }, "image/png");
-            document.body.removeChild(tempDiv);
             if (dataUrl.startsWith("data:image/png;base64,")) {
                 setImageurl(dataUrl);
             }
@@ -166,34 +159,37 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     }, [emailShare, generateImage]);
 
 
-    const idListProducts = shoppingList.reduce((acc, item) =>
-        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
+    const idListProducts = useMemo(
+        () => shoppingList.reduce((acc, item) =>
+            item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []),
+        [shoppingList, catalogId]
+    );
 
     const [productHtmls, setProductHtmls] = useState([]);
+    // true tant que le fetch des produits est en cours : evite le flash
+    // "liste vide" a l'ouverture quand la liste contient des produits.
+    const [htmlsLoading, setHtmlsLoading] = useState(idListProducts.length > 0);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
     const observerRef = useRef(null);
 
     useEffect(() => {
         if (idListProducts.length > 0) {
+            setHtmlsLoading(true);
             fetch(`${API_BASE_URL}/api/shopping-list/`, {
                 method: "POST",
                 body: JSON.stringify({ ids: idListProducts }),
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.length === 0 ){
-                        setProductHtmls([]);
-                    }else{
-                        setProductHtmls(data);
-                    }
+                    setProductHtmls(data.length === 0 ? [] : data);
                 })
-                .catch(error => console.error("Error fetching htmls:", error));
+                .catch(error => console.error("Error fetching htmls:", error))
+                .finally(() => setHtmlsLoading(false));
         } else {
             setProductHtmls([]);
+            setHtmlsLoading(false);
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [shoppingList]);
+    }, [idListProducts]);
 
     useEffect(() => {
         if (!observerRef.current) {
@@ -306,7 +302,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             <Modal
                 isOpen={isOpen}
                 onRequestClose={onClose}
-                style={getModalStyles()}
+                style={getModalStyles(isMobile)}
                 shouldCloseOnOverlayClick={true}
                 ariaHideApp={false}
             >
@@ -343,17 +339,17 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                             </>
                         }
                         <button className="close-btn" onClick={onClose} title='Fermer la liste de courses'>
-                            <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="white" />
-                                <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
-                                    fill={clientColor} />
-                            </svg>
+                            <CloseIcon xFill={clientColor} />
                         </button>
                     </div>
                 </div>
 
                 <div className="modal-body">
-                    {productHtmls.length > 0 ? (
+                    {htmlsLoading ? (
+                        [0, 1, 2].map((i) => (
+                            <ProductSkeleton key={i} height={100} width={"95%"} />
+                        ))
+                    ) : productHtmls.length > 0 ? (
                         productHtmls.map((categoryGroup, groupIndex) => {
                             if (categoryGroup.categorie_name && categoryGroup.products) {
                                 return (
@@ -371,7 +367,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                     data-id-produit={productHtml.id_produit}
                                                     style={{
                                                         position: "relative",
-                                                        ...((isMobile() && isChecked(productHtml.id_produit)) && {
+                                                        ...((isMobile && isChecked(productHtml.id_produit)) && {
                                                             filter: "opacity(60%)"
                                                         }),
                                                     }}
@@ -380,7 +376,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                                                         <>
                                                             <div className="product">
                                                                 <div className="product-item-in-modal" style={styles.productItem}>
-                                                                    {isMobile() && (
+                                                                    {isMobile && (
                                                                         <input
                                                                             name="checked"
                                                                             type="checkbox"
@@ -492,11 +488,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                 >
                     <div className="modal-header-empty-shopping-list" style={{ background: clientColor }}>
                         <button className="close-btn" onClick={closeEmptyListCourseModal} title='Fermer'>
-                            <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.5 32C25.6127 32 33 24.8366 33 16C33 7.16344 25.6127 0 16.5 0C7.3873 0 0 7.16344 0 16C0 24.8366 7.3873 32 16.5 32Z" fill="none" />
-                                <path fillRule="evenodd" clipRule="evenodd" d="M8.02844 7.78518C8.41291 7.38869 9.046 7.37895 9.44248 7.76342L16.492 14.5993L23.5414 7.76342C23.9379 7.37895 24.571 7.38869 24.9555 7.78518C25.3399 8.18166 25.3302 8.81475 24.9337 9.19922L17.9284 15.9922L24.9337 22.7852C25.3302 23.1697 25.3399 23.8028 24.9555 24.1993C24.571 24.5958 23.9379 24.6055 23.5414 24.221L16.492 17.3852L9.44248 24.221C9.046 24.6055 8.41291 24.5958 8.02844 24.1993C7.64397 23.8028 7.65371 23.1697 8.05019 22.7852L15.0555 15.9922L8.05019 9.19922C7.65371 8.81475 7.64397 8.18166 8.02844 7.78518Z"
-                                    fill="black" />
-                            </svg>
+                            <CloseIcon circleFill="none" xFill="black" />
                         </button>
                     </div>
                     {questionEmpyShoppingList ? (

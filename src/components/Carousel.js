@@ -1,19 +1,23 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext, useMemo, useCallback } from "react";
 import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
 import { useNavigate } from "react-router-dom";
 import AbsCatalogue from "./AbsCatalogue";
+import LoadingSpinner from "./spinner/LoadingSpinner";
 import { fetchCategories, fetchDefinitionMagasinChoice, fetchShopById, fetchViewChoice } from "./functions/Api";
 import { ClientContext } from "../store-client";
 import { ShoppingListContext } from "../store-shopping-list";
+import useIsMobile from "./functions/useIsMobile";
+import { getClientId } from "./functions/clientId";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const [slidesData, setSlidesData] = useState([]);
+    const [slidesLoaded, setSlidesLoaded] = useState(false);
     const [shopId, setShopId] = useState(null);
     const [clientId, setClientId] = useState(null);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+    const isMobileView = useIsMobile();
     const [slideWidth, setSlideWidth] = useState(640);
     const [showPageDots, setShowPageDots] = useState(true);
     const [definitionMagasinChoice, setDefinitionMagasinChoice] = useState(null);
@@ -33,7 +37,27 @@ function Carousel() {
         navigate(`/confidentiality`);
     };
 
-    const flickityOptions = {
+    // Redirige vers la bonne vue selon les modes actives du catalogue.
+    const handleSlideClick = useCallback(async (catalogueId) => {
+        const viewChoice = await fetchViewChoice(catalogueId);
+        // vue produit ET vue feuilletable
+        if (viewChoice?.isVueProduit && viewChoice?.isVueFeuilletable) {
+            navigate(`/view/${catalogueId}/${clientId}`);
+        }
+        // vue feuilletable seule
+        else if (viewChoice?.isVueProduit === false && viewChoice?.isVueFeuilletable === true) {
+            navigate(`/catalogue/${catalogueId}`);
+        }
+        // vue produit seule
+        else if (viewChoice?.isVueProduit === true && viewChoice?.isVueFeuilletable === false) {
+            const categories = await fetchCategories(catalogueId);
+            navigate(`/product-list/${catalogueId}/${categories[0]?.categorie_id}`);
+        } else {
+            navigate(`/view/${catalogueId}`);
+        }
+    }, [clientId, navigate]);
+
+    const flickityOptions = useMemo(() => ({
         initialIndex: 0,
         cellAlign: isMobileView
             ? "left"
@@ -43,18 +67,17 @@ function Carousel() {
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
-        groupCells: isMobileView ? false : true,
+        groupCells: !isMobileView,
         pageDots: true,
         prevNextButtons: true,
-    };
+    }), [isMobileView, slidesData.length]);
 
     useEffect(() => {
-        const hiddenInput = document.getElementById("catalogue-client");
-        const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
-        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || fetchedValue;
-
+        const clientIdToUse = getClientId();
         setClientId(clientIdToUse);
-        clientContext.setStoredClient(clientIdToUse);
+        if (clientIdToUse) {
+            clientContext.setStoredClient(clientIdToUse);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -66,7 +89,6 @@ function Carousel() {
         updateSlideWidth();
         calculatePaginationVisibility();
         const handleResize = () => {
-            setIsMobileView(window.innerWidth <= 767);
             updateSlideWidth();
             calculatePaginationVisibility();
         };
@@ -99,19 +121,28 @@ function Carousel() {
     ]);
 
     const fetchSlideData = () => {
-    fetch(`${API_BASE_URL}/api/getSlides/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : clientId}/${process.env.REACT_APP_SHOP_ID_TEST ? process.env.REACT_APP_SHOP_ID_TEST : shopId}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((fetchedData) => {
-            setSlidesData(fetchedData);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
+        if (shopId == null) return; // shopId pas encore resolu
+        if (!clientId) {
+            // aucun client identifiable : on abandonne et on affiche le fallback
+            setSlidesLoaded(true);
+            return;
+        }
+        fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((fetchedData) => {
+                setSlidesData(Array.isArray(fetchedData) ? fetchedData : []);
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            })
+            .finally(() => {
+                setSlidesLoaded(true);
+            });
     }
 
     useEffect(() => {
@@ -176,21 +207,23 @@ function Carousel() {
     };
 
     const calculatePaginationVisibility = () => {
+        if (!sliderContainerRef.current || !slidesData) return;
+
         const dataSlideLength = slidesData.length;
         const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
         const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
         const containerWidth =
             sliderContainerRef.current.offsetWidth -
             (paddingSlideContainer + slideMarginRight);
-        if (sliderContainerRef.current && slidesData) {
-            const totalSlidesWidth = slidesData.length * containerWidth;
-            setShowPageDots(totalSlidesWidth > containerWidth);
-        }
+        const totalSlidesWidth = slidesData.length * containerWidth;
+        setShowPageDots(totalSlidesWidth > containerWidth);
     };
 
     return (
         <div ref={sliderContainerRef}>
-            {slidesData && slidesData.length > 0 ? (
+            {!slidesLoaded ? (
+                <LoadingSpinner />
+            ) : slidesData && slidesData.length > 0 ? (
                 <Flickity
                     options={flickityOptions}
                     className={
@@ -199,29 +232,10 @@ function Carousel() {
                             : "slider-container hide-page-dots"
                     }
                 >
-                    {slidesData.map((slide, key) => {
-                        const handleClick = async () => {
-                            const viewChoice = await fetchViewChoice(slide.catalogue_id);
-                            // vue produit ET vue feuilletable
-                            if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
-                                navigate(`/view/${slide.catalogue_id}/${clientId}`);
-                            } 
-                            // vue feuilletable
-                            else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {
-                                navigate(`/catalogue/${slide.catalogue_id}`);
-                            } 
-                            // vue produit
-                            else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {
-                                const categories = await fetchCategories(slide.catalogue_id);
-                                navigate(`/product-list/${slide.catalogue_id}/${categories[0]?.categorie_id}`);
-                            } else {
-                                navigate(`/view/${slide.catalogue_id}`);
-                            }
-                        };
-
+                    {slidesData.map((slide) => {
                         return (
                             <div
-                                key={key}
+                                key={slide.catalogue_id}
                                 className="slide-element"
                                 style={{
                                     width: isMobileView ? "100%" : `${slideWidth}px`,
@@ -256,7 +270,7 @@ function Carousel() {
                                     </div>
                                     <div
                                         className="slide-button btn"
-                                        onClick={handleClick}
+                                        onClick={() => handleSlideClick(slide.catalogue_id)}
                                         style={{
                                             fontFamily: slide.btn_discover_typos_name,
                                         }}

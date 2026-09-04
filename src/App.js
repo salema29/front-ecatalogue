@@ -7,10 +7,10 @@ import CatalogOverview from './pages/CatalogOverview';
 import ProductList from './pages/ProductList';
 import Confidentiality from './components/policies/PrivacyPolicy';
 import { SearchProvider } from './components/search_bar/SearchContext';
-import useGtagPerClient  from '../src/components/functions/Gtag';
-import GtmLoader from './components/functions/GtmCookiesHander';
+import useGtagPerClient from './components/functions/Gtag';
+import GtmLoader from './components/functions/GtmLoader';
 import { GtmStore } from './store-gtm';
-import GtmPageViewHandler from  "../src/components/functions/GtmPageViewHandler"
+import GtmPageViewHandler from './components/functions/GtmPageViewHandler';
 
 function App() {
     useGtagPerClient();

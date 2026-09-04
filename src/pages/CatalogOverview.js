@@ -5,8 +5,11 @@ import disableEcatalogueAutoScroll from "../components/functions/DisableScroll";
 import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import useCatalogHeader from "../components/functions/useCatalogHeader";
+import useIsMobile from "../components/functions/useIsMobile";
+import CatalogHeaderInfo from "../components/CatalogHeaderInfo";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
+import { ClientContext } from '../store-client';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import  "../assets/styles/CatalogueOverview.css"
@@ -15,15 +18,22 @@ function Catalog() {
   const ALLOW_ORIGIN_ACCESS_URL = process.env.REACT_APP_IFRAME_ALLOW_ORIGIN_ACCESS_URL ;
   const { catalogId } = useParams();
   const headerData = useCatalogHeader(catalogId);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 767);
+  const isMobileView = useIsMobile(1024);
   const [viewChoice, setViewChoice] = useState({
     isVueProduit : true,
     isVueFeuilletable : true
   });
   const navigate = useNavigate();
+  const { storedClient } = useContext(ClientContext);
+
+  // Fermer le catalogue : retour à l'écran de choix de vue si le catalogue
+  // propose les deux modes, sinon retour à la page d'accueil.
   const handleClose = () => {
-    navigate(`/`);
-    window.location.reload();
+    if (viewChoice?.isVueProduit && viewChoice?.isVueFeuilletable && storedClient) {
+      navigate(`/view/${catalogId}/${storedClient}`);
+    } else {
+      navigate(`/`);
+    }
   };
 
   const { firstCategorieId } = useCategoriesPerCatalogue(catalogId);
@@ -40,17 +50,9 @@ function Catalog() {
   }, []);
 
   useEffect(() => {
-      const handleResize = () => {
-          setIsMobileView(window.innerWidth <= 1024);
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
     async function fetchChoiceForView() {
       const choice = await fetchViewChoice(catalogId);
-      setViewChoice(choice);
+      if (choice) setViewChoice(choice);
     }
     fetchChoiceForView();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,23 +96,7 @@ function Catalog() {
       {headerData ? (
         <>
           <header className="header">
-            <div className="view-format-dialog-left-part">
-              <img
-                className="header-logo"
-                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
-                alt=""
-              />
-              <div className="header-text">
-                <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
-                  {headerData.catalogue_name_ln_un}{" "}
-                  {headerData.catalogue_name_ln_deux}
-                </p>
-                <p className="catalogue-date" style={{ color: "black" }}>
-                  du {headerData.catalogue_date_validite_debut} au {" "}
-                  {headerData.catalogue_date_validite_fin}
-                </p>
-              </div>
-            </div>
+            <CatalogHeaderInfo headerData={headerData} isMobileView={isMobileView} />
             <div className="view-format-dialog-right-part">
               {viewChoice.isVueProduit && (
                 <button
