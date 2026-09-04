@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef, useContext, useMemo, useCallback } from "react";
 import Flickity from "react-flickity-component";
 import "../assets/styles/Carousel.css";
 import "../assets/styles/Confidentiality.css";
@@ -35,7 +35,27 @@ function Carousel() {
         navigate(`/confidentiality`);
     };
 
-    const flickityOptions = {
+    // Redirige vers la bonne vue selon les modes actives du catalogue.
+    const handleSlideClick = useCallback(async (catalogueId) => {
+        const viewChoice = await fetchViewChoice(catalogueId);
+        // vue produit ET vue feuilletable
+        if (viewChoice?.isVueProduit && viewChoice?.isVueFeuilletable) {
+            navigate(`/view/${catalogueId}/${clientId}`);
+        }
+        // vue feuilletable seule
+        else if (viewChoice?.isVueProduit === false && viewChoice?.isVueFeuilletable === true) {
+            navigate(`/catalogue/${catalogueId}`);
+        }
+        // vue produit seule
+        else if (viewChoice?.isVueProduit === true && viewChoice?.isVueFeuilletable === false) {
+            const categories = await fetchCategories(catalogueId);
+            navigate(`/product-list/${catalogueId}/${categories[0]?.categorie_id}`);
+        } else {
+            navigate(`/view/${catalogueId}`);
+        }
+    }, [clientId, navigate]);
+
+    const flickityOptions = useMemo(() => ({
         initialIndex: 0,
         cellAlign: isMobileView
             ? "left"
@@ -45,10 +65,10 @@ function Carousel() {
         contain: true,
         selectedAttraction: 0.03,
         friction: 0.3,
-        groupCells: isMobileView ? false : true,
+        groupCells: !isMobileView,
         pageDots: true,
         prevNextButtons: true,
-    };
+    }), [isMobileView, slidesData.length]);
 
     useEffect(() => {
         const clientIdToUse = getClientId();
@@ -199,29 +219,10 @@ function Carousel() {
                             : "slider-container hide-page-dots"
                     }
                 >
-                    {slidesData.map((slide, key) => {
-                        const handleClick = async () => {
-                            const viewChoice = await fetchViewChoice(slide.catalogue_id);
-                            // vue produit ET vue feuilletable
-                            if(viewChoice.isVueProduit && viewChoice.isVueFeuilletable) {
-                                navigate(`/view/${slide.catalogue_id}/${clientId}`);
-                            } 
-                            // vue feuilletable
-                            else if (viewChoice.isVueProduit === false && viewChoice.isVueFeuilletable === true) {
-                                navigate(`/catalogue/${slide.catalogue_id}`);
-                            } 
-                            // vue produit
-                            else if (viewChoice.isVueProduit === true && viewChoice.isVueFeuilletable === false) {
-                                const categories = await fetchCategories(slide.catalogue_id);
-                                navigate(`/product-list/${slide.catalogue_id}/${categories[0]?.categorie_id}`);
-                            } else {
-                                navigate(`/view/${slide.catalogue_id}`);
-                            }
-                        };
-
+                    {slidesData.map((slide) => {
                         return (
                             <div
-                                key={key}
+                                key={slide.catalogue_id}
                                 className="slide-element"
                                 style={{
                                     width: isMobileView ? "100%" : `${slideWidth}px`,
@@ -256,7 +257,7 @@ function Carousel() {
                                     </div>
                                     <div
                                         className="slide-button btn"
-                                        onClick={handleClick}
+                                        onClick={() => handleSlideClick(slide.catalogue_id)}
                                         style={{
                                             fontFamily: slide.btn_discover_typos_name,
                                         }}

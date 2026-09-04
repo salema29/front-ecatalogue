@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback, useMemo } from "react";
 import Modal from "react-modal";
 import "../../assets/styles/modalShoppingList.css";
 import { ShoppingListContext } from '../../store-shopping-list';
@@ -159,8 +159,11 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
     }, [emailShare, generateImage]);
 
 
-    const idListProducts = shoppingList.reduce((acc, item) =>
-        item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []);
+    const idListProducts = useMemo(
+        () => shoppingList.reduce((acc, item) =>
+            item.catalogId === catalogId ? acc.concat(item.products.map(p => p.id_produit_resume)) : acc, []),
+        [shoppingList, catalogId]
+    );
 
     const [productHtmls, setProductHtmls] = useState([]);
     const [visibleProducts, setVisibleProducts] = useState(new Set());
@@ -184,9 +187,7 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
         } else {
             setProductHtmls([]);
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [shoppingList]);
+    }, [idListProducts]);
 
     useEffect(() => {
         if (!observerRef.current) {

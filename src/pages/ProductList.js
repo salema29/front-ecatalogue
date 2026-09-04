@@ -9,6 +9,7 @@ import ProductItem from "../components/ProductItem";
 import useCategoriesPerCatalogue from "../components/navigation/useCategoriesPerCatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import { ShoppingListContext } from '../store-shopping-list';
+import { ClientContext } from '../store-client';
 import ListCourse from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
@@ -17,6 +18,7 @@ import ProductSearchResults from "../components/search_bar/ProductSearchResults"
 import CatalogHeaderInfo from "../components/CatalogHeaderInfo";
 import { useSearch } from '../components/search_bar/SearchContext';
 import useIsMobile from "../components/functions/useIsMobile";
+import useHeightBelow from "../components/functions/useHeightBelow";
 
 
 function Product() {
@@ -28,10 +30,6 @@ function Product() {
     // "mobile" ici = tablette et moins (mise en page de la grille + placement
     // de la barre de recherche).
     const isMobileView = useIsMobile(1024);
-    // Hauteur initiale approximative ; recalculée précisément dans les useEffect
-    // ci-dessous une fois le header ".sticky" monté (getBoundingClientRect).
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight);
-    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight);
     const navigate = useNavigate();
     const { categoryList } = useCategoriesPerCatalogue(catalogId);
     const [viewChoice, setViewChoice] = useState({
@@ -39,16 +37,32 @@ function Product() {
         isVueFeuilletable: true
     });
     const { shoppingList } = useContext(ShoppingListContext);
+    const { storedClient } = useContext(ClientContext);
 
+    // Fermer le catalogue : retour à l'écran de choix de vue si le catalogue
+    // propose les deux modes, sinon retour à la page d'accueil.
     const handleClose = () => {
-        navigate(`/`);
-        window.location.reload();
+        if (viewChoice?.isVueProduit && viewChoice?.isVueFeuilletable && storedClient) {
+            navigate(`/view/${catalogId}/${storedClient}`);
+        } else {
+            navigate(`/`);
+        }
     };
 
     const handleCatalogView = () => {
         navigate(`/catalogue/${catalogId}`);
     };
     const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
+
+    const wrapperHeight = useHeightBelow('.sticky', {
+        enabled: !!(headerData && categoryList),
+        delay: 1000,
+        deps: [categoryId],
+    });
+    const wrapperHeightSearch = useHeightBelow('.sticky', {
+        enabled: !!(searchQuery || searchResults),
+        delay: 1000,
+    });
 
     useEffect(() => {
         const fetchHeaderData = async () => {
@@ -105,26 +119,6 @@ function Product() {
     }, [categoryId, API_BASE_URL, catalogId]);
 
     useEffect(() => {
-        if (headerData && categoryList) {
-            const updateHeight = () => {
-                const stickyElement = document.querySelector('.sticky');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeight(height);
-            };
-
-            setTimeout(updateHeight, 1000); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeight);
-
-            return () => {
-                window.removeEventListener('resize', updateHeight);
-            };
-        }
-    }, [headerData, categoryId, categoryList]);
-
-
-    useEffect(() => {
         const wrapper = document.querySelector('.wrapper');
         if (wrapper) {
             wrapper.scrollTop = 0; // Réinitialise le scroll de l'élément wrapper
@@ -138,7 +132,7 @@ function Product() {
     useEffect(() => {
         async function fetchChoiceForView() {
             const choice = await fetchViewChoice(catalogId);
-            setViewChoice(choice);
+            if (choice) setViewChoice(choice);
         }
         fetchChoiceForView();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,23 +153,6 @@ function Product() {
         setLoading(false);
     };
 
-    useEffect(() => {
-        if (searchQuery || searchResults) {
-            const updateHeightResultatSearch = () => {
-                const stickyElement = document.querySelector('.sticky');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeightSearch(height);
-            };
-
-            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeightResultatSearch);
-
-            return () => {
-                window.removeEventListener('resize', updateHeightResultatSearch);
-            };
-        }
-    }, [searchQuery, searchResults]);
 
     const returnToCategory = () => {
         clearSearch();
@@ -281,7 +258,7 @@ function Product() {
                                                     {productData.map((product, index) => (
                                                         product.view_type === '1' ? (
                                                             <ProductItem
-                                                                key={index}
+                                                                key={product.id_produit || index}
                                                                 product={product}
                                                                 index={index}
                                                                 categoryId={categoryId}

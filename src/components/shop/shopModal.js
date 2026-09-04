@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import shareModalCloseIcon from "../../assets/icons/shopModalClose.svg";
-import geolocalisationIcon from "../../assets/icons/geolocalisation.svg";
-import roofIcon from "../../assets/icons/roof.svg";
 import searchIcon from "../../assets/icons/search.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopItem from "./shopItem";
+import ShopBrandIcon from "./ShopBrandIcon";
 import EmptyShopListContent from "./emptyShopListContent";
 import { getCurrentLocation, getPlaceLocation } from "../functions/Geolocalisation";
 import { ClientContext } from "../../store-client";
@@ -111,11 +110,6 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
         width: "100%"
     }
 
-    const shopIconStyle = {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-    }
 
     const searchInputStyle = {
         backgroundColor: "#dfdfdf",
@@ -203,10 +197,7 @@ const ShopModal = ({ catalogId, isOpen, onClose, clientColor, shopList }) => {
                 <div className="modal-body" style={modalBodyStyle}>
                     <div className="shop-filter" style={shopFilterStyle}>
                         {/* filter */}
-                        <div className="shop-icon" style={shopIconStyle}>
-                            <img src={geolocalisationIcon} style={{ width: isMobileView ? "36px" : "46px", height: isMobileView ? "55px" : "65px", transform: "translateY(8px)" }} alt="geolocalisationIcon"></img>
-                            <img src={roofIcon} style={{ width: "104px", height: "36px" }} alt="roofIcon"></img>
-                        </div>
+                        <ShopBrandIcon isMobileView={isMobileView} />
                         {!isMobileView && <div style={{ fontWeight: "bold", fontSize: "22px", color: "#2C3336", marginTop: "5px" }}>Choisissez votre commerce</div>}
                         {!isMobileView && <div style={{ maxWidth: "257px", fontSize: "18px", marginTop: "10px" }}>Renseignez votre code postal ou utilisez la géolocalisation pour choisir votre commerce.</div>}
                         {isMobileView && <div style={{ maxWidth: "280px", fontWeight: "500", fontSize: "20px", color: "#2C3336", marginTop: "5px" }}>Trouvez le magasin le plus proche participant

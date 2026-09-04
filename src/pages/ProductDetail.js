@@ -15,6 +15,7 @@ import useIsMobile from "../components/functions/useIsMobile";
 import SearchBar from "../components/search_bar/search_global_bar";
 import ProductSearchResults from "../components/search_bar/ProductSearchResults";
 import CatalogHeaderInfo from "../components/CatalogHeaderInfo";
+import useHeightBelow from "../components/functions/useHeightBelow";
 import { useSearch } from '../components/search_bar/SearchContext';
 
 function MainProduct() {
@@ -24,9 +25,6 @@ function MainProduct() {
     const [productData, setProductData] = useState(null);
     const isMobileView = useIsMobile();
     const navigate = useNavigate();
-    const headerHeight = 20; // class "header" height
-    const [wrapperHeight, setWrapperHeight] = useState(window.innerHeight - headerHeight);
-    const [wrapperHeightSearch, setWrapperHeightSearch] = useState(window.innerHeight);
     const [isLoading, setIsLoading] = useState(true);
     const { shoppingList, addProduct, removeProduct } = useContext(ShoppingListContext);
 
@@ -66,24 +64,6 @@ function MainProduct() {
     }, [productId, API_BASE_URL, categoryId]);
 
     useEffect(() => {
-        if (headerData) {
-            const updateHeight = () => {
-                const stickyElement = document.querySelector('.header');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeight(height);
-            };
-
-            setTimeout(updateHeight, 500); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeight);
-
-            return () => {
-                window.removeEventListener('resize', updateHeight);
-            };
-        }
-    }, [headerData]);
-
-    useEffect(() => {
         disableEcatalogueAutoScroll();
     }, []);
 
@@ -93,21 +73,10 @@ function MainProduct() {
 
     const [modalOpen, setModalOpen] = useState(false);
     const { searchQuery, setSearchQuery, searchResults, setSearchResults, clearSearch, loading, setLoading } = useSearch();
-    useEffect(() => {
-        if (searchQuery || searchResults) {
-            const updateHeightResultatSearch = () => {
-                const stickyElement = document.querySelector('.sticky');
-                const stickyHeight = stickyElement ? stickyElement.getBoundingClientRect().height : 0;
-                const height = window.innerHeight - stickyHeight;
-                setWrapperHeightSearch(height);
-            };
-            setTimeout(updateHeightResultatSearch, 1000); // Assurez-vous que le DOM est à jour.
-            window.addEventListener('resize', updateHeightResultatSearch);
-            return () => {
-                window.removeEventListener('resize', updateHeightResultatSearch);
-            };
-        }
-    }, [searchQuery, searchResults]);
+
+    const wrapperHeight = useHeightBelow('.header', { enabled: !!headerData, delay: 500 });
+    const wrapperHeightSearch = useHeightBelow('.sticky', { enabled: !!(searchQuery || searchResults), delay: 1000 });
+
     useEffect(() => {
         clearSearch();
         setProductData([]);

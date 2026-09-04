@@ -9,6 +9,7 @@ import useIsMobile from "../components/functions/useIsMobile";
 import CatalogHeaderInfo from "../components/CatalogHeaderInfo";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
+import { ClientContext } from '../store-client';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
 import ShoppingListModal from "../components/shoppingList/shoppingListModal";
 import  "../assets/styles/CatalogueOverview.css"
@@ -23,9 +24,16 @@ function Catalog() {
     isVueFeuilletable : true
   });
   const navigate = useNavigate();
+  const { storedClient } = useContext(ClientContext);
+
+  // Fermer le catalogue : retour à l'écran de choix de vue si le catalogue
+  // propose les deux modes, sinon retour à la page d'accueil.
   const handleClose = () => {
-    navigate(`/`);
-    window.location.reload();
+    if (viewChoice?.isVueProduit && viewChoice?.isVueFeuilletable && storedClient) {
+      navigate(`/view/${catalogId}/${storedClient}`);
+    } else {
+      navigate(`/`);
+    }
   };
 
   const { firstCategorieId } = useCategoriesPerCatalogue(catalogId);
@@ -44,7 +52,7 @@ function Catalog() {
   useEffect(() => {
     async function fetchChoiceForView() {
       const choice = await fetchViewChoice(catalogId);
-      setViewChoice(choice);
+      if (choice) setViewChoice(choice);
     }
     fetchChoiceForView();
   // eslint-disable-next-line react-hooks/exhaustive-deps

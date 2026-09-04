@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import Modal from "react-modal";
 import shareModalCloseIcon from "../../assets/icons/shopModalClose.svg";
-import geolocalisationIcon from "../../assets/icons/geolocalisation.svg";
-import roofIcon from "../../assets/icons/roof.svg";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import ShopModal from "./shopModal";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient } from "../functions/Api";
 import useIsMobile from "../functions/useIsMobile";
 import ShopLocationPin from "./ShopLocationPin";
+import ShopBrandIcon from "./ShopBrandIcon";
 import { ClientContext } from "../../store-client";
 
 const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
@@ -79,12 +78,6 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
     }
 
 
-    const shopIconStyle = {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-    }
-
     const shopItemStyle = {
         display: "flex",
         justifyContent: "space-between",
@@ -131,10 +124,7 @@ const ShopModalInfo = ({ catalogId, isOpen, onClose, clientColor, shop }) => {
 
                 <div className="modal-body" style={modalBodyStyle}>
                     <div className="shop-info" style={shopInfoStyle}>
-                        <div className="shop-icon" style={shopIconStyle}>
-                            <img src={geolocalisationIcon} style={{ width: isMobileView ? "36px" : "46px", height: isMobileView ? "55px" : "65px", transform: "translateY(8px)" }} alt="geolocalisationIcon"></img>
-                            <img src={roofIcon} style={{ width: "104px", height: "36px" }} alt="roofIcon"></img>
-                        </div>
+                        <ShopBrandIcon isMobileView={isMobileView} />
                         <div style={{ fontWeight: "bold", fontSize: "22px", color: "#2C3336", marginTop: "5px", textAlign: "center" }}>{shop.magasin_name}</div>
                         <div key={shop.magasin_id_action} className="shop-item" style={shopItemStyle}>
                             <div className="shop-info" style={{ margin: "0 10px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
