@@ -176,16 +176,16 @@ function Carousel() {
     };
 
     const calculatePaginationVisibility = () => {
+        if (!sliderContainerRef.current || !slidesData) return;
+
         const dataSlideLength = slidesData.length;
         const paddingSlideContainer = 15 * 2; // 15px * 2 -> slide-container padding
         const slideMarginRight = 10 * dataSlideLength; // 10 px -> slide-element margin-right
         const containerWidth =
             sliderContainerRef.current.offsetWidth -
             (paddingSlideContainer + slideMarginRight);
-        if (sliderContainerRef.current && slidesData) {
-            const totalSlidesWidth = slidesData.length * containerWidth;
-            setShowPageDots(totalSlidesWidth > containerWidth);
-        }
+        const totalSlidesWidth = slidesData.length * containerWidth;
+        setShowPageDots(totalSlidesWidth > containerWidth);
     };
 
     return (

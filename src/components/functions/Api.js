@@ -84,6 +84,19 @@ export const fetchCategories = async (catalogueId) => {
 export const fetchClientInfo = (clientId) =>
     requestData(`/api/get-data-client-info-v2/${clientId}`);
 
+// Recupere l'identifiant analytics d'un client. `kind` = "gtag" | "gtm".
+// Ces endpoints renvoient { status: 200, data } (et non l'enveloppe "success").
+export const fetchAnalyticsId = async (kind, clientId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}api/get-${kind}-client/${clientId}`);
+        const result = await response.json();
+        return result.status === 200 ? (result.data || null) : null;
+    } catch (error) {
+        console.error(`Erreur lors du chargement de ${kind} :`, error);
+        return null;
+    }
+};
+
 export const fetchViewChoice = async (catalogueId) => {
     const result = await requestData(`/api/get-view-choice/${catalogueId}`);
     if (!result) return null;
