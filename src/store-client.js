@@ -20,9 +20,12 @@ const ClientStore = (props) => {
     // Persistance centralisée : les composants n'ont plus qu'à appeler
     // setStoredClient, la sauvegarde localStorage est faite ici.
     useEffect(() => {
-        if (storedClient == null) return;
         try {
-            localStorage.setItem('stored-client', JSON.stringify(storedClient));
+            if (storedClient == null) {
+                localStorage.removeItem('stored-client');
+            } else {
+                localStorage.setItem('stored-client', JSON.stringify(storedClient));
+            }
         } catch (e) {
             console.error('Erreur de sauvegarde du client:', e);
         }

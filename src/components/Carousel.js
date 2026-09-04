@@ -173,7 +173,7 @@ function Carousel() {
             setShoppingList((prevList) => {
                 const slidesToAdd = slidesData.filter((slide) =>
                     !prevList.some(
-                        (item) => item.catalogId === slide.catalogue_id && item.shop !== null
+                        (item) => item.catalogId === slide.catalogue_id && item.shop != null
                     )
                 );
 
