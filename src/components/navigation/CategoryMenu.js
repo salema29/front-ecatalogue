@@ -15,7 +15,7 @@ const CategoryMenu = ({ categoryIdSelected, categoryList }) => {
             {categoryList.length > 0 ? (
                 <div className="circular-icons-row">
                     {categoryList.map((category, index) => (
-                        <div className="icon-container" key={category.categorie_id} height="186px" onClick={() => handleProductsPerCategory(catalogId, category.categorie_id)} >
+                        <div className="icon-container" key={category.categorie_id} onClick={() => handleProductsPerCategory(catalogId, category.categorie_id)} >
                             <img src={category.categorie_image} alt={category.categorie_name} className="icon" />
                             <p
                                 style={

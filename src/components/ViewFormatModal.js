@@ -147,7 +147,7 @@ function ViewFormatDialog() {
                                         className="view-format-text"
                                     >
                                         <span style={{ fontWeight: 700 }}>Nouveau !</span> <br /> choisissez votre mode de lecture
-                                    </h2 >
+                                    </h2>
                                     <p style={{ color: "black", textAlign: "center" }}>    Version <span className="text-gras" >simplifiée par produit</span> et créez ainsi directement vos listes
                                         de courses, <br /> ou continuer en <span className="text-gras" >version feuilletable.</span>
                                     </p>

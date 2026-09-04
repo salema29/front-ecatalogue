@@ -50,7 +50,7 @@ function ProductItem({ product, index, categoryId, catalogId, showListCourse, cl
             <div className="item-wrapper">
                 {product.type === "0" ? (
                     <div
-                        onClick={() => handleDetailedView(product.view_order, product.categoryId)}
+                        onClick={() => handleDetailedView(product.view_order)}
                         className="item-link"
                         style={{ cursor: "pointer" }}
                     >
