@@ -6,6 +6,7 @@ import showOnlyEcatalogue from "../components/functions/ShowOnlyEcatalogue";
 import { fetchViewChoice } from "../components/functions/Api";
 import useCatalogHeader from "../components/functions/useCatalogHeader";
 import useIsMobile from "../components/functions/useIsMobile";
+import CatalogHeaderInfo from "../components/CatalogHeaderInfo";
 import crossIconDark from "../assets/icons/cross-icon-dark.svg";
 import { ShoppingListContext } from '../store-shopping-list';
 import ListCourse  from '../components/shoppingList/shoppingListIcon';
@@ -87,23 +88,7 @@ function Catalog() {
       {headerData ? (
         <>
           <header className="header">
-            <div className="view-format-dialog-left-part">
-              <img
-                className="header-logo"
-                src={isMobileView ? headerData.client_logo_mobile : headerData.client_logo_desktop }
-                alt=""
-              />
-              <div className="header-text">
-                <p className="catalogue-name" style={{ color: headerData ? headerData.client_color : "#fff" }} >
-                  {headerData.catalogue_name_ln_un}{" "}
-                  {headerData.catalogue_name_ln_deux}
-                </p>
-                <p className="catalogue-date" style={{ color: "black" }}>
-                  du {headerData.catalogue_date_validite_debut} au {" "}
-                  {headerData.catalogue_date_validite_fin}
-                </p>
-              </div>
-            </div>
+            <CatalogHeaderInfo headerData={headerData} isMobileView={isMobileView} />
             <div className="view-format-dialog-right-part">
               {viewChoice.isVueProduit && (
                 <button
