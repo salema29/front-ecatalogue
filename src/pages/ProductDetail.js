@@ -68,7 +68,7 @@ function MainProduct() {
     }, []);
 
     useEffect(() => {
-        showOnlyEcatalogue();
+        return showOnlyEcatalogue();
     }, []);
 
     const [modalOpen, setModalOpen] = useState(false);

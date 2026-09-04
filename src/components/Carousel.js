@@ -51,7 +51,13 @@ function Carousel() {
         // vue produit seule
         else if (viewChoice?.isVueProduit === true && viewChoice?.isVueFeuilletable === false) {
             const categories = await fetchCategories(catalogueId);
-            navigate(`/product-list/${catalogueId}/${categories[0]?.categorie_id}`);
+            const firstCategoryId = categories[0]?.categorie_id;
+            if (firstCategoryId == null) {
+                console.error(`Aucune catégorie trouvée pour le catalogue ${catalogueId}`);
+                navigate(`/view/${catalogueId}`);
+                return;
+            }
+            navigate(`/product-list/${catalogueId}/${firstCategoryId}`);
         } else {
             navigate(`/view/${catalogueId}`);
         }

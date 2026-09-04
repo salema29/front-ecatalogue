@@ -124,7 +124,7 @@ function ViewFormatDialog() {
     };
 
     useEffect(() => {
-        showOnlyEcatalogue();
+        return showOnlyEcatalogue();
     }, []);
 
     return (

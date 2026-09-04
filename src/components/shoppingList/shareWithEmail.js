@@ -72,18 +72,19 @@ export const ShareWithEmail = ({ isOpen, onClose, image, blob, clientColor, cata
                 body: formData,
             });
 
-            // Corps JSON optionnel : si l'API renvoie l'enveloppe { status: ... }
-            // on la respecte, sinon on se base sur le code HTTP.
+            // Corps JSON optionnel : si l'API renvoie un corps, il doit confirmer
+            // explicitement le succès (comme requestData()) ; un corps sans champ
+            // "status" (ex. { success: false } ou { error: ... }) ne doit pas être
+            // interprété comme un succès.
             let payload = null;
             try {
                 payload = await response.clone().json();
             } catch (e) {
-                // réponse non-JSON : on ignore
+                // réponse non-JSON ou sans corps : on ignore
             }
 
             const success = response.ok &&
-                (payload == null || payload.status === undefined ||
-                    payload.status === "success" || payload.status === 200);
+                (payload == null || payload.status === "success" || payload.status === 200);
 
             if (success) {
                 setSendStatus("success");

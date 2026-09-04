@@ -88,7 +88,7 @@ function Catalog() {
   const page = urlParams.get('page') || 1; // Default to page 1 if no page param is found
 
   useEffect(() => {
-    showOnlyEcatalogue();
+    return showOnlyEcatalogue();
   }, []);
 
   return (

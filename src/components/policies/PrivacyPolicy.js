@@ -42,7 +42,7 @@ function PrivacyPolicy() {
     };
 
     useEffect(() => {
-        showOnlyEcatalogue();
+        return showOnlyEcatalogue();
     }, []);
 
     return (
