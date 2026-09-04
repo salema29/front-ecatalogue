@@ -8,6 +8,7 @@ import { fetchCategories, fetchDefinitionMagasinChoice, fetchShopById, fetchView
 import { ClientContext } from "../store-client";
 import { ShoppingListContext } from "../store-shopping-list";
 import useIsMobile from "./functions/useIsMobile";
+import { getClientId } from "./functions/clientId";
 
 function Carousel() {
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -50,12 +51,11 @@ function Carousel() {
     };
 
     useEffect(() => {
-        const hiddenInput = document.getElementById("catalogue-client");
-        const fetchedValue = hiddenInput ? hiddenInput.value : "No value found";
-        const clientIdToUse = process.env.REACT_APP_CLIENT_ID_TEST || fetchedValue;
-
+        const clientIdToUse = getClientId();
         setClientId(clientIdToUse);
-        clientContext.setStoredClient(clientIdToUse);
+        if (clientIdToUse) {
+            clientContext.setStoredClient(clientIdToUse);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -99,7 +99,7 @@ function Carousel() {
     ]);
 
     const fetchSlideData = () => {
-    fetch(`${API_BASE_URL}/api/getSlides/${process.env.REACT_APP_CLIENT_ID_TEST ? process.env.REACT_APP_CLIENT_ID_TEST : clientId}/${process.env.REACT_APP_SHOP_ID_TEST ? process.env.REACT_APP_SHOP_ID_TEST : shopId}`)
+    fetch(`${API_BASE_URL}/api/getSlides/${clientId}/${shopId}`)
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

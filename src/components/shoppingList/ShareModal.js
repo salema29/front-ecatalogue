@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from 'react-modal';
-import html2canvas from 'html2canvas';
 import { postShoppingListImage } from '../functions/Api';
+import { renderHtmlToCanvas } from '../functions/renderHtmlToCanvas';
 import '../../assets/styles/ShareModal.css';
 import MiniSpinner from '../spinner/MiniSpinner';
 import sendIcon from '../../assets/icons/send-icon.svg';
@@ -52,23 +52,11 @@ const ShareModal = ({ isOpen, onClose, shoppingList, catalogId, clientColor }) =
             const html = await postShoppingListImage(shoppingList, catalogId, { signal }); // Ajout du signal
             if (!isMounted.current) return;
 
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
+            const canvas = await renderHtmlToCanvas(html, { windowWidth: 1440 });
+            if (!isMounted.current) return;
 
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true, windowWidth: 1440 });
-            if (!isMounted.current) {
-                document.body.removeChild(tempDiv);
-                return;
-            }
-
-            const image = canvas.toDataURL("image/png");
-
-            setImageData(image);
+            setImageData(canvas.toDataURL("image/png"));
             setIsLoading(false);
-            document.body.removeChild(tempDiv);
         } catch (error) {
             if (error.name !== "AbortError") {  // Ignorer l'erreur si l'opération est annulée
                 console.error("Erreur lors de la génération de l'image", error);

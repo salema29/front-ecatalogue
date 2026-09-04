@@ -10,7 +10,7 @@ import EmptyCart from "../shoppingList/emptyListContent";
 import ShareModal from "./ShareModal";
 import { ShareWithEmail } from "../shoppingList/shareWithEmail";
 import { fetchDefinitionMagasinChoice, fetchShopListByClient, postShoppingListImage, postTotalPriceEconomyByCatalogue } from "../functions/Api";
-import html2canvas from "html2canvas";
+import { renderHtmlToCanvas } from "../functions/renderHtmlToCanvas";
 import miniGeoIcon from "../../assets/icons/mini-geo.svg";
 import shopInfo from "../../assets/icons/shop-info.svg";
 import { getShopByCatalogId } from "../functions/Shop";
@@ -120,14 +120,8 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
             currentAbortController.current = controller;
             const { signal } = controller;
             const html = await postShoppingListImage(shoppingList, catalogId, { signal });
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
-            tempDiv.style.position = "absolute";
-            tempDiv.style.left = "-9999px";
-            document.body.appendChild(tempDiv);
-            const canvas = await html2canvas(tempDiv, { allowTaint: true, useCORS: true });
+            const canvas = await renderHtmlToCanvas(html);
             if (!isMounted.current) {
-                document.body.removeChild(tempDiv);
                 return;
             }
             const dataUrl = canvas.toDataURL("image/png");
@@ -136,7 +130,6 @@ const ShoppingListModal = ({ catalogId, isOpen, onClose, clientColor }) => {
                     setBlob(blob);
                 }
             }, "image/png");
-            document.body.removeChild(tempDiv);
             if (dataUrl.startsWith("data:image/png;base64,")) {
                 setImageurl(dataUrl);
             }
